@@ -4,7 +4,7 @@
 
 ### 🚀 Descripción
 
-Esta API REST permite la comunicación y gestión de dispositivos IoT utilizando un protocolo propio inspirado en OCPP 1.5. Proporciona endpoints para el registro, autenticación, monitoreo y control remoto de dispositivos conectados en plantas.
+Esta API REST permite la comunicación y gestión de dispositivos IoT utilizando un protocolo propio inspirado en OCPP 2.1. Proporciona endpoints para el registro, autenticación, monitoreo y control remoto de dispositivos conectados en plantas.
 
 ### 📌 Características
 
