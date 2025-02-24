@@ -29,3 +29,13 @@ Esta API REST permite la comunicación y gestión de dispositivos IoT utilizando
 * Docker: Para despliegue en entornos productivos
 
 Protocolos: HTTP / WebSockets (para comunicación bidireccional)
+
+### Librerìas Utilizadas
+
+* Django
+* Djangorestframework
+* Djangorestframework_simplejwt
+* psycopg
+* psycopg2-binary
+* PyJWT
+* sqlparse
