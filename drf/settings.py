@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-!1i4hbr651j)bb9_mtqwgl_cusm%kpp11#8ia(khm$elx@m1ag
 DEBUG = True
 
 #Colocar los dominios permitidos separados por (,)
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
 
 # Application definition
@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'api'
+    'api',
+    'channels',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +73,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'drf.wsgi.application'
+#ASGI_APPLICATION = 'drf.asgi.application'
 
 
 # Database
@@ -94,6 +97,16 @@ DATABASES = {
     }
 }
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],  # Asegúrate de que Redis esté en ejecución
+        },
+    },
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -112,6 +125,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Permitir CORS para WebSockets
+MIDDLEWARE.insert(1, 'corsheaders.middleware.CorsMiddleware')
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
