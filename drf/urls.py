@@ -23,9 +23,9 @@ urlpatterns = [
 ]
 
 
-"""from django.urls import re_path
-from api.urls import OCPPConsumer  # Importa tu WebSocket Consumer
+from django.urls import re_path
+from api.consumers import OCPPConsumer  # Importa tu WebSocket Consumer
 
 websocket_urlpatterns = [
     re_path(r'ws/ocpp/$', OCPPConsumer.as_asgi()),
-]"""
+]
