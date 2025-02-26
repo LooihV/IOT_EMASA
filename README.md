@@ -30,7 +30,7 @@ Esta API REST permite la comunicación y gestión de dispositivos IoT utilizando
 
 Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
-### Librerìas Utilizadas
+### Librerías Utilizadas
 
 * Django
 * Djangorestframework
@@ -39,3 +39,7 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 * psycopg2-binary
 * PyJWT
 * sqlparse
+
+### Despliegue
+
+*
