@@ -33,12 +33,20 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 ### Librerías Utilizadas
 
 * Django
+* Django-cors-headers
 * Djangorestframework
 * Djangorestframework_simplejwt
 * psycopg
 * psycopg2-binary
 * PyJWT
 * sqlparse
+* redis
+* websockets
+* ocpp
+* pip
+* daphne
+* channels
+* channels_redis
 
 ### Despliegue
 
