@@ -72,8 +72,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'drf.wsgi.application'
-#ASGI_APPLICATION = 'drf.asgi.application'
+#WSGI_APPLICATION = 'drf.wsgi.application'
+ASGI_APPLICATION = 'drf.asgi.application'
 
 
 # Database
