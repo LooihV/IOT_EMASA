@@ -106,7 +106,7 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 2. DJANGO_SECRET_KEY='clave-super-segura'
 3. DJANGO_DEBUG=True
 4. DB_NAME=dbsens
-5. DB_USER=miusuario
+5. DB_USER=usuario
 6. DB_PASSWORD=admin
 7. DB_HOST=localhost
 8. DB_PORT=5432
