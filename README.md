@@ -75,11 +75,11 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 ### Despliegue
 
-* Tener instalado:
-####Python 3.10
-####PostgreSQL
-####Git
-####Virtualenv
+*Tener instalado:
+1. Python 3.10
+2. PostgreSQL
+3. Git
+4. Virtualenv
 
 2. Clonar el repositorio.
 
