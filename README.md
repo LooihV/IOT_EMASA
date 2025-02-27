@@ -88,7 +88,7 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 2. source venv/bin/activate  # En Linux/macOS
 3. venv\Scripts\activate  # En Windows
      
-#### 4) Instañar dependencias:
+#### 4) Instalar dependencias:
 1. pip install -r requirements.txt
 2. pip freeze > requirements.txt
 
@@ -102,7 +102,7 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 7. GRANT ALL PRIVILEGES ON DATABASE dbsens TO miusuario;
 
 #### 6) Configurar variables del entorno virtual:
-1. Crear un archivo .env en l araiz del proyecto
+1. Crear un archivo .env en la raiz del proyecto
 2. DJANGO_SECRET_KEY='clave-super-segura'
 3. DJANGO_DEBUG=True
 4. DB_NAME=dbsens
@@ -125,7 +125,7 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 #### 1) Tener instaladas las dependencias para WebSockets y OCPP:
 1. pip install daphne ocpp
-2. pip freeze > requirements.tx
+2. pip freeze > requirements.txt
 
 #### 2) Abrir 2 terminales:
 * 1. pkill -f daphne
