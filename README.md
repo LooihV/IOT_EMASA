@@ -75,8 +75,8 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 ### Despliegue
 
- 1. Tener instalado:   *Python 3.10
-                       *PostgreSQL
+ 1. Tener instalado:   ####Python 3.10
+                       ####PostgreSQL
                        *Git
                        *Virtualenv
 
