@@ -88,36 +88,36 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 2. source venv/bin/activate  # En Linux/macOS
 3. venv\Scripts\activate  # En Windows
      
-4. Instañar dependencias:
-####pip install -r requirements.txt
-####pip freeze > requirements.txt
+#### 4) Instañar dependencias:
+1. pip install -r requirements.txt
+2. pip freeze > requirements.txt
 
-5. Configurar PostgreSQL:
-####sudo -u postgres psql
-####CREATE DATABASE dbsens;
-####CREATE USER miusuario WITH PASSWORD 'admin';
-####ALTER ROLE miusuario SET client_encoding TO 'utf8';
-####ALTER ROLE miusuario SET default_transaction_isolation TO 'read committed';
-####ALTER ROLE miusuario SET timezone TO 'UTC';
-####GRANT ALL PRIVILEGES ON DATABASE dbsens TO miusuario;
+#### 5) Configurar PostgreSQL:
+1. sudo -u postgres psql
+2. CREATE DATABASE dbsens;
+3. CREATE USER miusuario WITH PASSWORD 'admin';
+4. ALTER ROLE miusuario SET client_encoding TO 'utf8';
+5. ALTER ROLE miusuario SET default_transaction_isolation TO 'read committed';
+6. ALTER ROLE miusuario SET timezone TO 'UTC';
+7. GRANT ALL PRIVILEGES ON DATABASE dbsens TO miusuario;
 
-6. Configurar variables del entorno virtual:
-####Crear un archivo .env en l araiz del proyecto
-####DJANGO_SECRET_KEY='clave-super-segura'
-####DJANGO_DEBUG=True
-####DB_NAME=dbsens
-####DB_USER=miusuario
-####DB_PASSWORD=admin
-####DB_HOST=localhost
-####DB_PORT=5432
+#### 6) Configurar variables del entorno virtual:
+1. Crear un archivo .env en l araiz del proyecto
+2. DJANGO_SECRET_KEY='clave-super-segura'
+3. DJANGO_DEBUG=True
+4. DB_NAME=dbsens
+5. DB_USER=miusuario
+6. DB_PASSWORD=admin
+7. DB_HOST=localhost
+8. DB_PORT=5432
 
-7. Ejecutar y Utilizar las migraciones:
-####python manage.py makemigrations
-####python manage.py migrate
+#### 7) Ejecutar y Utilizar las migraciones:
+1. python manage.py makemigrations
+2. python manage.py migrate
 
-8. Levantar la API el servidor local:
-####python manage.py runserver 8080
+#### 8) Levantar la API el servidor local:
+1. python manage.py runserver 8080
  
-9. Endpoints de la API:
-####http://localhost:8080/api/
+#### 9) Endpoints de la API:
+1. http://localhost:8080/api/
   
