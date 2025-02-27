@@ -75,7 +75,7 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 ### Despliegue
 
-*Tener instalado:
+#### Tener instalado:
 1. Python 3.10
 2. PostgreSQL
 3. Git
