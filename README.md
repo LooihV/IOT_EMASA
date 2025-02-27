@@ -120,4 +120,15 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
  
 #### 9) Endpoints de la API:
 1. http://localhost:8080/api/
-  
+
+### Protocolo OCPP
+
+#### 1) Tener instaladas las dependencias para WebSockets y OCPP:
+1. pip install daphne ocpp
+2. pip freeze > requirements.tx
+
+#### 2) Abrir 2 terminales:
+1. pkill -f daphne
+1.1 daphne -b 0.0.0.0 -p 8000 drf.asgi:application
+2. python testws.py
+
