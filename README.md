@@ -75,18 +75,18 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 ### Despliegue
 
-#### Tener instalado:
+#### 1) Tener instalado:
 1. Python 3.10
 2. PostgreSQL
 3. Git
 4. Virtualenv
 
-2. Clonar el repositorio.
+#### 2) Clonar el repositorio.
 
-3. Crear y activar el ambiente virtual:    
-####python3 -m venv venv
-####source venv/bin/activate  # En Linux/macOS
-####venv\Scripts\activate  # En Windows
+#### 3) Crear y activar el ambiente virtual:    
+1. python3 -m venv venv
+2. source venv/bin/activate  # En Linux/macOS
+3. venv\Scripts\activate  # En Windows
      
 4. Instañar dependencias:
 ####pip install -r requirements.txt
