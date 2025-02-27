@@ -75,41 +75,41 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 ### Despliegue
 
- 1. Tener instalado:  -Python 3.10
-                       -PostgreSQL
-                       -Git
-                       -Virtualenv
+ 1. Tener instalado:   *Python 3.10
+                       *PostgreSQL
+                       *Git
+                       *Virtualenv
 
 2. Clonar el repositorio.
 
-3. Crear y activar el ambiente virtual:  -python3 -m venv venv
-                                           -source venv/bin/activate  # En Linux/macOS
-                                           -venv\Scripts\activate  # En Windows
+3. Crear y activar el ambiente virtual:    *python3 -m venv venv
+                                           *source venv/bin/activate  # En Linux/macOS
+                                           *venv\Scripts\activate  # En Windows
      
-4. Instañar dependencias:  -pip install -r requirements.txt
-                             -pip freeze > requirements.txt
+4. Instañar dependencias:    *pip install -r requirements.txt
+                             *pip freeze > requirements.txt
 
-5. Configurar PostgreSQL:  -sudo -u postgres psql
-                             -CREATE DATABASE dbsens;
-                             -CREATE USER miusuario WITH PASSWORD 'admin';
-                             -ALTER ROLE miusuario SET client_encoding TO 'utf8';
-                             -ALTER ROLE miusuario SET default_transaction_isolation TO 'read committed';
-                             -ALTER ROLE miusuario SET timezone TO 'UTC';
-                             -GRANT ALL PRIVILEGES ON DATABASE dbsens TO miusuario;
+5. Configurar PostgreSQL:    *sudo -u postgres psql
+                             *CREATE DATABASE dbsens;
+                             *CREATE USER miusuario WITH PASSWORD 'admin';
+                             *ALTER ROLE miusuario SET client_encoding TO 'utf8';
+                             *ALTER ROLE miusuario SET default_transaction_isolation TO 'read committed';
+                             *ALTER ROLE miusuario SET timezone TO 'UTC';
+                             *GRANT ALL PRIVILEGES ON DATABASE dbsens TO miusuario;
 
-6. Configurar variables del entorno virtual:  -Crear un archivo .env en l araiz del proyecto
-                                                -DJANGO_SECRET_KEY='clave-super-segura'
-                                                -DJANGO_DEBUG=True
-                                                -DB_NAME=dbsens
-                                                -DB_USER=miusuario
-                                                -DB_PASSWORD=admin
-                                                -DB_HOST=localhost
-                                                -DB_PORT=5432
+6. Configurar variables del entorno virtual:    *Crear un archivo .env en l araiz del proyecto
+                                                *DJANGO_SECRET_KEY='clave-super-segura'
+                                                *DJANGO_DEBUG=True
+                                                *DB_NAME=dbsens
+                                                *DB_USER=miusuario
+                                                *DB_PASSWORD=admin
+                                                *DB_HOST=localhost
+                                                *DB_PORT=5432
 
-7. Ejecutar y Utilizar las migraciones:   -python manage.py makemigrations
-                                            -python manage.py migrate
+7. Ejecutar y Utilizar las migraciones:    *python manage.py makemigrations
+                                           *python manage.py migrate
 
-8. Levantar la API el servidor local:  -python manage.py runserver 8080
+8. Levantar la API el servidor local:  *python manage.py runserver 8080
  
-9. Endpoints de la API:  -http://localhost:8080/api/
+9. Endpoints de la API:  *http://localhost:8080/api/
   
