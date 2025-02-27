@@ -75,12 +75,12 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 ### Despliegue
 
- I. Tener instalado:  -Python 3.10
+ 1. Tener instalado:  -Python 3.10
                        -PostgreSQL
                        -Git
                        -Virtualenv
 
-XI. Clonar el repositorio.
+2. Clonar el repositorio.
 
 3. Crear y activar el ambiente virtual:  -python3 -m venv venv
                                            -source venv/bin/activate  # En Linux/macOS
