@@ -4,7 +4,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from ocpp.routing import on
 from ocpp.v16 import ChargePoint
 from ocpp.v16 import call_result
-
+ 
 logging.basicConfig(level=logging.INFO)
 
 class ChargePointHandler(ChargePoint):
