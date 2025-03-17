@@ -1,6 +1,5 @@
 """
 URL configuration for drf project.
-
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
 Examples:
@@ -16,16 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from api import views
+from api.views import MachineViewSet
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/',include('api.urls'))
-]
-
-
-from django.urls import re_path
-from api.consumers import OCPPConsumer  # Importa tu WebSocket Consumer
-
-websocket_urlpatterns = [
-    re_path(r'ws/ocpp/$', OCPPConsumer.as_asgi()),
+    path('api/v1/',include('api.urls')),
+    path('api-token-auth/', views.CustomAuthToken.as_view(), name='api_token_auth'),
 ]

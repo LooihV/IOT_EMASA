@@ -8,17 +8,13 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/asgi/
 """
 
 import os
-
 from django.core.asgi import get_asgi_application
-
 from channels.routing import ProtocolTypeRouter, URLRouter
-
-import drf.urls
+import api.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')
 
-application = get_asgi_application()
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": URLRouter(drf.routing.websocket_urlpatterns),
+    "websocket": URLRouter(api.routing.websocket_urlpatterns),
 })
