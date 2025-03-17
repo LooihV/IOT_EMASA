@@ -4,11 +4,12 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from ocpp.routing import on
 from ocpp.v16 import ChargePoint
 from ocpp.v16 import call_result
- 
+
+
 logging.basicConfig(level=logging.INFO)
 
 class ChargePointHandler(ChargePoint):
-    """ Implementa los métodos OCPP """
+    """ Métodos OCPP """
     
     @on("BootNotification")  
     async def on_boot_notification(self, charge_point_model, charge_point_vendor, **kwargs):
@@ -41,11 +42,9 @@ class OCPPConsumer(AsyncWebsocketConsumer):
         logging.info(f"✅ Sensor conectado: {self.id}")
 
     async def disconnect(self, close_code):
-        """ Se ejecuta cuando el sensor se desconecta """
         logging.info(f"❌ Sensor desconectado: {self.id}")
 
     async def receive(self, text_data=None, bytes_data=None):
-        """ Maneja mensajes entrantes """
         try:
             message = json.loads(text_data)
             logging.info(f"📩 Mensaje recibido: {message}")
