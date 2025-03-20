@@ -5,11 +5,12 @@ from api import views
 
 router = routers.DefaultRouter()
 #router.register (r'Sensores',views.ProgrammerViewSet)
-router.register (r'maquinas',views.MachineViewSet)
-router.register (r'users',views.UserViewSet)
+router.register (r'Maquinas',views.MachineViewSet)
+router.register (r'Users',views.UserViewSet)
+router.register (r'Registro',views.RegistroViewSet, basename = 'registro')
+
 
 
 urlpatterns = [
-    path('',include(router.urls))
-   
+    path('',include(router.urls)),
 ] 

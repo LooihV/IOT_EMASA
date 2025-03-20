@@ -7,9 +7,9 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializer import ProgrammerSerializer,UserSerializer
-from .models import Programador, CustomUser, User
+from .models import Programador, CustomUser, User, Registro
 from .models import Machine,CentralSystem
-from .serializer import MachineSerializer
+from .serializer import MachineSerializer, RegistroSerializer
 
 
 
@@ -76,6 +76,18 @@ class MachineViewSet(viewsets.ModelViewSet):
         machine.save()
         return Response({"message": f"Màquina {machine.name} {'encendida' if machine.is_on else 'apagada'}"})
         
+
+
+class RegistroViewSet(viewsets.ModelViewSet):
+    queryset = Registro.objects.all()
+    serializer_class = RegistroSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user   
+        if user.is_superuser:
+            return Registro.objects.all()
+        return Registro.objects.filter(maquina__user = user)
 
 
 class UserViewSet(viewsets.ModelViewSet):

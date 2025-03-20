@@ -54,15 +54,22 @@ class Machine (models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="machines")#DUEÑO DE LA MAQUINA
     central = models.ForeignKey(CentralSystem, on_delete=models.CASCADE)
     is_on = models.BooleanField(default=False)
+    predictivo = models.BooleanField(default=False)
+    gps = models.JSONField(default=dict)
+
+def __str__(self):
+        return self.name
 
 
-#SENSORES DE LA MAQUINA.
 
+class Registro(models.Model):
+    maquina = models.ForeignKey(Machine, on_delete=models.CASCADE)
+    Fecha = models.DateField(auto_now_add=True)
+    TimeStamp = models.DateTimeField(auto_now_add=True)
     Pressure = models.FloatField(default=0.0)
     Current = models.FloatField(default=0.0)
     Temperature = models.FloatField(default=0.0)
     Voltage = models.FloatField(default=0.0)
 
-    def __str__(self):
-        return self.name
-    
+    def _str_(self):
+        return f"Registro de {self.maquina.name if self.maquina else 'Sin máquina'} - {self.Fecha}"
