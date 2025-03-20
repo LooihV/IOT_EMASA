@@ -87,7 +87,7 @@ class RegistroViewSet(viewsets.ModelViewSet):
         user = self.request.user   
         if user.is_superuser:
             return Registro.objects.all()
-        return Registro.objects.filter(maquina__user = user)
+        return Registro.objects.filter(machine__user = user)
 
 
 class UserViewSet(viewsets.ModelViewSet):

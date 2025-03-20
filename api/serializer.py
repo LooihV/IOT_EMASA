@@ -36,9 +36,9 @@ class RegistroSerializer(serializers.ModelSerializer):
         if request and request.user.is_authenticated:  # Verificar si el usuario está autenticado
             user = request.user
             if user.is_superuser:  # Si es admin, mostrar todas las máquinas
-                self.fields['maquina'].queryset = Machine.objects.all()
+                self.fields['machine'].queryset = Machine.objects.all()
             else:  # Si no, filtrar solo las máquinas relacionadas a él
-                self.fields['maquina'].queryset = Machine.objects.filter(user=user)
+                self.fields['machine'].queryset = Machine.objects.filter(user=user)
 
     class Meta:
         model = Registro
