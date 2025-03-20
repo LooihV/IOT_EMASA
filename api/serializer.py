@@ -25,7 +25,7 @@ class MachineSerializer(serializers.ModelSerializer):
 
 class RegistroSerializer(serializers.ModelSerializer):
 
-    maquina = serializers.PrimaryKeyRelatedField(
+    machine = serializers.PrimaryKeyRelatedField(
         queryset=Machine.objects.none()  # Inicialmente vacío, lo llenaremos en _init_
     )
 

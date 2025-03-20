@@ -63,7 +63,7 @@ def __str__(self):
 
 
 class Registro(models.Model):
-    maquina = models.ForeignKey(Machine, on_delete=models.CASCADE)
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE)
     Fecha = models.DateField(auto_now_add=True)
     TimeStamp = models.DateTimeField(auto_now_add=True)
     Pressure = models.FloatField(default=0.0)
@@ -72,4 +72,4 @@ class Registro(models.Model):
     Voltage = models.FloatField(default=0.0)
 
     def _str_(self):
-        return f"Registro de {self.maquina.name if self.maquina else 'Sin máquina'} - {self.Fecha}"
+        return f"Registro de {self.machine.name if self.machine else 'Sin máquina'} - {self.Fecha}"
