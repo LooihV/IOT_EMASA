@@ -116,9 +116,12 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 2. python manage.py migrate
 
 #### 8) Levantar la API el servidor local:
-1. python manage.py runserver 8080
+1. python manage.py runserver 8000
  
 #### 9) Endpoints de la API:
-1. http://localhost:8080/api/
+1. http://localhost:8000/admin/
+2. http://localhost:8000/api/v1/Users/
+3. http://localhost:8000/api/v1/Maquinas/
+4. http://localhost:8000/api/v1/Registro/
 
 
