@@ -7,6 +7,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,17 +23,19 @@ SECRET_KEY = 'django-insecure-!1i4hbr651j)bb9_mtqwgl_cusm%kpp11#8ia(khm$elx@m1ag
 DEBUG = True
 
 #Colocar los dominios permitidos separados por (,)
-ALLOWED_HOSTS = ['localhost','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','10.0.2.15']
 
 # Application definition
 
 INSTALLED_APPS = [
+    #'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'rest_framework',
     'rest_framework.authtoken',
     'api',
@@ -74,11 +77,14 @@ ASGI_APPLICATION = 'drf.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://miusuario:admin@db:5432/dbsens',
+        conn_max_age=600,
+        ssl_require=False
+    )
 }
 """
 DATABASES = {
@@ -91,7 +97,7 @@ DATABASES = {
         'PORT': '5432',  # Puerto por defecto de PostgreSQL
     }
 }
-
+"""
 CHANNEL_LAYERS = {
     "default": {
         #"BACKEND": "channels_redis.core.RedisChannelLayer",
