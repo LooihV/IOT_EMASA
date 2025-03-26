@@ -34,9 +34,10 @@ services:
 
   web:
     build: .
-    command: bash -c "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"
+    command: bash -c "python manage.py collectstatic --no-input && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"
     volumes:
       - .:/app
+      - static_volume:/app/staticfiles
     ports:
       - "8000:8000"
     depends_on:
@@ -52,3 +53,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  static_volume:

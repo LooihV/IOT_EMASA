@@ -17,7 +17,3 @@ router.register (r'Registro',views.RegistroViewSet, basename = 'registro')
 urlpatterns = [
     path('',include(router.urls)),
 ] 
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
