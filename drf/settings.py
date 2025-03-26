@@ -6,6 +6,8 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from pathlib import Path
 import os
 
@@ -23,7 +25,7 @@ SECRET_KEY = 'django-insecure-!1i4hbr651j)bb9_mtqwgl_cusm%kpp11#8ia(khm$elx@m1ag
 DEBUG = True
 
 #Colocar los dominios permitidos separados por (,)
-ALLOWED_HOSTS = ['localhost','127.0.0.1','10.0.2.15']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','10.0.2.15','192.168.18.118']
 
 # Application definition
 
@@ -78,7 +80,7 @@ ASGI_APPLICATION = 'drf.asgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 import dj_database_url
-
+"""
 DATABASES = {
     'default': dj_database_url.config(
         default='postgres://miusuario:admin@db:5432/dbsens',
@@ -93,17 +95,19 @@ DATABASES = {
         'NAME': 'dbsens',  # Nombre de la base de datos
         'USER': 'miusuario',  # Usuario de PostgreSQL
         'PASSWORD': 'admin',  # Contraseña del usuario
-        'HOST': 'localhost',  # Dirección del servidor (localhost si es local) si no entonces la ip
+        'HOST': 'db',  # Dirección del servidor (localhost si es local) si no entonces la ip
         'PORT': '5432',  # Puerto por defecto de PostgreSQL
     }
 }
-"""
+
 CHANNEL_LAYERS = {
     "default": {
         #"BACKEND": "channels_redis.core.RedisChannelLayer",
         "BACKEND":"channels.layers.InMemoryChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],  # Asegúrate de que Redis esté en ejecución
+            "hosts": [("127.0.0.1", 6379,"redis")],
+            "password":"redispass",
+            # Asegúrate de que Redis esté en ejecución
         },
     },
 }
@@ -154,7 +158,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

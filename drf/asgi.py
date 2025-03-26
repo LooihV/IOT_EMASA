@@ -12,7 +12,7 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 import api.routing
 from django.urls import path
-from api.consumers import DatosConsummer
+from api.consumers import OCPPConsumer
 
 
 
@@ -21,7 +21,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": URLRouter(
-        [path("ws/datos/",DatosConsummer.as_asgi()),
+        [path("ws/datos/",OCPPConsumer.as_asgi()),
          ]
     ),
 })

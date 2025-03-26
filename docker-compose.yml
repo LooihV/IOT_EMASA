@@ -2,27 +2,53 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:13
-    environment:            
+    image: postgres:16
+    environment:
       POSTGRES_DB: dbsens
       POSTGRES_USER: miusuario
       POSTGRES_PASSWORD: admin
-    volumes:                                                                                                                                                                                                                            
+      POSTGRES_HOST_AUTH_METHOD: trust  # Temporal para configuración inicial
+    volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U miusuario -d dbsens"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    command: redis-server --requirepass redispass  # Contraseña para Redis
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgres://miusuario:admin@db:5432/dbsens
+      REDIS_URL: redis://:redispass@redis:6379/0
+      POSTGRES_HOST_AUTH_METHOD: trust
 
 volumes:
   postgres_data:
+  redis_data:
