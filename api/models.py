@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
-
 # models here.
 # class Programador se puede cambiar en un futuro por la de Sensor 
 # y cambiar los datos de esa clase por: Current, Preasure, Temperature, Voltage.

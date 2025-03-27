@@ -18,4 +18,4 @@ RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["python", "bash","-c","manage.py", "runserver", "0.0.0.0:8000", "python manage.py collectstatic --no-input && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"]
+CMD ["python","sh", "bash","-c","manage.py", "runserver", "0.0.0.0:8000", "python manage.py createsu && python manage.py collectstatic --no-input && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"]
