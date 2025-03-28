@@ -26,16 +26,16 @@ class MachineSerializer(serializers.ModelSerializer):
 class RegistroSerializer(serializers.ModelSerializer):
 
     machine = serializers.PrimaryKeyRelatedField(
-        queryset=Machine.objects.none()  # Inicialmente vacío, lo llenaremos en _init_
+        queryset=Machine.objects.none()  
     )
 
     def __init__(self, *args, **kwargs):
         super(RegistroSerializer, self).__init__(*args, **kwargs)
-        request = self.context.get('request', None)  # Obtener la solicitud
+        request = self.context.get('request', None)  
         
-        if request and request.user.is_authenticated:  # Verificar si el usuario está autenticado
+        if request and request.user.is_authenticated: 
             user = request.user
-            if user.is_superuser:  # Si es admin, mostrar todas las máquinas
+            if user.is_superuser:  
                 self.fields['machine'].queryset = Machine.objects.all()
             else:  # Si no, filtrar solo las máquinas relacionadas a él
                 self.fields['machine'].queryset = Machine.objects.filter(user=user)
@@ -61,6 +61,12 @@ class UserSerializer(serializers.ModelSerializer):
             is_staff=validated_data.get('is_staff',False)
 
         )
-        user.set_password(validated_data['password'])  # Encripta la contraseña
+        user.set_password(validated_data['password'])  
         user.save()
         return user
+    
+    def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            instance.set_password(validated_data['password'])  
+            validated_data.pop('password')  
+        return super().update(instance, validated_data)
