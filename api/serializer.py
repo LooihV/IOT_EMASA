@@ -56,7 +56,10 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User(
             username=validated_data['username'],
-            email=validated_data.get('email', '')
+            email=validated_data.get('email', ''),
+            is_superuser=validated_data.get('is_superuser',False),
+            is_staff=validated_data.get('is_staff',False)
+
         )
         user.set_password(validated_data['password'])  # Encripta la contraseña
         user.save()
