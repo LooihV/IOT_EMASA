@@ -21,19 +21,20 @@ else:
     print("Superusuario ya existe, no se creó uno nuevo.")
 
 # Crear registro en django_site
+SITE_ID = 1
 SITE_DOMAIN = "localhost:8000"
-SITE_NAME = "localhost"
+SITE_NAME = "Mi Sitio Local"
 
-site, created = Site.objects.get_or_create(id=1, defaults={"domain": SITE_DOMAIN, "name": SITE_NAME})
-if not created:
-    site.domain = SITE_DOMAIN
-    site.name = SITE_NAME
-    site.save()
-    print(f"Se actualizó django_site con domain={SITE_DOMAIN} y name={SITE_NAME}.")
+site, created = Site.objects.update_or_create(
+    id=SITE_ID,
+    defaults={"domain": SITE_DOMAIN, "name": SITE_NAME},
+)
+
+if created:
+    print(f"✅ Sitio creado con ID {SITE_ID}, dominio {SITE_DOMAIN}")
 else:
-    print("Se creó un nuevo registro en django_site.")
+    print(f"✅ Sitio actualizado con ID {SITE_ID}, dominio {SITE_DOMAIN}")
 
-print("Configuración inicial completada.")
 
 CENTRAL_NAME = "EMASA"
 
