@@ -1,4 +1,3 @@
-# imagen base Python
 FROM python:3.10-slim
 
 WORKDIR /app
@@ -14,8 +13,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 RUN mkdir -p /app/staticfiles
+
+# Ejecuta collectstatic antes de iniciar el servidor
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["python","sh", "bash","-c","manage.py", "runserver", "0.0.0.0:8000", "python manage.py createsu && python manage.py collectstatic --no-input && python manage.py migrate && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"]
+CMD ["bash", "-c", "python manage.py migrate && python manage.py shell < init_superuser.py && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"]
