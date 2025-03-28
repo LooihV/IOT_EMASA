@@ -2,6 +2,7 @@ import os
 import django
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
+from api.models import CentralSystem
 
 # Configurar Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')  # Asegúrate de que 'drf' sea el nombre correcto de tu módulo
@@ -33,3 +34,11 @@ else:
     print("Se creó un nuevo registro en django_site.")
 
 print("Configuración inicial completada.")
+
+CENTRAL_NAME = "EMASA"
+
+if not CentralSystem.objects.filter(name=CENTRAL_NAME).exists():
+    CentralSystem.objects.create(name=CENTRAL_NAME)
+    print("La central se creò con èxito")
+else:
+    print("Ya existe una central")
