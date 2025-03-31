@@ -108,7 +108,6 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             "hosts": [("127.0.0.1", 6379,"redis")],
             "password":"redispass",
-            # Asegúrate de que Redis esté en ejecución
         },
     },
 }
