@@ -7,7 +7,7 @@ services:
       POSTGRES_DB: dbsens
       POSTGRES_USER: miusuario
       POSTGRES_PASSWORD: admin
-      POSTGRES_HOST_AUTH_METHOD: trust  # Temporal para configuración inicial
+      POSTGRES_HOST_AUTH_METHOD: trust  # Temporal para configuración inicial Cambiar eso por md5 o sha-256 en producción.
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
@@ -30,7 +30,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    command: redis-server --requirepass redispass  # Contraseña para Redis
+    command: redis-server --requirepass redispass  # Contraseña Redis
 
   web:
     build: .
@@ -48,7 +48,7 @@ services:
     environment:
       DATABASE_URL: postgres://miusuario:admin@db:5432/dbsens
       REDIS_URL: redis://:redispass@redis:6379/0
-      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_HOST_AUTH_METHOD: trust     #Cambiar eso por md5 o sha-256 
 
 volumes:
   postgres_data:

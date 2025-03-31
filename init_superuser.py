@@ -5,22 +5,31 @@ from django.contrib.sites.models import Site
 from api.models import CentralSystem
 
 # Configurar Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')  # Asegúrate de que 'drf' sea el nombre correcto de tu módulo
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')  
 django.setup()
 
-# Crear Superusuario
 User = get_user_model()
-SUPERUSER_USERNAME = "EMASADOCK"
-SUPERUSER_EMAIL = "admin@example.com"
-SUPERUSER_PASSWORD = "emasa123"
 
-if not User.objects.filter(username=SUPERUSER_USERNAME).exists():
-    User.objects.create_superuser(SUPERUSER_USERNAME, SUPERUSER_EMAIL, SUPERUSER_PASSWORD)
-    print(f"Superusuario '{SUPERUSER_USERNAME}' creado con éxito.")
-else:
-    print("Superusuario ya existe, no se creó uno nuevo.")
+SUPERUSERS = [
 
-# Crear registro en django_site
+{"username" : "EMASADOCK",
+"email" : "admin@example.com",
+"password" : "emasa123"},
+{"username" : "JEMINSONADMIN",
+"email" : "Jadmin@example.com",
+"password" : "Jemasa123*"},
+]
+
+for user in SUPERUSERS:
+ if not User.objects.filter(username=user["username"]).exists(): #&& Y EL OTRO
+    User.objects.create_superuser(user["username"], user["email"], user["password"]) #&& Y EL OTRO
+    print(f"Superusuario '{user['username']}' creado con éxito.")
+ else:
+    print("Superusuario {user['username']}' ya existe, no se creó uno nuevo.")
+
+
+
+
 SITE_ID = 1
 SITE_DOMAIN = "localhost:8000"
 SITE_NAME = "Mi Sitio Local"
