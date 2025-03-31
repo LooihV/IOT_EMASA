@@ -78,9 +78,10 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 #### 1) Tener instalado:
 1. Python 3.10
-2. PostgreSQL
+2. PostgreSQL V 16
 3. Git
 4. Virtualenv
+5. Redis V 7,4
 
 #### 2) Clonar el repositorio.
 
