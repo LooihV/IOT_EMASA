@@ -15,9 +15,9 @@ SUPERUSERS = [
 {"username" : "EMASADOCK",
 "email" : "admin@example.com",
 "password" : "emasa123"},
-{"username" : "JEMINSONADMIN",
+{"username" : "Jemison00",
 "email" : "Jadmin@example.com",
-"password" : "Jemasa123*"},
+"password" : "2025jemisonM*"},
 ]
 
 for user in SUPERUSERS:
