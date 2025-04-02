@@ -168,3 +168,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID =1
+
+#AUTH_USER_MODEL = "api.CustomUser"
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"  # Servidor de Gmail
+EMAIL_PORT = 587  # Puerto para TLS
+EMAIL_USE_TLS = True  
+EMAIL_USE_SSL = False
+EMAIL_HOST_USER = "mario.bernalc@gmail.com"  # Correo de Gmail
+EMAIL_HOST_PASSWORD = "hdnv mzqq bvxz kkne"  # que debe generar desde gmail contraseña para otra aplicacion
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

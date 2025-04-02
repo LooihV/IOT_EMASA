@@ -43,7 +43,6 @@ class CentralSystem (models.Model):
         if CentralSystem.objects.exists() and not self.pk:
             raise ValueError("Solo puede existir una central.")
         super().save(*args, **kwargs)
-
     def __str__(self):
         return self.name
 
