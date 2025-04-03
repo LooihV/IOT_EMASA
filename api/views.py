@@ -102,27 +102,27 @@ class UserViewSet(viewsets.ModelViewSet):
     
     
 class PasswordResetRequestViewSet(APIView):
-    permission_classes = [AllowAny]  # Permite que cualquier usuario acceda
+    permission_classes = [AllowAny]  #Cualquier usuario accede  ---->  cambiar eso
 
     def post(self, request):
         email = request.data.get("email")
 
-        # Verificar si el usuario existe
+        # Verifica si el usuario existe
         try:
             user = User.objects.get(email=email)  #CustomUser
         except User.DoesNotExist:
             return Response({"error": "El usuario no existe"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Generar una contraseña temporal
+        # Genera la contraseña temporal
         temp_password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
         user.set_password(temp_password)  # Se asigna la nueva contraseña
         user.save()
 
-        # Enviar la contraseña temporal por correo
+        # Envia la contraseña temporal por correo
         send_mail(
-            "Recuperación de contraseña",
+            "MONITOR: Recuperación de contraseña",
             f"Tu nueva contraseña temporal es: {temp_password}\n\nPor favor, cámbiala antes del próximo inicio de sesión.",
-            "mario.bernalc@gmail.com",  # Cambia esto por tu email configurado en settings.py
+            "mario.bernalc@gmail.com",  # email configurado en settings.py
             [email],
             fail_silently=False,
         )
@@ -130,7 +130,7 @@ class PasswordResetRequestViewSet(APIView):
         return Response({"mensage": "Se ha enviado una contraseña temporal a tu correo."}, status=status.HTTP_200_OK)
     
 class ChangePasswordViewSet(APIView):
-    permission_classes = [IsAuthenticated]  # Solo usuarios autenticados pueden cambiar la contraseña
+    permission_classes = [IsAuthenticated]  #los usuarios autenticados pueden cambiar la contraseña
 
     def post(self, request):
         user = request.user
@@ -149,3 +149,4 @@ class ChangePasswordViewSet(APIView):
         Token.objects.filter(user=user).delete()
 
         return Response({"message": "Contraseña actualizada correctamente"}, status=status.HTTP_200_OK)
+    
