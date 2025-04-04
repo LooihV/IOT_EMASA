@@ -6,12 +6,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet
 
+
 router = routers.DefaultRouter()
-#router.register (r'Sensores',views.ProgrammerViewSet)
 router.register (r'Maquinas',views.MachineViewSet)
 router.register (r'Users',views.UserViewSet)
 router.register (r'Registro',views.RegistroViewSet, basename = 'registro')
-
 
 
 urlpatterns = [

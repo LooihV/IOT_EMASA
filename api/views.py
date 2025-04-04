@@ -102,23 +102,22 @@ class UserViewSet(viewsets.ModelViewSet):
     
     
 class PasswordResetRequestViewSet(APIView):
-    permission_classes = [AllowAny]  #Cualquier usuario accede  ---->  cambiar eso
+    permission_classes = [IsAuthenticated]  #Sólo usuarios autenticados cambian sus cuentas asociadas.
 
     def post(self, request):
         email = request.data.get("email")
 
-        # Verifica si el usuario existe
-        try:
-            user = User.objects.get(email=email)  #CustomUser
-        except User.DoesNotExist:
-            return Response({"error": "El usuario no existe"}, status=status.HTTP_404_NOT_FOUND)
+        # Verifica si el usuario existe y
+        # Verifica que el usuario autenticado coincide con el correo
+        if request.user.email != email:
+            return Response({"error": "No puedes solicitar un cambio de contraseña para otro usuario."}, status=status.HTTP_403_FORBIDDEN)
 
-        # Genera la contraseña temporal
+        # Genera contraseña temporal
         temp_password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        user.set_password(temp_password)  # Se asigna la nueva contraseña
-        user.save()
+        request.user.set_password(temp_password)  # Se asigna la nueva contraseña
+        request.user.save()
 
-        # Envia la contraseña temporal por correo
+        # Envia contraseña temporal por correo
         send_mail(
             "MONITOR: Recuperación de contraseña",
             f"Tu nueva contraseña temporal es: {temp_password}\n\nPor favor, cámbiala antes del próximo inicio de sesión.",
@@ -130,22 +129,22 @@ class PasswordResetRequestViewSet(APIView):
         return Response({"mensage": "Se ha enviado una contraseña temporal a tu correo."}, status=status.HTTP_200_OK)
     
 class ChangePasswordViewSet(APIView):
-    permission_classes = [IsAuthenticated]  #los usuarios autenticados pueden cambiar la contraseña
+    permission_classes = [IsAuthenticated]  
 
     def post(self, request):
         user = request.user
         old_password = request.data.get("old_password")
         new_password = request.data.get("new_password")
 
-        # Verificar si la contraseña actual es correcta
+        # Verifica si la contraseña actual es correcta
         if not user.check_password(old_password):
             return Response({"error": "La contraseña temporal-actual es incorrecta"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Cambiar la contraseña
+        # Cambiar contraseña
         user.set_password(new_password)
         user.save()
 
-        # Invalidar token anterior (si usas Token Authentication)
+        # Invalidar token anterior 
         Token.objects.filter(user=user).delete()
 
         return Response({"message": "Contraseña actualizada correctamente"}, status=status.HTTP_200_OK)
