@@ -47,6 +47,8 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: postgres://miusuario:admin@db:5432/dbsens
+      EMAIL_HOST_USER: mario.bernalc@gmail.com 
+      EMAIL_HOST_PASSWORD: hdnv mzqq bvxz kkne
       REDIS_URL: redis://:redispass@redis:6379/0
       POSTGRES_HOST_AUTH_METHOD: trust     #Cambiar eso por md5 o sha-256 
 
