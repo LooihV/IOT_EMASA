@@ -119,11 +119,17 @@ Protocolos: HTTP / WebSockets (para comunicación bidireccional)
 
 #### 8) Levantar la API el servidor local:
 1. python manage.py runserver 8000
+
+### 9) Ejecutar desde el docker:
+1. sudo docker-compose down
+2. sudo docker-compose up -d --build
  
-#### 9) Endpoints de la API:
+#### 10) Endpoints de la API:
 1. http://localhost:8000/admin/
 2. http://localhost:8000/api/v1/Users/
 3. http://localhost:8000/api/v1/Maquinas/
 4. http://localhost:8000/api/v1/Registro/
+5. http://localhost:8000/api/v1/pass/reset/
+6. http://localhost:8000/api/v1/pass/change/
 
 
