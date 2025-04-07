@@ -174,9 +174,9 @@ SITE_ID =1
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"  # Servidor de Gmail
-EMAIL_PORT = 587  # Puerto para TLS
-EMAIL_USE_TLS = True  
-EMAIL_USE_SSL = False
+EMAIL_PORT = 465  # Puerto para TLS  465 si es para SSL   587 si es para TLS
+EMAIL_USE_TLS = False  
+EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") # que debe generar desde gmail contraseña para otra aplicacion
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
