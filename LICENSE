@@ -1,0 +1,6 @@
+This repository contains multiple components with different licences:
+
+- The `/api_rest_emasa` folder is licensed under MIT. See `/api_rest_emasa/LICENSE`.
+- The `/lorawan_server` folder is licensed under MIT. See `/lorawan_server/LICENSE`.
+
+Be sure to review the individual licenses before using or redistributing components of this project.
