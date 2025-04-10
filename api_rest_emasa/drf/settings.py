@@ -169,7 +169,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID =1
 
-#AUTH_USER_MODEL = "api.CustomUser"
+AUTH_USER_MODEL = "api.CustomUser"
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

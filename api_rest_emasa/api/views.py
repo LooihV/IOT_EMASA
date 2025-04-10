@@ -15,6 +15,7 @@ from .serializer import ProgrammerSerializer,UserSerializer
 from .models import Programador, CustomUser, User, Registro
 from .models import Machine,CentralSystem
 from .serializer import MachineSerializer, RegistroSerializer
+from chirpstack_api import create_user_in_chirpstack
 
 
 
@@ -99,6 +100,12 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
+    
+    
+    
+    
+    
+       
     
     
 class PasswordResetRequestViewSet(APIView):
