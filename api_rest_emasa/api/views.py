@@ -15,7 +15,7 @@ from .serializer import ProgrammerSerializer,UserSerializer
 from .models import Programador, CustomUser, User, Registro
 from .models import Machine,CentralSystem
 from .serializer import MachineSerializer, RegistroSerializer
-from chirpstack_api import create_user_in_chirpstack
+#from api_rest_emasa.api.chirpstack_api import create_user_in_chirpstack
 
 
 

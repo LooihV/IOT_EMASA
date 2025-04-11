@@ -17,6 +17,8 @@ services:
       - POSTGRESQL_HOST=postgres
     ports:
       - "8080:8080"
+    networks:
+      - chirp-django-net
 
   chirpstack-gateway-bridge:
     image: chirpstack/chirpstack-gateway-bridge:4
@@ -29,6 +31,8 @@ services:
       - INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE=us915_7/gateway/{{ .GatewayID }}/event/{{ .EventType }}
       - INTEGRATION__MQTT__STATE_TOPIC_TEMPLATE=us915_7/gateway/{{ .GatewayID }}/state/{{ .StateType }}
       - INTEGRATION__MQTT__COMMAND_TOPIC_TEMPLATE=us915_7/gateway/{{ .GatewayID }}/command/#
+    networks:
+      - chirp-django-net
     depends_on:
       - mosquitto
   
@@ -40,6 +44,8 @@ services:
       - "3001:3001"
     volumes:
       - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
+    networks:
+      - chirp-django-net
     depends_on:
       - mosquitto
 
@@ -51,6 +57,8 @@ services:
       - "8090:8090"
     depends_on:
       - chirpstack
+    networks:
+      - chirp-django-net
 
   postgres:
     image: postgres:16-alpine
@@ -62,6 +70,9 @@ services:
       - POSTGRES_USER=chirpstack
       - POSTGRES_PASSWORD=chirpstack
       - POSTGRES_DB=chirpstack
+    networks:
+      - chirp-django-net
+ 
 
   redis:
     image: redis:7-alpine
@@ -69,6 +80,8 @@ services:
     command: redis-server --save 300 1 --save 60 100 --appendonly no
     volumes:
       - redisdata:/data
+    networks:
+      - chirp-django-net
 
   mosquitto:
     image: eclipse-mosquitto:2
@@ -78,7 +91,13 @@ services:
     volumes: 
       - ./configuration/mosquitto/config/:/mosquitto/config/
       - ../../.certs:/etc/mosquitto/certs/
+    networks:
+      - chirp-django-net
 
 volumes:
   postgresqldata:
   redisdata:
+
+networks:
+  chirp-django-net:
+   external: true

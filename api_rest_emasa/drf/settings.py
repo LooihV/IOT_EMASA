@@ -169,7 +169,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID =1
 
-AUTH_USER_MODEL = "api.CustomUser"
+#AUTH_USER_MODEL = "api.CustomUser"
+CHIRPSTACK_JWT_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6IjQ1YzE1NzAxLTk4ZjEtNGQ5My04OTk0LTEzOGFmZjVmMjhkZCIsInR5cCI6ImtleSJ9.GkOcWf0y_UtlIuRi41nefb3hNzEDBWXeyX3BsBht-5A'
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

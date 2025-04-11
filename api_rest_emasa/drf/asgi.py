@@ -24,4 +24,4 @@ application = ProtocolTypeRouter({
         [path("ws/datos/",OCPPConsumer.as_asgi()),
          ]
     ),
-})
+})#MQTT
