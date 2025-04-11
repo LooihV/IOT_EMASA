@@ -104,3 +104,23 @@
   [integration.mqtt]
     server="tcp://$MQTT_BROKER_HOST:1883/"
     json=true
+
+    # Configuration for MQTT clients.
+    [integration.mqtt.client]
+
+      # CA certificate and key file (optional).
+      #
+      # If setting the CA certificate and key file options, ChirpStack 
+      # will generate client certificates which can be used by the MQTT clients for
+      # authentication and authorization. The Common Name of the certificate will
+      # be set to the ID of the application.
+      #
+      # The ca_key is expected to be in PKCS#8 format (you can use openssl to
+      # convert to PKCS#8).
+      ca_cert="/etc/chirpstack/certs/ca.pem"
+      ca_key="/etc/chirpstack/certs/ca.key"
+
+      # Certificate lifetime.
+      #
+      # This defines how long (after generating) the certificate remains valid.
+      client_cert_lifetime="11months 30days 3h 50m 24s"
