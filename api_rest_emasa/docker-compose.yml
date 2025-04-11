@@ -17,6 +17,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - chirp-django-net
 
   redis:
     image: redis:alpine
@@ -51,8 +53,14 @@ services:
       EMAIL_HOST_PASSWORD: hdnv mzqq bvxz kkne
       REDIS_URL: redis://:redispass@redis:6379/0
       POSTGRES_HOST_AUTH_METHOD: trust     #Cambiar eso por md5 o sha-256 
+    networks:
+      - chirp-django-net
 
 volumes:
   postgres_data:
   redis_data:
   static_volume:
+
+networks:
+  chirp-django-net:
+   external: true

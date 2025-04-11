@@ -19,6 +19,9 @@ class Programador (models.Model):
 
 
 class CustomUser(AbstractUser):
+    
+    chirpstack_id = models.CharField(max_length=36,blank=True, null=True)
+    
     ROLE_CHOISES = [
         ("viewer", "solo visualizacion"),
         ("controller", "controlar la maquina"),

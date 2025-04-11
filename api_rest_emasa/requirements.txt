@@ -12,6 +12,7 @@ dj-database-url==2.3.0
 Django==5.1.6
 django-cors-headers==4.7.0
 djangorestframework==3.15.2
+requests
 djangorestframework_simplejwt==5.4.0
 hyperlink==21.0.0
 idna==3.10
