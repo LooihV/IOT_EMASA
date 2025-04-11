@@ -16,7 +16,7 @@ Este proyecto está compuesto por dos componentes principales: una **API REST** 
 
 ## 🧠 Tecnologías utilizadas
 
-- **Python** – backend API con FastAPI.
+- **Python** – backend API con DJANGO rest Framework.
 - **PostgreSQL** – base de datos relacional.
 - **Docker** – contenedores para despliegue ágil y portátil.
 - **ChirpStack** – servidor LoRaWAN para gestión de red.
