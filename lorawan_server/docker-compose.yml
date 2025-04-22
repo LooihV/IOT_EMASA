@@ -8,13 +8,12 @@ services:
       - ./configuration/chirpstack:/etc/chirpstack
       - ../../.certs:/etc/chirpstack/certs
     depends_on:
-      - postgres
       - mosquitto
       - redis
     environment:
       - MQTT_BROKER_HOST=mosquitto
       - REDIS_HOST=redis
-      - POSTGRESQL_HOST=postgres
+      - POSTGRESQL_HOST=persistance-postgres-1
     ports:
       - "8080:8080"
     networks:
@@ -59,19 +58,6 @@ services:
       - chirpstack
     networks:
       - chirp-django-net
-
-  postgres:
-    image: postgres:16-alpine
-    restart: unless-stopped
-    volumes:
-      - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
-      - postgresqldata:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=chirpstack
-      - POSTGRES_PASSWORD=chirpstack
-      - POSTGRES_DB=chirpstack
-    networks:
-      - chirp-django-net
  
 
   redis:
@@ -95,7 +81,6 @@ services:
       - chirp-django-net
 
 volumes:
-  postgresqldata:
   redisdata:
 
 networks:
