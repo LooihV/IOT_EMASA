@@ -169,7 +169,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_ID =1
 
-AUTH_USER_MODEL = "api.CustomUser" #aca es?
+AUTH_USER_MODEL = "api.CustomUser" #acá es, se comenta si se usa el panel admin de django para crar users y se descomenta para usar el de api/vi/Users y conectar asì las apis
 CHIRPSTACK_JWT_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6IjQ1YzE1NzAxLTk4ZjEtNGQ5My04OTk0LTEzOGFmZjVmMjhkZCIsInR5cCI6ImtleSJ9.GkOcWf0y_UtlIuRi41nefb3hNzEDBWXeyX3BsBht-5A'
 
 

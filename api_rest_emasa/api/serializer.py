@@ -58,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             email=validated_data.get('email', ''),
             is_superuser=validated_data.get('is_superuser',False),
-            is_staff=validated_data.get('is_staff',False)
+            is_staff=validated_data.get('is_staff',False),
 
         )
         user.set_password(validated_data['password'])  
@@ -72,5 +72,9 @@ class UserSerializer(serializers.ModelSerializer):
         if 'password' in validated_data:
             instance.set_password(validated_data['password'])  
             validated_data.pop('password')  
-        return super().update(instance, validated_data)
+        
+        user = super().update(instance, validated_data)
+        from api.chirpstack_api import sync_user_to_chirpstack 
+        sync_user_to_chirpstack(sender=User, instance=user, created=True)
+        return user
     
