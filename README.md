@@ -29,7 +29,7 @@ Este proyecto está compuesto por dos componentes principales: una **API REST** 
 
 ```bash
 /mi-proyecto
-├── /api_rest_emasa           # API REST con FastAPI
+├── /api_rest_emasa           # API REST con DJANGO rest Framework
 │   ├── main.py
 │   └── ...
 ├── /lorawan_server        # Servidor LoRaWAN e integración con ChirpStack
