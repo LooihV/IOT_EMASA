@@ -20,7 +20,7 @@ Esta API REST permite la comunicación y gestión de dispositivos IoT utilizando
 
 ### 🏗 Tecnologías Utilizadas
 
-* Backend: FastAPI (Python)
+* Backend: Django Rest Framework (Python)
 
 * Base de Datos: PostgreSQL / SQLite
 
