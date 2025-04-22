@@ -63,6 +63,9 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])  
         user.save()
+        
+        from api.chirpstack_api import sync_user_to_chirpstack 
+        sync_user_to_chirpstack(sender=User, instance=user, created=True)
         return user
     
     def update(self, instance, validated_data):

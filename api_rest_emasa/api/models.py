@@ -20,6 +20,7 @@ class Programador (models.Model):
 
 class CustomUser(AbstractUser):
     
+    email = models.EmailField(unique = True)
     chirpstack_id = models.CharField(max_length=36,blank=True, null=True)
     
     ROLE_CHOISES = [
