@@ -16,7 +16,7 @@ Esta API REST permite la comunicación y gestión de dispositivos IoT utilizando
 
 * 🔒 Seguridad con autenticación basada en tokens.
 
-* ⚡ Optimizado para escalabilidad con FastAPI y PostgreSQL.
+* ⚡ Optimizado para escalabilidad con DjangoRestFramework y PostgreSQL.
 
 ### 🏗 Tecnologías Utilizadas
 
