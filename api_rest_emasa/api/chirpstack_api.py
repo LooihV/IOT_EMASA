@@ -5,9 +5,10 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 #from django.contrib.auth.models import User  # Usa tu modelo si es personalizado
 from django.contrib.auth import get_user_model
-from .models import User,Tenant
+from .models import User,Tenant, CustomUser
 
-User = get_user_model()
+#User = get_user_model()
+CustomUser = get_user_model()
 
 CHIRPSTACK_API_URL = "http://chirpstack-rest-api:8090/api/users"
 CHIRPSTACK_TENANT_URL = "http://chirpstack-rest-api:8090/api/tenants"
@@ -52,7 +53,7 @@ def get_chirpstack_user_id(email):
     
     return None
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=CustomUser)
 def sync_user_to_chirpstack(sender, instance, created, **kwargs):
     print("Signal POST SAVE ejecutado para usuario Django")
     email = instance.email.strip()
@@ -109,7 +110,7 @@ def sync_user_to_chirpstack(sender, instance, created, **kwargs):
     except Exception as e:
         print(f"Error al sincronizar usuario con ChirpStack: {e}")
 
-@receiver(pre_delete, sender=User)
+@receiver(pre_delete, sender=CustomUser)
 def delete_user_from_chirpstack(sender, instance, **kwargs):
     print(" Signal PRE DELETE ejecutado para usuario Django")
     email = instance.email.strip().lower()
