@@ -11,10 +11,12 @@ router = routers.DefaultRouter()
 router.register (r'Maquinas',views.MachineViewSet)
 router.register (r'Users',views.UserViewSet)
 router.register (r'Registro',views.RegistroViewSet, basename = 'registro')
+router.register (r'Tenants',views.TenantViewSet)
+
 
 
 urlpatterns = [
     path('',include(router.urls)),
     path("pass/reset/", PasswordResetRequestViewSet.as_view(), name="password_reset"),
     path("pass/change/", ChangePasswordViewSet.as_view(), name="password_change")
-] 
+]

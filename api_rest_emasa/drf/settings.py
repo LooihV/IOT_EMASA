@@ -80,7 +80,7 @@ ASGI_APPLICATION = 'drf.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-import dj_database_url
+#import dj_database_url
 """
 DATABASES = {
     'default': dj_database_url.config(
@@ -90,7 +90,7 @@ DATABASES = {
     )
 }
 """
-DATABASES = {
+"""DATABASES = {   #esta funcionoba antes....
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dbsens',  # Nombre de la base de datos
@@ -98,6 +98,19 @@ DATABASES = {
         'PASSWORD': 'admin',  # Contraseña del usuario
         'HOST': 'db',  # Dirección del servidor (localhost si es local) si no entonces la ip
         'PORT': '5432',  # Puerto por defecto de PostgreSQL
+    }
+}"""
+
+#NUEVA DB
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'chirpstack'),
+        'USER': os.environ.get('DB_USER', 'chirpstack'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'chirpstack'),
+        'HOST': os.environ.get('DB_HOST', 'persistance-postgres-1'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 

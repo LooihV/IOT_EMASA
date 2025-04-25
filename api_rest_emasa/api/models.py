@@ -17,22 +17,29 @@ class Programador (models.Model):
 
 
 
+class Tenant (models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    chirpstack_id = models.CharField(max_length=36,blank=True, null=True)
+    Can_have_gateways = models.BooleanField(default=False)
+    private_gateways_up = models.BooleanField(default=False)
+    private_gateways_down = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.name
+    
 
 class CustomUser(AbstractUser):
     
     email = models.EmailField(unique = True)
-    chirpstack_id = models.CharField(max_length=36,blank=True, null=True)
+    #chirpstack_id = models.CharField(max_length=36,blank=True, null=True)
     
     ROLE_CHOISES = [
         ("viewer", "solo visualizacion"),
         ("controller", "controlar la maquina"),
     ]
     role = models.CharField(max_length=10, choices=ROLE_CHOISES, default="viewer")
-    groups = models.ManyToManyField(
-        "auth.Group", 
-        related_name ="custom_users",
-        blank=True
-        )
+    #groups = models.ManyToManyField("auth.Group", related_name ="custom_users",blank=True)
+    tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, null=True, blank=True)
     user_permissions = models.ManyToManyField(
         "auth.Permission",
         related_name="custom_users_permissions",
@@ -59,7 +66,7 @@ class Machine (models.Model):
     predictivo = models.BooleanField(default=False)
     gps = models.JSONField(default=dict)
 
-def __str__(self):
+    def __str__(self):
         return self.name
 
 
@@ -73,5 +80,5 @@ class Registro(models.Model):
     Temperature = models.FloatField(default=0.0)
     Voltage = models.FloatField(default=0.0)
 
-    def _str_(self):
+    def __str__(self):
         return f"Registro de {self.machine.name if self.machine else 'Sin máquina'} - {self.Fecha}"

@@ -11,12 +11,11 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .serializer import ProgrammerSerializer,UserSerializer
-from .models import Programador, CustomUser, User, Registro
+from .serializer import ProgrammerSerializer,UserSerializer,TenantSerializer
+from .models import Programador, CustomUser, User, Registro, Tenant
 from .models import Machine,CentralSystem
 from .serializer import MachineSerializer, RegistroSerializer
 #from api_rest_emasa.api.chirpstack_api import create_user_in_chirpstack
-
 
 
 class ProgrammerViewSet(viewsets.ModelViewSet):
@@ -33,6 +32,18 @@ class ProgrammerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return [IsAuthenticated()]  # Acceso total para admin
         return [IsAuthenticated()]  # Acceso solo a datos del usuario
+
+
+
+
+
+
+class TenantViewSet(viewsets.ModelViewSet):
+    queryset = Tenant.objects.all()
+    serializer_class = TenantSerializer
+
+
+
 
 
 # Vista para generar token de autenticación
@@ -155,4 +166,3 @@ class ChangePasswordViewSet(APIView):
         Token.objects.filter(user=user).delete()
 
         return Response({"message": "Contraseña actualizada correctamente"}, status=status.HTTP_200_OK)
-    
