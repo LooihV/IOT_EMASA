@@ -44,7 +44,7 @@ class RegistroSerializer(serializers.ModelSerializer):
             user = request.user
             if user.is_superuser:  
                 self.fields['machine'].queryset = Machine.objects.all()
-            else:  # Si no, filtrar solo las máquinas relacionadas a él
+            else:  # de lo contarrio solo las máquinas relacionadas a él
                 self.fields['machine'].queryset = Machine.objects.filter(user=user)
 
     class Meta:
@@ -70,6 +70,7 @@ class UserSerializer(serializers.ModelSerializer):
             is_superuser=validated_data.get('is_superuser',False),
             is_staff=validated_data.get('is_staff',False),
             tenant=tenant,
+            #Agregar password
 
         )
         user.set_password(validated_data['password'])  

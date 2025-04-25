@@ -13,7 +13,7 @@ CHIRPSTACK_API_URL = "http://chirpstack-rest-api:8090/api/users"
 CHIRPSTACK_TENANT_URL = "http://chirpstack-rest-api:8090/api/tenants"
 CHIRPSTACK_GATEWAYS_URL = "http://chirpstack-rest-api:8090/api/gateways"
 CHIRPSTACK_DEVICE_PROFILE_URL = "http://chirpstack-rest-api:8090/api/device-profiles"
-CHIRPSTACK_devices_url = "http://chirpstack-rest-api:8090/api/devices"
+CHIRPSTACK_DEVICES_URL = "http://chirpstack-rest-api:8090/api/devices"
 
 HEADERS = {
     "Authorization": f"Bearer {settings.CHIRPSTACK_JWT_TOKEN}",
@@ -24,6 +24,8 @@ def is_valid_email(email):
     """Valida si un string es un correo electrónico válido."""
     return bool(re.match(r"[^@]+@[^@]+\.[^@]+", email))
 
+
+# -------------------- USERS POST, DELETE, CON Y SIN TENANT --------------------
 
 
 def get_chirpstack_user_id(email):
@@ -52,24 +54,42 @@ def get_chirpstack_user_id(email):
 
 @receiver(post_save, sender=User)
 def sync_user_to_chirpstack(sender, instance, created, **kwargs):
-    print(" Signal POST SAVE ejecutado para usuario Django")
-    email = instance.email.strip()#.lower() #pone todo en minuscula
-    
+    print("Signal POST SAVE ejecutado para usuario Django")
+    email = instance.email.strip()
 
     if not is_valid_email(email):
-        print(" Email inválido. No se sincroniza con ChirpStack.")
+        print("Email inválido. No se sincroniza con ChirpStack.")
         return
+
+    # Buscar el chirpstack_id del tenant si existe uno en el usuario
+    tenant_payload = []
+    if instance.tenant:
+        tenant_name = instance.tenant.name
+        tenant_id = instance.tenant.chirpstack_id or get_chirpstack_tenant_id_by_name(tenant_name)
+
+        if tenant_id:
+            tenant_payload.append({
+                "tenantId": tenant_id,
+                "isAdmin": True,
+                "isDeviceAdmin": True,
+                "isGatewayAdmin": True
+            })
+        else:
+            print(f"Tenant '{tenant_name}' no encontrado en ChirpStack. No se asociará el usuario.")
 
     user_data = {
         "user": {
             "email": email,
             "note": f"Sincronizado desde Django para {instance.username}",
             "isAdmin": instance.is_superuser,
-            "isActive":True,
-            "password": instance.password, #if created else "dummy"  # sólo al crear
-            "tenant": instance.tenant.chirpstack_id
-        }
+            "isActive": True,
+        },
+        "tenants": tenant_payload
     }
+
+    # Solo al crear se incluye la contraseña
+    if created:
+        user_data["password"] = instance.password
 
     try:
         user_id = get_chirpstack_user_id(email)
@@ -78,7 +98,7 @@ def sync_user_to_chirpstack(sender, instance, created, **kwargs):
             print("Usuario nuevo. Creando en ChirpStack...")
             response = requests.post(CHIRPSTACK_API_URL, headers=HEADERS, json=user_data)
         else:
-            print(" Usuario ya existe. Actualizando en ChirpStack...")
+            print("Usuario ya existe. Actualizando en ChirpStack...")
             update_url = f"{CHIRPSTACK_API_URL}/{user_id}"
             user_data["user"].pop("password", None)  # No actualices contraseña
             response = requests.put(update_url, headers=HEADERS, json=user_data)
@@ -87,7 +107,7 @@ def sync_user_to_chirpstack(sender, instance, created, **kwargs):
         response.raise_for_status()
 
     except Exception as e:
-        print(f" Error al sincronizar usuario con ChirpStack: {e}")
+        print(f"Error al sincronizar usuario con ChirpStack: {e}")
 
 @receiver(pre_delete, sender=User)
 def delete_user_from_chirpstack(sender, instance, **kwargs):
@@ -122,7 +142,7 @@ def delete_user_from_chirpstack(sender, instance, **kwargs):
         
         
 
-#  ------------------------- TENANTS -------------------------
+#  ------------------------- TENANTS POST Y DELETE -------------------------
 
 @receiver(post_save, sender=Tenant)
 def sync_tenant_to_chirpstack(sender, instance, created, **kwargs):
