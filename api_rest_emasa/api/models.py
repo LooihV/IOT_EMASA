@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Permission, Group
 from django.db import models
 from django.conf import settings
 
@@ -40,11 +40,33 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOISES, default="viewer")
     #groups = models.ManyToManyField("auth.Group", related_name ="custom_users",blank=True)
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, null=True, blank=True)
-    user_permissions = models.ManyToManyField(
+    
+    """user_permissions = models.ManyToManyField(
         "auth.Permission",
         related_name="custom_users_permissions",
         blank=True
+    )"""
+    groups = models.ManyToManyField(
+        Group,
+        verbose_name='groups',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        related_name="customuser_set",  # Nombre único para la relación inversa
+        related_query_name="customuser",
     )
+    
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name='user permissions',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        related_name="customuser_set",  # Nombre único para la relación inversa
+        related_query_name="customuser",
+    )
+
+    def _str_(self):
+        return self.username
+    
 
 
 class CentralSystem (models.Model):
