@@ -12,7 +12,7 @@ User = get_user_model()
 CHIRPSTACK_API_URL = "http://chirpstack-rest-api:8090/api/users"
 CHIRPSTACK_TENANT_URL = "http://chirpstack-rest-api:8090/api/tenants"
 CHIRPSTACK_GATEWAYS_URL = "http://chirpstack-rest-api:8090/api/gateways"
-CHIRPSTACK_DEVICE_PROFILE_URL = "http://chirpstack-ret-api:8090/api/device-profiles"
+CHIRPSTACK_DEVICE_PROFILE_URL = "http://chirpstack-rest-api:8090/api/device-profiles"
 CHIRPSTACK_devices_url = "http://chirpstack-rest-api:8090/api/devices"
 
 HEADERS = {
@@ -67,7 +67,7 @@ def sync_user_to_chirpstack(sender, instance, created, **kwargs):
             "isAdmin": instance.is_superuser,
             "isActive":True,
             "password": instance.password, #if created else "dummy"  # sólo al crear
-            "tenant": instance.tenant
+            "tenant": instance.tenant.chirpstack_id
         }
     }
 
