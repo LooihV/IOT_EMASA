@@ -56,41 +56,45 @@ class RegistroSerializer(serializers.ModelSerializer):
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
-    tenant = serializers.PrimaryKeyRelatedField(queryset=Tenant.objects.all(),required=False,allow_null=True)
+    tenant = serializers.PrimaryKeyRelatedField(queryset=Tenant.objects.all(), required=False, allow_null=True)
     
     class Meta:
         model = User
-        fields='__all__'
+        fields = '__all__'
 
     def create(self, validated_data):
-        tenant = validated_data.pop('tenant',None)
+        password = validated_data.get('password')
+        tenant = validated_data.pop('tenant', None)
+        
         user = User(
             username=validated_data['username'],
             email=validated_data.get('email', ''),
-            is_superuser=validated_data.get('is_superuser',False),
-            is_staff=validated_data.get('is_staff',False),
+            is_superuser=validated_data.get('is_superuser', False),
+            is_staff=validated_data.get('is_staff', False),
             tenant=tenant,
-            #Agregar password
-
         )
-        user.set_password(validated_data['password'])  
+        user.set_password(password)  # Aquí usas el password bien
         user.save()
-        
+
         from api.chirpstack_api import sync_user_to_chirpstack 
-        sync_user_to_chirpstack(sender=User, instance=user, created=True)
+        sync_user_to_chirpstack(sender=User, instance=user, created=True, password_plaintext=password)
         return user
     
     def update(self, instance, validated_data):
+        password = None
         if 'password' in validated_data:
-            instance.set_password(validated_data['password'])  
-            validated_data.pop('password')  
-        
-        tenant = validated_data.pop('tenant',None)
+            password = validated_data.get('password')
+            instance.set_password(password)
+            validated_data.pop('password')
+
+        tenant = validated_data.pop('tenant', None)
         if tenant:
             instance.tenant = tenant
-        
+
         user = super().update(instance, validated_data)
         instance.save()
+
         from api.chirpstack_api import sync_user_to_chirpstack 
-        sync_user_to_chirpstack(sender=User, instance=user, created=False)
+        sync_user_to_chirpstack(sender=User, instance=user, created=False, password_plaintext=password)
+
         return user

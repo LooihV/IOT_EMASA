@@ -42,7 +42,7 @@ def get_chirpstack_user_id(email):
         
         # Recorre los usuarios para buscar el que coincida con el email
         for user in users:
-            if user["email"].strip().lower() == email.strip().lower():
+            if user["email"] == email:
                 return user["id"]
         
         # Si no se encuentra, imprime un mensaje y devuelve None
@@ -53,8 +53,8 @@ def get_chirpstack_user_id(email):
     
     return None
 
-@receiver(post_save, sender=CustomUser)
-def sync_user_to_chirpstack(sender, instance, created, **kwargs):
+#@receiver(post_save, sender=CustomUser)
+def sync_user_to_chirpstack(sender, instance, created, password_plaintext=None, **kwargs):
     print("Signal POST SAVE ejecutado para usuario Django")
     email = instance.email.strip()
 
@@ -88,24 +88,38 @@ def sync_user_to_chirpstack(sender, instance, created, **kwargs):
         "tenants": tenant_payload
     }
 
-    # Solo al crear se incluye la contraseña
-    if created:
-        user_data["password"] = instance.password
-
     try:
         user_id = get_chirpstack_user_id(email)
 
-        if created or not user_id:
-            print("Usuario nuevo. Creando en ChirpStack...")
+        if created:
+            print("Usuario NUEVO. Creando en ChirpStack...")
+            if password_plaintext:
+                user_data["password"] = password_plaintext
             response = requests.post(CHIRPSTACK_API_URL, headers=HEADERS, json=user_data)
-        else:
-            print("Usuario ya existe. Actualizando en ChirpStack...")
-            update_url = f"{CHIRPSTACK_API_URL}/{user_id}"
-            user_data["user"].pop("password", None)  # No actualices contraseña
-            response = requests.put(update_url, headers=HEADERS, json=user_data)
+            print(f"STATUS CREACIÓN: {response.status_code} | RESPUESTA: {response.text}")
+            response.raise_for_status()
 
-        print(f"STATUS: {response.status_code} | RESPUESTA: {response.text}")
-        response.raise_for_status()
+        else:
+            if not user_id:
+                print(f"Error crítico: No se encontró user_id en ChirpStack para {email}. No se puede actualizar.")
+                return
+
+            print("Usuario EXISTENTE. Actualizando en ChirpStack...")
+            update_url = f"{CHIRPSTACK_API_URL}/{user_id}"
+
+            # Primero actualiza los datos generales
+            response = requests.put(update_url, headers=HEADERS, json=user_data)
+            print(f"STATUS ACTUALIZACIÓN: {response.status_code} | RESPUESTA: {response.text}")
+            response.raise_for_status()
+
+            # Luego actualiza el password si es necesario
+            if password_plaintext:
+                print("Actualizando contraseña en ChirpStack...")
+                password_url = f"{CHIRPSTACK_API_URL}/{user_id}/password"
+                password_payload = {"password": password_plaintext}
+                password_response = requests.post(password_url, headers=HEADERS, json=password_payload)
+                print(f"STATUS CONTRASEÑA: {password_response.status_code} | RESPUESTA: {password_response.text}")
+                password_response.raise_for_status()
 
     except Exception as e:
         print(f"Error al sincronizar usuario con ChirpStack: {e}")
