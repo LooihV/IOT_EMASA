@@ -1,0 +1,6 @@
+.*
+!.gitattributes
+.env
+# data folder
+/data
+/lorawan-devices
