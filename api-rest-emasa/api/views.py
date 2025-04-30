@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
+from rest_framework import status, permissions
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework import viewsets
@@ -12,9 +13,12 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from .serializer import ProgrammerSerializer,UserSerializer,TenantSerializer
-from .models import Programador, CustomUser, User, Registro, Tenant
+from .models import Programador, CustomUser,  Registro, Tenant #,User
 from .models import Machine,CentralSystem
 from .serializer import MachineSerializer, RegistroSerializer
+from django.contrib.auth import authenticate
+from .models import CustomToken
+from django.utils.timezone import now
 #from api_rest_emasa.api.chirpstack_api import create_user_in_chirpstack
 
 
@@ -56,9 +60,27 @@ class CustomAuthToken(ObtainAuthToken):
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key})
-    
+
+#---------------------
 
 
+class CustomObtainAuthToken(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            token, created = CustomToken.objects.get_or_create(user=user)
+            return Response({
+                'token': token.key,
+                'user_id': user.id,
+                'created': token.created,
+                'is_new': created
+            })
+        return Response({'error': 'Credenciales inválidas'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 

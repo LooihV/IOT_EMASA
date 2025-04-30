@@ -1,7 +1,14 @@
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser, Permission, Group
 from django.db import models
 from django.conf import settings
+from django.contrib.auth import get_user_model
+import binascii
+import os
+
+
+#User = get_user_model()
+
 
 # models here.
 # class Programador se puede cambiar en un futuro por la de Sensor 
@@ -104,3 +111,27 @@ class Registro(models.Model):
 
     def __str__(self):
         return f"Registro de {self.machine.name if self.machine else 'Sin máquina'} - {self.Fecha}"
+    
+    
+    
+    
+
+class CustomToken(models.Model):
+    key = models.CharField(max_length=40, primary_key=True, editable=False)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,  # Usará api_customuser
+        related_name='custom_tokens',
+        on_delete=models.CASCADE
+    )
+    created = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            self.key = self.generate_key()
+        return super().save(*args, **kwargs)
+
+    def generate_key(self):
+        return binascii.hexlify(os.urandom(20)).decode()
+
+    def __str__(self):
+        return self.key

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'rest_framework',
-    'rest_framework.authtoken',
+    #'rest_framework.authtoken',
     'api',
     'channels',
     'corsheaders',
@@ -106,11 +106,11 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'chirpstack'),
-        'USER': os.environ.get('DB_USER', 'chirpstack'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'chirpstack'),
-        'HOST': os.environ.get('DB_HOST', 'persistance-postgres-1'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
@@ -150,7 +150,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'api.authentication.CustomTokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -183,7 +184,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_ID =1
 
 AUTH_USER_MODEL = "api.CustomUser" #acá es, se comenta si se usa el panel admin de django para crar users y se descomenta para usar el de api/vi/Users y conectar asì las apis
-CHIRPSTACK_JWT_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6Ijc2Y2VjMDA0LTg3ZjAtNDJjZi04YjQ4LTMzZmJiZjk0MTUwOCIsInR5cCI6ImtleSJ9.K078yW3NdA1ZjuI23e3hxxxs-s3ALqzqONxyVuv0_nw'
+CHIRPSTACK_JWT_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6ImZiNDE5MzBjLTc3N2MtNDM2NS1hMzgxLTI3MDY1NDQ5NDhhZCIsInR5cCI6ImtleSJ9.kZ7vFR7R58qHPlpnup_itCcnzvnIufN64ameLSgU39Y'
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

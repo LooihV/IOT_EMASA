@@ -4,7 +4,7 @@ from api import views
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet
+from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet, CustomObtainAuthToken
 
 
 router = routers.DefaultRouter()
@@ -18,5 +18,6 @@ router.register (r'Tenants',views.TenantViewSet)
 urlpatterns = [
     path('',include(router.urls)),
     path("pass/reset/", PasswordResetRequestViewSet.as_view(), name="password_reset"),
-    path("pass/change/", ChangePasswordViewSet.as_view(), name="password_change")
+    path("pass/change/", ChangePasswordViewSet.as_view(), name="password_change"),
+    path('token/', CustomObtainAuthToken.as_view(), name='custom-token'),
 ]

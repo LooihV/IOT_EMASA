@@ -5,10 +5,18 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 #from django.contrib.auth.models import User  # Usa tu modelo si es personalizado
 from django.contrib.auth import get_user_model
-from .models import User,Tenant, CustomUser
+from .models import Tenant, CustomUser #,User
+from rest_framework.authtoken.models import Token
 
 #User = get_user_model()
 CustomUser = get_user_model()
+
+
+
+#@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+#def create_auth_token(sender, instance=None, created=False, **kwargs):
+ #   if created:
+  #      Token.objects.create(user=instance)
 
 CHIRPSTACK_API_URL = "http://chirpstack-rest-api:8090/api/users"
 CHIRPSTACK_TENANT_URL = "http://chirpstack-rest-api:8090/api/tenants"

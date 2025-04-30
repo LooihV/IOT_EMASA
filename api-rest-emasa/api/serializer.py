@@ -1,8 +1,9 @@
 from rest_framework import serializers
 from .models import Programador
 from .models import Machine, Registro, Tenant
-from .models import User, CustomUser
+from .models import  CustomUser #, User
 from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
 #from .chirpstack_api import create_user_in_chirpstack, update_user_in_chirpstack, delete_user_in_chirpstack
 
 class ProgrammerSerializer(serializers.ModelSerializer):
@@ -57,10 +58,10 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     tenant = serializers.PrimaryKeyRelatedField(queryset=Tenant.objects.all(), required=False, allow_null=True)
-    
     class Meta:
         model = User
         fields = '__all__'
+    
 
     def create(self, validated_data):
         password = validated_data.get('password')
