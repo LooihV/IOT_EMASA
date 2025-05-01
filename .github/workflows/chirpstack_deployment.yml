@@ -1,9 +1,10 @@
 name: Deploy LoRaWAN Server
 
 on:
-  push:
-    branches:
-      - main  # here goes the production branch
+  workflow_run:
+    workflows: ["Databases Deployment"]
+    types:
+    - completed
 
 jobs:
   deploy-lorawan-server:
