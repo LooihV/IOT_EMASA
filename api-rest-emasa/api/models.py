@@ -8,16 +8,7 @@ import os
 
 
 #User = get_user_model()
-
-
 # models here.
-# class Programador se puede cambiar en un futuro por la de Sensor 
-# y cambiar los datos de esa clase por: Current, Preasure, Temperature, Voltage.
-class Programador (models.Model):
-    id = models.AutoField(primary_key=True)
-    Usuario = models.CharField(max_length=100)
-    Clave = models.CharField(max_length=50)
-    Email = models.EmailField(unique=True, null=True)
 
 
 

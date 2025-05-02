@@ -5,8 +5,10 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 #from django.contrib.auth.models import User  # Usa tu modelo si es personalizado
 from django.contrib.auth import get_user_model
-from .models import Tenant, CustomUser #,User
+from .models import Tenant, CustomUser, Machine #,User
 from rest_framework.authtoken.models import Token
+import binascii
+import os
 
 #User = get_user_model()
 CustomUser = get_user_model()
@@ -223,7 +225,7 @@ def get_chirpstack_tenant_id_by_name(name):
         print(f"Error al buscar tenant en ChirpStack: {e}")
     
     return None
-
+##
 @receiver(pre_delete, sender=Tenant)
 def delete_tenant_from_chirpstack(sender, instance, **kwargs):
     print("Signal PRE DELETE ejecutado para Tenant Django")
@@ -245,3 +247,134 @@ def delete_tenant_from_chirpstack(sender, instance, **kwargs):
 
     except requests.exceptions.RequestException as e:
         print(f"Error al eliminar tenant en ChirpStack: {e}")
+        
+        
+        
+# --------------------- GATEWAY ---------------------
+
+def sync_gateway_to_chirpstack(gateway_id, name, tenant_name, description="Desde Django", stats_interval=30):
+    tenant_id = get_chirpstack_tenant_id_by_name(tenant_name)
+    if not tenant_id:
+        print(f"Tenant '{tenant_name}' no encontrado. No se puede crear Gateway.")
+        return
+
+    payload = {
+        "gateway": {
+            "gatewayId": gateway_id,
+            "name": name,
+            "description": description,
+            "statsInterval": stats_interval,
+            "tenantId": tenant_id
+        }
+    }
+
+    try:
+        response = requests.post(CHIRPSTACK_GATEWAYS_URL, headers=HEADERS, json=payload)
+        print(f"[Gateway] STATUS {response.status_code} | RESPUESTA: {response.text}")
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Error creando gateway: {e}")
+
+
+# --------------------- DEVICE PROFILE ---------------------
+
+def sync_device_profile_to_chirpstack(name, tenant_name, region="US915"):
+    tenant_id = get_chirpstack_tenant_id_by_name(tenant_name)
+    if not tenant_id:
+        print(f"Tenant '{tenant_name}' no encontrado. No se puede crear perfil.")
+        return
+
+    payload = {
+        "deviceProfile": {
+            "name": name,
+            "region": region,
+            "macVersion": "LORAWAN_1_0_3",
+            "regParamRevision": "RP002_1_0_1",
+            "supportsOtaa": False,
+            "abpRx1Delay": 0,
+            "abpRx1DrOffset": 0,
+            "abpRx2Dr": 0,
+            "abpRx2Freq": 0,
+            "supportsClassB": False,
+            "supportsClassC": False,
+            "payloadCodecRuntime": "NONE",
+            "isRlay": False,
+            "isRlayEd": False,
+            "tenantId": tenant_id
+        }
+    }
+
+    try:
+        response = requests.post(CHIRPSTACK_DEVICE_PROFILE_URL, headers=HEADERS, json=payload)
+        print(f"[DeviceProfile] STATUS {response.status_code} | RESPUESTA: {response.text}")
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Error creando device profile: {e}")
+
+
+# --------------------- DEVICE ---------------------
+
+def sync_device_to_chirpstack(dev_eui, name, description, profile_id, application_id):
+    payload = {
+        "device": {
+            "name": name,
+            "description": description,
+            "devEui": dev_eui,
+            "deviceProfileId": profile_id,
+            "isDisabled": False,
+            "applicationId": application_id
+        }
+    }
+
+    try:
+        response = requests.post(CHIRPSTACK_DEVICES_URL, headers=HEADERS, json=payload)
+        print(f"[Device] STATUS {response.status_code} | RESPUESTA: {response.text}")
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Error creando device: {e}")
+        
+@receiver(post_save, sender=Machine)
+def sync_machine_as_device(sender, instance, created, **kwargs):
+    if not created:
+        return
+
+    print("Sincronizando Machine como device en ChirpStack...")
+
+    user = instance.user
+    tenant = user.tenant
+
+    if not tenant or not tenant.chirpstack_id:
+        print("La máquina no tiene un tenant válido, no se puede sincronizar.")
+        return
+
+    # Crear device profile si no existe
+    device_profile_name = f"profile-{tenant.name}"
+    sync_device_profile_to_chirpstack(device_profile_name, tenant.name)
+
+    # Buscar ID del perfil recién creado
+    try:
+        response = requests.get(CHIRPSTACK_DEVICE_PROFILE_URL, headers=HEADERS, params={"limit": 100})
+        response.raise_for_status()
+        profiles = response.json().get("result", [])
+        profile_id = next((p["id"] for p in profiles if p["name"] == device_profile_name), None)
+    except Exception as e:
+        print("Error obteniendo device profiles:", e)
+        return
+
+    if not profile_id:
+        print(f"No se encontró el profile '{device_profile_name}' después de crearlo.")
+        return
+
+    # Crear una aplicación si es necesario
+    application_id = tenant.chirpstack_id  # Opcionalmente crea/usa una aplicación por tenant
+
+    # dev_eui ficticio único (cambiar despues por los #de serie de cada device 16 caracteres)
+    dev_eui = binascii.hexlify(os.urandom(8)).decode()
+
+    sync_device_to_chirpstack(
+        dev_eui=dev_eui,
+        name=instance.name,
+        description="Dispositivo creado desde Django",
+        profile_id=profile_id,
+        application_id=application_id
+    )

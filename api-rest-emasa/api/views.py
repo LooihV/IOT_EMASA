@@ -12,34 +12,19 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from .serializer import ProgrammerSerializer,UserSerializer,TenantSerializer
-from .models import Programador, CustomUser,  Registro, Tenant #,User
+from .serializer import UserSerializer,TenantSerializer
+from .models import  CustomUser,  Registro, Tenant #,User
 from .models import Machine,CentralSystem
 from .serializer import MachineSerializer, RegistroSerializer
 from django.contrib.auth import authenticate
 from .models import CustomToken
 from django.utils.timezone import now
+#from .chirpstack_api import ChirpstackApiClient
+from .chirpstack_client import ChirpstackApiClient
+from django.conf import settings
+
+
 #from api_rest_emasa.api.chirpstack_api import create_user_in_chirpstack
-
-
-class ProgrammerViewSet(viewsets.ModelViewSet):
-    queryset = Programador.objects.all()
-    serializer_class = ProgrammerSerializer
-    permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_superuser:
-            return Programador.objects.all()
-        return Programador.objects.filter(Usuario=user.username)
-    def get_permissions(self):
-        """Restringir acceso según el tipo de usuario."""
-        if self.request.user.is_superuser:
-            return [IsAuthenticated()]  # Acceso total para admin
-        return [IsAuthenticated()]  # Acceso solo a datos del usuario
-
-
-
-
 
 
 class TenantViewSet(viewsets.ModelViewSet):
@@ -193,3 +178,111 @@ class ChangePasswordViewSet(APIView):
         Token.objects.filter(user=user).delete()
 
         return Response({"message": "Contraseña actualizada correctamente"}, status=status.HTTP_200_OK)
+
+
+# ---------------- VIEWS DEL CONSUMO DE CHIRPSTACK GATEWAYS, DEVICES, APPLICATIONS ----------------
+
+
+CHIRPSTACK_API_BASE = "http://chirpstack-rest-api:8090"
+CHIRPSTACK_TOKEN = settings.CHIRPSTACK_JWT_TOKEN
+
+
+class ChirpstackGatewayViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.register_gateway(request.data)
+            return Response(result, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+    def get(self, request):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.list_gateways()
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+class ChirpstackDeviceProfileViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.create_device_profile(request.data)
+            return Response(result, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+class ChirpstackDeviceViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.create_device(request.data)
+            return Response(result, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+    def get(self, request, dev_eui):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.get_device(dev_eui)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+class ChirpstackDeviceActivationViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, dev_eui):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.activate_device(dev_eui, request.data)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+    def get(self, request, dev_eui):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.get_device_activation(dev_eui)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+        
+class ChirpstackApplicationViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        tenant_id = request.query_params.get("tenantId")
+        limit = request.query_params.get("limit", 10)
+        offset = request.query_params.get("offset", 0)
+        search = request.query_params.get("search", "")
+
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.list_applications(tenant_id, limit, offset, search)
+            return Response(result, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+class ChirpstackMQTTCertificateViewSet(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, application_id):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.create_mqtt_certificate(application_id)
+            return Response(result, status=201)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)

@@ -1,18 +1,9 @@
 from rest_framework import serializers
-from .models import Programador
 from .models import Machine, Registro, Tenant
 from .models import  CustomUser #, User
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 #from .chirpstack_api import create_user_in_chirpstack, update_user_in_chirpstack, delete_user_in_chirpstack
-
-class ProgrammerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Programador
-        fields='__all__'
-
-
-
 
 
 
