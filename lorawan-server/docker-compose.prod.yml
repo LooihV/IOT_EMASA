@@ -2,8 +2,7 @@ services:
   chirpstack:
     image: chirpstack/chirpstack:4
     user: 1000:1000
-    command: |
-      sh -c "apk add --no-cache curl && chirpstack -c /etc/chirpstack"
+    command: -c /etc/chirpstack
     restart: always
     env_file:
       - .env.prod
