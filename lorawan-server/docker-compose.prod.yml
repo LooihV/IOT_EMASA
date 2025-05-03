@@ -17,7 +17,7 @@ services:
       - ./configuration/chirpstack:/etc/chirpstack
       - ../../.certs:/etc/chirpstack/certs
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      test: ["CMD", "nc", "-z", "localhost", "8080"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -90,7 +90,7 @@ services:
     networks:
       - chirp-django-net
     healthcheck:
-      test: ["CMD", "mosquitto_sub", "-t", "test", "-C", "1", "-h", "localhost"]
+      test: ["CMD", "nc", "-z", "localhost", "1883"]
       interval: 30s
       timeout: 10s
       retries: 3
