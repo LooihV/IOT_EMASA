@@ -18,10 +18,17 @@ class ChirpstackApiClient:
         return self.handle_response(requests.post(url,json={"gateway":gateway_data},headers=self.headers))
     
     
-    def list_gateway(self,limit=100):
+    def list_gateway(self,tenant_id=None,limit=100):
         url = f"{self.base_url}/api/gateways?limit={limit}"
+        if tenant_id:
+            url += f"&tenant_id={tenant_id}"
         return self.handle_response(requests.get(url,headers=self.headers))
     
+    
+    def delete_gateway(self, gateway_id):
+        url = f"{self.base_url}/api/gateways/{gateway_id}"
+        return self.handle_response(requests.delete(url,headers=self.headers))
+
     
     def create_device_profile(self, profile_data):
         url = f"{self.base_url}/api/device-profiles"
@@ -33,16 +40,21 @@ class ChirpstackApiClient:
         return self.handle_response(requests.get(url,headers=self.headers))
     
     
-    def create_application(self, profile_application):
+    def create_application(self,application_data):
         url = f"{self.base_url}/api/applications"
-        return self.handle_response(requests.post(url,json={"deviceProfile":profile_application},headers=self.headers))
+        return self.handle_response(requests.post(url,json={"application":application_data},headers=self.headers))
     
     
-    def list_appilication(self, tenant_id=None, limit=100, offset=0, search=""):
+    def list_application(self, tenant_id=None, limit=100, offset=0, search=""):
         url = f"{self.base_url}/api/applications?limit={limit}&offset={offset}&search={search}"
         if tenant_id:
             url += f"&tenant_id={tenant_id}"
         return self.handle_response(requests.get(url,headers=self.headers))
+    
+    
+    def delete_application(self, application_id):
+        url = f"{self.base_url}/api/applications/{application_id}"
+        return self.handle_response(requests.delete(url,headers=self.headers))
     
     
     def create_mqqt_certificate(self, application_id):

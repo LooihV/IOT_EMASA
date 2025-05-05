@@ -200,11 +200,38 @@ class ChirpstackGatewayViewSet(APIView):
 
     def get(self, request):
         client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+
         try:
-            result = client.list_gateways()
+            if request.user.is_superuser:
+                result = client.list_gateway()
+            else:
+                tenant = request.user.tenant
+                if not tenant or not tenant.chirpstack_id:
+                    return Response({"error": "El usuario no tiene un tenant válido asociado."}, status=403)
+                
+                tenant_id = tenant.chirpstack_id
+                result = client.list_gateway(tenant_id=tenant_id)
+
             return Response(result, status=status.HTTP_200_OK)
+
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+        
+        
+        
+class ChirpstackGatewayDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    
+    def delete(self, request, gateway_id):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+
+        try:
+            result = client.delete_gateway(gateway_id)
+            return Response({"message": "Gateway eliminado correctamente"}, status=204)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
 
 
 class ChirpstackDeviceProfileViewSet(APIView):
@@ -262,18 +289,55 @@ class ChirpstackDeviceActivationViewSet(APIView):
 class ChirpstackApplicationViewSet(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
-        tenant_id = request.query_params.get("tenantId")
-        limit = request.query_params.get("limit", 10)
-        offset = request.query_params.get("offset", 0)
-        search = request.query_params.get("search", "")
+
+    def post(self, request):
+        user = request.user
+        tenant = user.tenant
+
+        if not tenant or not tenant.chirpstack_id:
+            return Response({"error": "Usuario no tiene tenant asignado."}, status=403)
+
+        application_data = request.data.copy()
+        application_data["tenant_id"] = tenant.chirpstack_id  
 
         client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
         try:
-            result = client.list_applications(tenant_id, limit, offset, search)
-            return Response(result, status=200)
+            result = client.create_application(application_data)
+            return Response(result, status=201)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+        
+    def get(self, request):
+     user = request.user
+     tenant = user.tenant
+
+     if not tenant or not tenant.chirpstack_id:
+        return Response({"error": "Usuario no tiene tenant asignado."}, status=403)
+
+     tenant_id = tenant.chirpstack_id
+     limit = request.query_params.get("limit", 10)
+     offset = request.query_params.get("offset", 0)
+     search = request.query_params.get("search", "")
+
+     client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+     try:
+        result = client.list_application(tenant_id, limit, offset, search)
+        return Response(result, status=200)
+     except Exception as e:
+        return Response({"error": str(e)}, status=400)
+        
+
+class ChirpstackApplicationDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+
+    def delete(self, request, application_id):
+     client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+     try:
+        result = client.delete_application(application_id)
+        return Response({"message": "Aplicación eliminada correctamente"}, status=204)
+     except Exception as e:
+        return Response({"error": str(e)}, status=400)
 
 
 class ChirpstackMQTTCertificateViewSet(APIView):
@@ -282,7 +346,7 @@ class ChirpstackMQTTCertificateViewSet(APIView):
     def post(self, request, application_id):
         client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
         try:
-            result = client.create_mqtt_certificate(application_id)
+            result = client.create_mqqt_certificate(application_id)
             return Response(result, status=201)
         except Exception as e:
             return Response({"error": str(e)}, status=400)

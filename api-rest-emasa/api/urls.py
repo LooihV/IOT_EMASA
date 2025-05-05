@@ -4,7 +4,7 @@ from api import views
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet, CustomObtainAuthToken, ChirpstackGatewayViewSet, ChirpstackDeviceProfileViewSet, ChirpstackDeviceViewSet, ChirpstackDeviceActivationViewSet, ChirpstackApplicationViewSet, ChirpstackMQTTCertificateViewSet
+from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet, CustomObtainAuthToken, ChirpstackGatewayViewSet, ChirpstackDeviceProfileViewSet, ChirpstackDeviceViewSet, ChirpstackDeviceActivationViewSet, ChirpstackApplicationViewSet, ChirpstackMQTTCertificateViewSet, ChirpstackGatewayDeleteView, ChirpstackApplicationDeleteView
 
 
 router = routers.DefaultRouter()
@@ -21,12 +21,15 @@ urlpatterns = [
     path("pass/change/", ChangePasswordViewSet.as_view(), name="Password_change"),
     path('token/', CustomObtainAuthToken.as_view(), name='Custom-token'),
     
-    # --------------- URLS DE LA COMUNICACIÒN DE CHIRPSTACK ---------------
-    path("chirpstack/gateways",ChirpstackGatewayViewSet.as_view(), name="Gateways"),
+    # ------------------------- URLS DE LA COMUNICACIÒN DE CHIRPSTACK -------------------------
+    path("chirpstack/gateways/",ChirpstackGatewayViewSet.as_view(), name="Gateways"),
+    path("chirpstack/gateways/<str:gateway_id>/",ChirpstackGatewayDeleteView.as_view(), name="Gateway-Delete"),
     path("chirpstack/device-profiles",ChirpstackDeviceProfileViewSet.as_view(),name="Device-Profile"),
     path("chirpstack/devices",ChirpstackDeviceViewSet.as_view(), name="Devices"),
     path("chirpstack/devices/<str:dev_eui>/", ChirpstackDeviceViewSet.as_view(), name="Devices2"),
     path("chirpstack/devices/activation", ChirpstackDeviceActivationViewSet.as_view(), name="Device-Activation"),
-    path("chirpstack/applications",ChirpstackApplicationViewSet.as_view(), name=("Applications")),
+    path("chirpstack/applications/",ChirpstackApplicationViewSet.as_view(), name=("Applications")),
+    path("chirpstack/applications/<str:application_id>/",ChirpstackApplicationDeleteView.as_view(), name=("Applications")),
     path("chirpstack/applications/<str:application_id>/mqtt-certificate/", ChirpstackMQTTCertificateViewSet.as_view()),    
+    
 ]
