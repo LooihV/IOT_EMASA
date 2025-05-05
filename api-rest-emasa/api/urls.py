@@ -22,6 +22,7 @@ urlpatterns = [
     path('token/', CustomObtainAuthToken.as_view(), name='Custom-token'),
     
     # ------------------------- URLS DE LA COMUNICACIÒN DE CHIRPSTACK -------------------------
+    
     path("chirpstack/gateways/",ChirpstackGatewayViewSet.as_view(), name="Gateways"),
     path("chirpstack/gateways/<str:gateway_id>/",ChirpstackGatewayDeleteView.as_view(), name="Gateway-Delete"),
     path("chirpstack/device-profiles",ChirpstackDeviceProfileViewSet.as_view(),name="Device-Profile"),
