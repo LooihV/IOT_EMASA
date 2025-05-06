@@ -1,4 +1,5 @@
-import random, os, string
+import random
+import string
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -256,10 +257,6 @@ class ChirpstackDeviceViewSet(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=400)
 
-
-class  ChirpstackDeviceDelGetView(APIView):
-    permission_classes = [IsAuthenticated]
-    
     def get(self, request, dev_eui):
         client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
         try:
@@ -269,54 +266,16 @@ class  ChirpstackDeviceDelGetView(APIView):
             return Response({"error": str(e)}, status=400)
 
 
-    def delete(self, request, dev_eui):
-        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
-        try:
-            result = client.delete_device(dev_eui)
-            return Response({"message":"Device eliminado correctamente"},status=204)
-        except Exception as e:
-            return Response({"error":str(e)},status=400)
-            
-    
-    
 class ChirpstackDeviceActivationViewSet(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request, dev_eui):
-        
-        
-       """   ESTO SI SE VA A GENERAR LOS TOKENS DE APP_S_KEY Y NWK_S_KEY AUTOMATICAMENTE Y AL AZAR
-            def generate_key():
-            return os.urandom(16).hex()
-
-        activation_data = {
-            "dev_addr": "01020304",
-            "app_s_key": generate_key(),
-            "nwk_s_key": generate_key(),
-            "f_cnt_up": 0,
-            "f_cnt_down": 0
-        }
-
         client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
         try:
-            result = client.activate_device(dev_eui, activation_data)
-            return Response({
-                "message": "Dispositivo activado correctamente",
-                "activation_data": activation_data,
-                "result": result
-            }, status=200)
-        except Exception as e:
-            return Response({"error": str(e)}, status=400)"""
-        
-        
-       client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
-       try:
             result = client.activate_device(dev_eui, request.data)
             return Response(result, status=status.HTTP_200_OK)
-       except Exception as e:
+        except Exception as e:
             return Response({"error": str(e)}, status=400)
-        
-        
 
     def get(self, request, dev_eui):
         client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
