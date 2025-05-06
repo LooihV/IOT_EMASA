@@ -1,0 +1,13 @@
+services:
+  paho:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ../../.certs:/etc/paho-mqtt/certs
+    networks:
+      - chirp-django-net
+
+networks:
+  chirp-django-net:
+    external: true  
+    
