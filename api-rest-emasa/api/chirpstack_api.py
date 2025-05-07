@@ -250,7 +250,7 @@ def delete_tenant_from_chirpstack(sender, instance, **kwargs):
         
         
         
-# --------------------- GATEWAY ---------------------
+# --------------------- GATEWAY * USA MEJOR LO DE CHIRPSTACK_CLIENT * ---------------------
 
 def sync_gateway_to_chirpstack(gateway_id, name, tenant_name, description="Desde Django", stats_interval=30):
     tenant_id = get_chirpstack_tenant_id_by_name(tenant_name)

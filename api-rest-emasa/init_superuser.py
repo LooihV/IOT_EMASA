@@ -1,23 +1,23 @@
 import os
 import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')  
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from api.models import CentralSystem
 
 # Configurar Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')  
 django.setup()
 
 User = get_user_model()
 
 SUPERUSERS = [
 
-{"username" : "EMASADOCK",
-"email" : "admin@example.com",
-"password" : "emasa123"},
-{"username" : "Jemison00",
-"email" : "Jadmin@example.com",
-"password" : "2025jemisonM*"},
+{"username" : os.environ.get("SUPERUSER_1_USERNAME"),
+"email" : os.environ.get("SUPERUSER_1_EMAIL"),
+"password" : os.environ.get("SUPERUSER_1_PASSWORD")},
+{"username" : os.environ.get("SUPERUSER_2_USERNAME"),
+"email" : os.environ.get("SUPERUSER_2_EMAIL"),
+"password" : os.environ.get("SUPERUSER_2_PASSWORD")},
 ]
 
 for user in SUPERUSERS:

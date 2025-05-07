@@ -19,12 +19,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+
+#SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') #Poner esto en vez del de abajo para produccion
 SECRET_KEY = 'django-insecure-!1i4hbr651j)bb9_mtqwgl_cusm%kpp11#8ia(khm$elx@m1ag'
 
-# SECURITY WARNING: don't run with debug turned on in production! cambiar DEBUG = False
+# SECURITY WARNING: don't run with debug turned on in production! cambiar DEBUG = False!!
 DEBUG = True
 
-#Colocar los dominios permitidos separados por (,)
+#Colocar los dominios permitidos separados por (,) cambiar en produccion por el dominio de emasa hostinger
 ALLOWED_HOSTS = ['localhost','127.0.0.1','10.0.2.15','192.168.18.118']
 
 # Application definition
@@ -81,25 +83,6 @@ ASGI_APPLICATION = 'drf.asgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 #import dj_database_url
-"""
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://miusuario:admin@db:5432/dbsens',
-        conn_max_age=600,
-        ssl_require=False
-    )
-}
-"""
-"""DATABASES = {   #esta funcionoba antes....
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dbsens',  # Nombre de la base de datos
-        'USER': 'miusuario',  # Usuario de PostgreSQL
-        'PASSWORD': 'admin',  # Contraseña del usuario
-        'HOST': 'db',  # Dirección del servidor (localhost si es local) si no entonces la ip
-        'PORT': '5432',  # Puerto por defecto de PostgreSQL
-    }
-}"""
 
 #NUEVA DB
 
@@ -147,6 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 MIDDLEWARE.insert(1, 'corsheaders.middleware.CorsMiddleware')
 
 CORS_ALLOW_ALL_ORIGINS = True
+#Para Produccion CORS_ALLOWED_ORIGINS = [url del frontend] #y quitar/comentar el de arriba el CORS_ALLOW_ALL
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -184,6 +168,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_ID =1
 
 AUTH_USER_MODEL = "api.CustomUser" #acá es, se comenta si se usa el panel admin de django para crar users y se descomenta para usar el de api/vi/Users y conectar asì las apis
+
+#CHIRPSTACK_JWT_TOKEN = os.environ.get("CHIRPSTACK_JWT_TOKEN") #Para Produccion cambiar por el de abajo y el token ponerlo en .env.prod
 CHIRPSTACK_JWT_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6ImZiNDE5MzBjLTc3N2MtNDM2NS1hMzgxLTI3MDY1NDQ5NDhhZCIsInR5cCI6ImtleSJ9.kZ7vFR7R58qHPlpnup_itCcnzvnIufN64ameLSgU39Y'
 
 
@@ -193,5 +179,5 @@ EMAIL_PORT = 465  # Puerto para TLS  465 si es para SSL   587 si es para TLS
 EMAIL_USE_TLS = False  
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") # que debe generar desde gmail contraseña para otra aplicacion
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") # que debe generar desde gmail contraseña para otra aplicacio
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

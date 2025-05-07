@@ -151,7 +151,7 @@ class PasswordResetRequestViewSet(APIView):
         send_mail(
             "MONITOR: Recuperación de contraseña",
             f"Tu nueva contraseña temporal es: {temp_password}\n\nPor favor, cámbiala antes del próximo inicio de sesión.",
-            "mario.bernalc@gmail.com",  # email configurado en settings.py
+            "monitor.pruebas2000@gmail.com",  # email configurado en settings.py
             [email],
             fail_silently=False,
         )

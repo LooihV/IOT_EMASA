@@ -1,10 +1,10 @@
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-from .models import CustomToken  # Asegúrate que este import apunta a tu modelo correcto
+from .models import CustomToken  
 
 class CustomTokenAuthentication(BaseAuthentication):
     keyword = 'Token'
-    model = CustomToken  # Esto es CRUCIAL - le decimos qué modelo usar
+    model = CustomToken  
 
     def authenticate(self, request):
         auth = request.headers.get('Authorization', '').split()

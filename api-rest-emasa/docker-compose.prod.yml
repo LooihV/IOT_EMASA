@@ -21,13 +21,9 @@ services:
       - static_volume:/app/staticfiles
     ports:
       - "8000:8000"
-    environment:
-      - DB_NAME=chirpstack
-      - DB_USER=chirpstack
-      - DB_PASSWORD=chirpstack
-      - DB_HOST=persistance-postgres-1
-      - DB_PORT=5432
-      
+    env_file:
+      - .env.prod
+
     depends_on:
       - redis
     networks:

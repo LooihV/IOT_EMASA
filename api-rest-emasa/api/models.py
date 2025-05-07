@@ -6,10 +6,8 @@ from django.contrib.auth import get_user_model
 import binascii
 import os
 
-
 #User = get_user_model()
 # models here.
-
 
 
 
