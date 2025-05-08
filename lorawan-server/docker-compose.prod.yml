@@ -5,7 +5,7 @@ services:
     command: -c /etc/chirpstack
     restart: always
     env_file:
-      - .env.prod
+      - ../.env.prod
     depends_on:
       - mosquitto
       - redis
@@ -31,7 +31,7 @@ services:
     volumes:
       - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
     env_file:
-      - .env.prod
+      - ../.env.prod
     networks:
       - chirp-django-net
     depends_on:

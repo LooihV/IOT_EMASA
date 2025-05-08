@@ -29,6 +29,7 @@ services:
       - "1700:1700/udp"
     volumes:
       - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
+      - ../../.certs:/etc/chirpstack-gateway-bridge/certs
     environment:
       - INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE=us915_7/gateway/{{ .GatewayID }}/event/{{ .EventType }}
       - INTEGRATION__MQTT__STATE_TOPIC_TEMPLATE=us915_7/gateway/{{ .GatewayID }}/state/{{ .StateType }}
@@ -46,6 +47,7 @@ services:
       - "3001:3001"
     volumes:
       - ./configuration/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
+      - ../../.certs:/etc/chirpstack-gateway-bridge/certs
     networks:
       - chirp-django-net
     depends_on:
@@ -77,7 +79,6 @@ services:
     restart: unless-stopped
     ports:
       - "1883:1883"
-      - "8883:8883"
     volumes: 
       - ./configuration/mosquitto/config/:/mosquitto/config/
       - ../../.certs:/etc/mosquitto/certs/

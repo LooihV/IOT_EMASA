@@ -24,8 +24,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') #Poner esto en vez del de abajo
 #SECRET_KEY = 'django-insecure-!1i4hbr651j)bb9_mtqwgl_cusm%kpp11#8ia(khm$elx@m1ag'
 
 # SECURITY WARNING: don't run with debug turned on in production! cambiar DEBUG = False!!
-DEBUG = True
-
+DEBUG = False
 
 #Colocar los dominios permitidos separados por (,) cambiar en produccion por el dominio de emasa hostinger
 ALLOWED_HOSTS = ['localhost','127.0.0.1','10.0.2.15','192.168.18.118']
@@ -90,11 +89,11 @@ ASGI_APPLICATION = 'drf.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'), 
-        'USER': os.environ.get('DB_USER'), 
-        'PASSWORD': os.environ.get('DB_PASSWORD'), 
-        'HOST': os.environ.get('DB_HOST'), 
-        'PORT': os.environ.get('DB_PORT'), 
+        'NAME': os.environ.get('POSTGRES_DB'), 
+        'USER': os.environ.get('POSTGRES_USER'), 
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'), 
+        'HOST': os.environ.get('POSTGRESQL_HOST'), 
+        'PORT': os.environ.get('POSTGRES_PORT'), 
     }
 }
 
