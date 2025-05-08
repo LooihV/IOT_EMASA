@@ -67,15 +67,20 @@ class ChirpstackApiClient:
         return self.handle_response(requests.post(url,json={"device":device_data},headers=self.headers))
     
     
-    def activate_device(self, dev_eui, activation_data):
-        url = f"{self.base_url}/api/devices/{dev_eui}/activate"
-        return self.handle_response(requests.post(url,json={"activatedevice":activation_data},headers=self.headers))
-    
-    
     def get_device(self,dev_eui):
         url = f"{self.base_url}/api/devices/{dev_eui}"
         return self.handle_response(requests.get(url,headers=self.headers))
     
+    
+    def delete_device(self, dev_eui):
+        url = f"{self.base_url}/api/devices/{dev_eui}"
+        return self.handle_response(requests.delete(url,headers=self.headers))
+    
+    
+    def activate_device(self, dev_eui, activation_data):
+        url = f"{self.base_url}/api/devices/{dev_eui}/activate"
+        return self.handle_response(requests.post(url,json={"activatedevice":activation_data},headers=self.headers))
+      
     
     def get_device_activation(self, dev_eui):
         url = f"{self.base_url}/api/devices/{dev_eui}/activation"
