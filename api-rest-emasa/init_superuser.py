@@ -1,5 +1,6 @@
 import os
 import django
+import requests
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drf.settings')  
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
@@ -20,13 +21,46 @@ SUPERUSERS = [
 "password" : os.environ.get("SUPERUSER_2_PASSWORD")},
 ]
 
-for user in SUPERUSERS:
- if not User.objects.filter(username=user["username"]).exists(): #&& Y EL OTRO
-    User.objects.create_superuser(user["username"], user["email"], user["password"]) #&& Y EL OTRO
-    print(f"Superusuario '{user['username']}' creado con éxito.")
- else:
-    print("Superusuario {user['username']}' ya existe, no se creó uno nuevo.")
+# URL y token de ChirpStack
+CHIRPSTACK_API_BASE = os.environ.get("CHIRPSTACK_API_BASE", "http://chirpstack-rest-api:8090/api")
+CHIRPSTACK_TOKEN = os.environ.get("CHIRPSTACK_JWT_TOKEN")
 
+headers = {
+    "Grpc-Metadata-Authorization": f"Bearer {CHIRPSTACK_TOKEN}",
+    "Content-Type": "application/json"
+}
+
+# Crear en Django y ChirpStack
+for user in SUPERUSERS:
+    if not User.objects.filter(username=user["username"]).exists():
+        User.objects.create_superuser(user["username"], user["email"], user["password"])
+        print(f"✅ Superusuario '{user['username']}' creado en Django.")
+    else:
+        print(f"ℹ️ Superusuario '{user['username']}' ya existe en Django.")
+
+    # Verifica si ya existe en ChirpStack por email
+    try:
+        list_resp = requests.get(f"{CHIRPSTACK_API_BASE}/users", headers=headers)
+        list_resp.raise_for_status()
+        exists = any(u["user"]["email"] == user["email"] for u in list_resp.json().get("result", []))
+
+        if not exists:
+            payload = {
+                "user": {
+                    "email": user["email"],
+                    "note": f"Usuario creado desde init_superuser.py",
+                    "password": user["password"],
+                    "isAdmin": True
+                }
+            }
+            create_resp = requests.post(f"{CHIRPSTACK_API_BASE}/users", json=payload, headers=headers)
+            create_resp.raise_for_status()
+            print(f"✅ Usuario '{user['email']}' creado en ChirpStack.")
+        else:
+            print(f"ℹ️ Usuario '{user['email']}' ya existe en ChirpStack.")
+
+    except Exception as e:
+        print(f"❌ Error al crear usuario en ChirpStack: {e}")
 
 
 
