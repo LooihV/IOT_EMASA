@@ -28,12 +28,19 @@ Este proyecto está compuesto por dos componentes principales: una **API REST** 
 ## 📁 Estructura del proyecto
 
 ```bash
-/mi-proyecto
-├── /api_rest_emasa           # API REST con DJANGO rest Framework
+/IOT_EMASA
+├── /api-rest-emasa        # API REST con DJANGO rest Framework
 │   ├── main.py
 │   └── ...
-├── /lorawan_server        # Servidor LoRaWAN e integración con ChirpStack
+├── /lorawan-server        # Servidor LoRaWAN e integración con ChirpStack
 │   └── ...
+├── /mqtt-client           # cliente MQTT con paho
+│   ├── main.py
+│   └── ...
+├── /persistance           # Servidor LoRaWAN e integración con ChirpStack
+│   └── ...
+├── .gitignore
 ├── LICENSE
-└── README.md
+├── README.md
+└── openapi.json
 
