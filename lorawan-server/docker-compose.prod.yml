@@ -69,9 +69,16 @@ services:
   redis:
     image: redis:7-alpine
     restart: always
-    command: redis-server --save 300 1 --save 60 100 --appendonly no
     volumes:
       - redisdata:/data
+    env_file:
+      - ../.env.prod
+    command: >
+      sh -c "redis-server 
+      --requirepass \"${REDIS_PASSWORD}\" 
+      --save 300 1 
+      --save 60 100 
+      --appendonly no"
     networks:
       - chirp-django-net
     healthcheck:

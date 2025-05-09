@@ -4,12 +4,14 @@ services:
     restart: always
     volumes:
       - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    command: redis-server --requirepass redispass
+    environment:
+      - REDIS_PASSWORD=redispass
+    command: >
+      sh -c "redis-server 
+      --requirepass \"${REDIS_PASSWORD}\" 
+      --save 300 1 
+      --save 60 100 
+      --appendonly no"
     networks:
       - chirp-django-net
 
@@ -22,16 +24,36 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DB_NAME=chirpstack
-      - DB_USER=chirpstack
-      - DB_PASSWORD=chirpstack
-      - DB_HOST=persistance-postgres-1
-      - DB_PORT=5432
-      
+      - DJANGO_SECRET_KEY=your_secret_key_here
+      - EMAIL_HOST_USER= here goes the email
+      - EMAIL_HOST_PASSWORD= here goes the password
+      - CHIRPSTACK_JWT_TOKEN= your_chirpstack_here
+      - SUPERUSER_1_USERNAME= admin1
+      - SUPERUSER_1_EMAIL= admin1@example.com
+      - SUPERUSER_1_PASSWORD= admin1password
+      - SUPERUSER_2_USERNAME= admin2
+      - SUPERUSER_2_EMAIL= admin2@example.com
+      - SUPERUSER_2_PASSWORD= admin2password
+      - POSTGRES_USER= chirpstack
+      - POSTGRES_PASSWORD= chirpstack
+      - POSTGRES_DB= chirpstack
+      - REDIS_PASSWORD= redispass
     depends_on:
       - redis
     networks:
       - chirp-django-net
+  
+  swagger-ui:
+    image: swaggerapi/swagger-ui:latest
+    ports:
+    - "8010:8080"
+    volumes:
+    - ../openapi.json:/usr/share/nginx/html/openapi.json
+    environment:
+      - SWAGGER_JSON_URL=/openapi.json
+    restart: always
+    networks:
+    - chirp-django-net
 
 volumes:
   redis_data:

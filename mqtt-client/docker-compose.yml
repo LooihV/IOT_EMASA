@@ -1,7 +1,7 @@
 services:
   paho:
     build: .
-    restart: unless-stopped
+    restart: always
     volumes:
       - ../../.certs:/etc/paho-mqtt/certs
     networks:

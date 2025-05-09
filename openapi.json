@@ -1,0 +1,1043 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "EMASA API",
+    "description": "API for EMASA services management",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "EMASA API Server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "tokenAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Format: TOKEN {token-value}"
+      }
+    },
+    "schemas": {
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "username": { "type": "string" },
+          "password": { "type": "string" }
+        },
+        "required": ["username", "password"]
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "password": { "type": "string" },
+          "is_superuser": { "type": "boolean" },
+          "username": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "is_staff": { "type": "boolean" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "Maquina": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "central": { "type": "integer" },
+          "is_on": { "type": "boolean" },
+          "predictivo": { "type": "boolean" },
+          "gps": {
+            "type": "array",
+            "items": { "type": "number" }
+          }
+        }
+      },
+      "Registro": {
+        "type": "object",
+        "properties": {
+          "machine": { "type": "integer" },
+          "Pressure": { "type": "number" },
+          "Current": { "type": "number" },
+          "Temperature": { "type": "number" },
+          "Voltage": { "type": "number" }
+        }
+      },
+      "PasswordReset": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "format": "email" }
+        },
+        "required": ["email"]
+      },
+      "PasswordChange": {
+        "type": "object",
+        "properties": {
+          "old_password": { "type": "string" },
+          "new_password": { "type": "string" }
+        },
+        "required": ["old_password", "new_password"]
+      },
+      "Tenant": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "can_have_gateways": { "type": "boolean" },
+          "private_gateways_up": { "type": "boolean" },
+          "private_gateways_down": { "type": "boolean" }
+        }
+      },
+      "Application": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      },
+      "Gateway": {
+        "type": "object",
+        "properties": {
+          "gatewayId": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "statsInterval": { "type": "integer" },
+          "tenantId": { "type": "string" }
+        }
+      },
+      "DeviceProfile": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "region": { "type": "string" },
+          "mac_version": { "type": "string" },
+          "reg_params_revision": { "type": "string" },
+          "supports_join": { "type": "boolean" },
+          "rx_delay_1": { "type": "integer" },
+          "rx_datarate_2": { "type": "integer" },
+          "rx_freq_2": { "type": "integer" },
+          "factory_preset_freqs": {
+            "type": "array",
+            "items": { "type": "integer" }
+          },
+          "max_eirp": { "type": "number" },
+          "uplink_interval": { "type": "string" },
+          "supports_class_b": { "type": "boolean" },
+          "supports_class_c": { "type": "boolean" },
+          "tenant_id": { "type": "string" }
+        }
+      },
+      "Device": {
+        "type": "object",
+        "properties": {
+          "application_id": { "type": "string" },
+          "description": { "type": "string" },
+          "dev_eui": { "type": "string" },
+          "device_profile_id": { "type": "string" },
+          "name": { "type": "string" },
+          "skip_fcnt_check": { "type": "boolean" },
+          "is_disabled": { "type": "boolean" }
+        }
+      },
+      "DeviceActivation": {
+        "type": "object",
+        "properties": {
+          "dev_addr": { "type": "string" },
+          "app_s_key": { "type": "string" },
+          "nwk_s_key": { "type": "string" },
+          "f_cnt_up": { "type": "integer" },
+          "f_cnt_down": { "type": "integer" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/token/": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Get authentication token",
+        "description": "Authenticate user and retrieve token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              },
+              "example": {
+                "username": "username",
+                "password": "password"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid credentials"
+          }
+        }
+      }
+    },
+    "/api/v1/Users/": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get users",
+        "description": "Retrieve list of all users",
+        "security": [{"tokenAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "summary": "Register user",
+        "description": "Create a new user",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/Users/{userId}": {
+      "put": {
+        "tags": ["Users"],
+        "summary": "Update user",
+        "description": "Update existing user information",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the user to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - User does not exist"
+          }
+        }
+      }
+    },
+    "/api/v1/Maquinas/": {
+      "get": {
+        "tags": ["Maquinas"],
+        "summary": "Get maquinas",
+        "description": "Retrieve list of all machines",
+        "security": [{"tokenAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of maquinas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Maquina"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Maquinas"],
+        "summary": "Create maquina",
+        "description": "Create a new machine",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maquina"
+              },
+              "example": {
+                "name": "torreon_8",
+                "central": 1,
+                "is_on": false,
+                "predictivo": false,
+                "gps": [13.88, 8.32]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Maquina created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maquina"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/Maquinas/{maquinaId}/": {
+      "put": {
+        "tags": ["Maquinas"],
+        "summary": "Update maquina",
+        "description": "Update existing machine information",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "maquinaId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the machine to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Maquina"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Maquina updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Maquina"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Maquina does not exist"
+          }
+        }
+      }
+    },
+    "/api/v1/Registro/": {
+      "get": {
+        "tags": ["Registro"],
+        "summary": "Get registros",
+        "description": "Retrieve list of all records/logs",
+        "security": [{"tokenAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of registros",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Registro"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Registro"],
+        "summary": "Create registro",
+        "description": "Create a new record/log for a machine",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registro"
+              },
+              "example": {
+                "machine": 0,
+                "Pressure": 0,
+                "Current": 0,
+                "Temperature": 0,
+                "Voltage": 0
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registro created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Registro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/Registro/{registroId}/": {
+      "put": {
+        "tags": ["Registro"],
+        "summary": "Update registro",
+        "description": "Update existing record/log information",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "registroId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" },
+            "description": "ID of the record/log to update"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Registro"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registro updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Registro"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Registro does not exist"
+          }
+        }
+      }
+    },
+    "/api/v1/pass/reset/": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Request temporary password",
+        "description": "Request a temporary password reset via email",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordReset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset request successful"
+          },
+          "400": {
+            "description": "Bad request - Invalid email"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/pass/change/": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Change password",
+        "description": "Change user password",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordChange"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed successfully"
+          },
+          "400": {
+            "description": "Bad request - Invalid password"
+          }
+        }
+      }
+    },
+    "/api/v1/Tenants/": {
+      "get": {
+        "tags": ["Tenants"],
+        "summary": "Get tenants",
+        "description": "Retrieve list of all tenants",
+        "security": [{"tokenAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of tenants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tenant"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tenants"],
+        "summary": "Create tenant",
+        "description": "Create a new tenant",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tenant"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tenant created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/Tenants/{tenantId}": {
+      "delete": {
+        "tags": ["Tenants"],
+        "summary": "Delete tenant",
+        "description": "Delete existing tenant",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "tenantId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the tenant to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Tenant deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Tenant does not exist"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/applications/": {
+      "get": {
+        "tags": ["Applications"],
+        "summary": "Get applications",
+        "description": "Retrieve list of all applications",
+        "security": [{"tokenAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of applications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Application"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Applications"],
+        "summary": "Create application",
+        "description": "Create a new application",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Application"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Application created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Application"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/applications/{applicationId}/": {
+      "delete": {
+        "tags": ["Applications"],
+        "summary": "Delete application",
+        "description": "Delete existing application",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "applicationId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the application to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Application deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Application does not exist"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/gateways/": {
+      "get": {
+        "tags": ["Gateways"],
+        "summary": "Get gateways",
+        "description": "Retrieve list of all gateways",
+        "security": [{"tokenAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of gateways",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Gateway"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Gateways"],
+        "summary": "Create gateway",
+        "description": "Create a new gateway",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Gateway"
+              },
+              "example": {
+                "gatewayId": "string",
+                "name": "string",
+                "description": "string",
+                "statsInterval": 0,
+                "tenantId": "string"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Gateway created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Gateway"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/gateways/{gatewayId}/": {
+      "delete": {
+        "tags": ["Gateways"],
+        "summary": "Delete gateway",
+        "description": "Delete existing gateway",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "gatewayId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the gateway to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Gateway deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Gateway does not exist"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/device-profiles": {
+      "post": {
+        "tags": ["Device Profiles"],
+        "summary": "Create device profile",
+        "description": "Create a new device profile",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceProfile"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Device profile created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/devices/{deviceId}": {
+      "get": {
+        "tags": ["Devices"],
+        "summary": "Get device",
+        "description": "Retrieve device information",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the device to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Device information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Device does not exist"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Devices"],
+        "summary": "Delete device",
+        "description": "Delete existing device",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the device to delete"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Device deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Device does not exist"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/devices": {
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Create device",
+        "description": "Create a new device",
+        "security": [{"tokenAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Device"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Device created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          }
+        }
+      }
+    },
+    "/api/v1/chirpstack/devices/{deviceId}/activation/": {
+      "post": {
+        "tags": ["Devices"],
+        "summary": "Activate device",
+        "description": "Activate a device",
+        "security": [{"tokenAuth": []}],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID of the device to activate"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceActivation"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Device activated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceActivation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid data"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing token"
+          },
+          "404": {
+            "description": "Not found - Device does not exist"
+          }
+        }
+      }
+    }
+  }
+}

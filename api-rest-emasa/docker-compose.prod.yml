@@ -4,12 +4,19 @@ services:
     restart: always
     volumes:
       - redis_data:/data
+    env_file:
+      - ../.env.prod
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
-    command: redis-server --requirepass redispass
+    command: >
+      sh -c "redis-server 
+      --requirepass \"${REDIS_PASSWORD}\" 
+      --save 300 1 
+      --save 60 100 
+      --appendonly no"
     networks:
       - chirp-django-net
 
@@ -17,7 +24,6 @@ services:
     build: .
     command: bash -c "python manage.py migrate && python manage.py shell < init_superuser.py && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"
     volumes:
-      - .:/app
       - static_volume:/app/staticfiles
     ports:
       - "8000:8000"
@@ -27,6 +33,24 @@ services:
       - redis
     networks:
       - chirp-django-net
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui:latest
+    ports:
+    - "8010:8080"
+    volumes:
+    - ../openapi.json:/usr/share/nginx/html/openapi.json
+    env_file:
+      - ../.env.prod
+    restart: always
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "127.0.0.1:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+    - chirp-django-net
 
 volumes:
   redis_data:

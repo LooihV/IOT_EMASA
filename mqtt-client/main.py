@@ -34,14 +34,14 @@ def on_message(client, userdata, msg):
         # Procesa los datos JSON normalmente
         if "data" in data:
             b = base64.b64decode(data["data"])
-            logging.info(f"Raw bytes (from JSON): {b}")
+            logging.info("Received Raw bytes (from JSON)")
         else:
             logging.warning(f"JSON recibido sin campo 'data': {data}")
             
     except UnicodeDecodeError:
         # Si falla como UTF-8, trata el mensaje como binario
         logging.info(f"Mensaje binario recibido: {len(msg.payload)} bytes")
-        logging.info(f"Primeros 10 bytes: {msg.payload[:10].hex()}")
+        logging.info(f"Primeros 5 bytes: {msg.payload[:5].hex()}")
         
         # Intentar procesar como binario directo si es necesario
         try:

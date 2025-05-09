@@ -21,7 +21,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') #Poner esto en vez del de abajo para produccion
-#SECRET_KEY = 'django-insecure-!1i4hbr651j)bb9_mtqwgl_cusm%kpp11#8ia(khm$elx@m1ag'
 
 # SECURITY WARNING: don't run with debug turned on in production! cambiar DEBUG = False!!
 DEBUG = False
@@ -93,17 +92,14 @@ DATABASES = {
         'USER': os.environ.get('POSTGRES_USER'), 
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'), 
         'HOST': os.environ.get('POSTGRESQL_HOST'), 
-        'PORT': os.environ.get('POSTGRES_PORT'), 
     }
 }
 
 CHANNEL_LAYERS = {
     "default": {
-        #"BACKEND": "channels_redis.core.RedisChannelLayer",
-        "BACKEND":"channels.layers.InMemoryChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379,"redis")],
-            "password":"redispass",
+            "hosts": [f"redis://:{os.environ.get('REDIS_PASSWORD')}@redis:6379/0"],
         },
     },
 }
@@ -170,7 +166,6 @@ SITE_ID =1
 AUTH_USER_MODEL = "api.CustomUser" #acá es, se comenta si se usa el panel admin de django para crar users y se descomenta para usar el de api/vi/Users y conectar asì las apis
 
 CHIRPSTACK_JWT_TOKEN = os.environ.get("CHIRPSTACK_JWT_TOKEN") #Para Produccion cambiar por el de abajo y el token ponerlo en .env.prod
-#CHIRPSTACK_JWT_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6ImZiNDE5MzBjLTc3N2MtNDM2NS1hMzgxLTI3MDY1NDQ5NDhhZCIsInR5cCI6ImtleSJ9.kZ7vFR7R58qHPlpnup_itCcnzvnIufN64ameLSgU39Y'
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
