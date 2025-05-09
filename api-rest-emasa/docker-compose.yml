@@ -19,25 +19,25 @@ services:
     build: .
     command: bash -c "python manage.py migrate && python manage.py shell < init_superuser.py && daphne -b 0.0.0.0 -p 8000 drf.asgi:application"
     volumes:
-      - .:/app
       - static_volume:/app/staticfiles
     ports:
       - "8000:8000"
     environment:
       - DJANGO_SECRET_KEY=your_secret_key_here
-      - EMAIL_HOST_USER= here goes the email
-      - EMAIL_HOST_PASSWORD= here goes the password
-      - CHIRPSTACK_JWT_TOKEN= your_chirpstack_here
-      - SUPERUSER_1_USERNAME= admin1
-      - SUPERUSER_1_EMAIL= admin1@example.com
-      - SUPERUSER_1_PASSWORD= admin1password
-      - SUPERUSER_2_USERNAME= admin2
-      - SUPERUSER_2_EMAIL= admin2@example.com
-      - SUPERUSER_2_PASSWORD= admin2password
-      - POSTGRES_USER= chirpstack
-      - POSTGRES_PASSWORD= chirpstack
-      - POSTGRES_DB= chirpstack
-      - REDIS_PASSWORD= redispass
+      - EMAIL_HOST_USER=email@example.com
+      - EMAIL_HOST_PASSWORD=password
+      - CHIRPSTACK_JWT_TOKEN=your_chipstack_jwt_token_here
+      - SUPERUSER_1_USERNAME=admin1
+      - SUPERUSER_1_EMAIL=admin1@example.com
+      - SUPERUSER_1_PASSWORD=admin1password
+      - SUPERUSER_2_USERNAME=admin2
+      - SUPERUSER_2_EMAIL=admin2@example.com
+      - SUPERUSER_2_PASSWORD=admin2password
+      - POSTGRESQL_HOST=persistance-postgres-1
+      - POSTGRES_USER=chirpstack
+      - POSTGRES_PASSWORD=chirpstack
+      - POSTGRES_DB=chirpstack
+      - REDIS_PASSWORD=redispass
     depends_on:
       - redis
     networks:
