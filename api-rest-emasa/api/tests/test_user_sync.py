@@ -1,0 +1,31 @@
+from django.test import TestCase
+from unittest.mock import patch
+from api.models import CustomUser
+
+class UserChirpstackSyncTest(TestCase):
+    @patch("api.signals.requests.post")
+    def test_user_creation_triggers_chirpstack_sync(self, mock_post):
+        mock_post.return_value.status_code = 200
+        mock_post.return_value.json.return_value = {"id": "user-123"}
+
+        CustomUser.objects.create_user(username="test", email="test@example.com", password="test")
+
+        self.assertTrue(mock_post.called)
+        called_url = mock_post.call_args[0][0]
+        self.assertIn("/api/users", called_url)
+
+    @patch("api.signals.requests.get")
+    @patch("api.signals.requests.delete")
+    def test_user_deletion_triggers_chirpstack_delete(self, mock_delete, mock_get):
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {
+            "result": [{"user": {"email": "delete@example.com", "id": "user-456"}}]
+        }
+        mock_delete.return_value.status_code = 200
+
+        user = CustomUser.objects.create_user(username="deleteuser", email="delete@example.com", password="pass")
+        user.delete()
+
+        self.assertTrue(mock_delete.called)
+        called_url = mock_delete.call_args[0][0]
+        self.assertIn("/api/users/user-456", called_url)
