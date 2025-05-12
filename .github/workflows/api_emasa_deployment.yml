@@ -1,8 +1,9 @@
-name: Deploy MQTT client
+name: Deploy EMASA API-REST
+
 
 on:
   workflow_run:
-    workflows: ["Deploy EMASA API-REST"]
+    workflows: ["Deploy MQTT client"]
     types:
     - completed
 
