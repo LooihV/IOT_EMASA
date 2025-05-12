@@ -282,7 +282,7 @@ Finally, open the terminal in the path where docker-compose.yaml file is located
 docker-compose up --build -d
 ```
 ## 4.3 Deployment Diagram for Database
-![Diagram](images/datebase_docker_diagram.svg)
+![Diagram](resources/SVG/datebase_docker_diagram.svg)
 
 
 # 5. Testing the Deployment
