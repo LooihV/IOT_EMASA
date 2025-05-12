@@ -21,6 +21,8 @@ from django.utils.timezone import now
 #from .chirpstack_api import ChirpstackApiClient
 from .chirpstack_client import ChirpstackApiClient
 from django.conf import settings
+from .chirpstack_api import update_chirpstack_user_password
+
 
 
 #from api_rest_emasa.api.chirpstack_api import create_user_in_chirpstack
@@ -125,66 +127,71 @@ class UserViewSet(viewsets.ModelViewSet):
         return User.objects.filter(id=user.id)
     
     
-    
-    
+CHIRPSTACK_API_BASE = "http://chirpstack-rest-api:8090"
+CHIRPSTACK_TOKEN = os.environ.get("CHIRPSTACK_JWT_TOKEN")
+   
        
-    
-    
+        
 class PasswordResetRequestViewSet(APIView):
-    permission_classes = [IsAuthenticated]  #Sólo usuarios autenticados cambian sus cuentas asociadas.
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        email = request.data.get("email")
+        # 1. Siempre toma el email del usuario autenticado
+        email = request.user.email
 
-        # Verifica si el usuario existe y
-        # Verifica que el usuario autenticado coincide con el correo
-        if request.user.email != email:
-            return Response({"error": "No puedes solicitar un cambio de contraseña para otro usuario."}, status=status.HTTP_403_FORBIDDEN)
-
-        # Genera contraseña temporal
+        # 2. Generar contraseña temporal
         temp_password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-        request.user.set_password(temp_password)  # Se asigna la nueva contraseña
+        request.user.set_password(temp_password)
         request.user.save()
 
-        # Envia contraseña temporal por correo
+        # 3. Enviar al correo
         send_mail(
             "MONITOR: Recuperación de contraseña",
-            f"Tu nueva contraseña temporal es: {temp_password}\n\nPor favor, cámbiala antes del próximo inicio de sesión.",
-            "monitor.pruebas2000@gmail.com",  # email configurado en settings.py
+            f"Tu nueva contraseña temporal es: {temp_password}",
+            "monitor.pruebas2000@gmail.com",
             [email],
             fail_silently=False,
         )
 
-        return Response({"mensage": "Se ha enviado una contraseña temporal a tu correo."}, status=status.HTTP_200_OK)
+        try:
+            update_chirpstack_user_password(email=email, new_password=temp_password)
+        except Exception as e:
+            return Response({"error": f"Error al sincronizar con ChirpStack: {e}"}, status=500)
     
+
 class ChangePasswordViewSet(APIView):
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         user = request.user
         old_password = request.data.get("old_password")
         new_password = request.data.get("new_password")
 
-        # Verifica si la contraseña actual es correcta
         if not user.check_password(old_password):
-            return Response({"error": "La contraseña temporal-actual es incorrecta"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "La contraseña actual es incorrecta"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Cambiar contraseña
-        user.set_password(new_password)
-        user.save()
+        # 1. Obtener email ANTES de cambiar nada
+        email = request.user.email
 
-        # Invalidar token anterior 
-        Token.objects.filter(user=user).delete()
+        try:
+            # 2. Cambiar primero en ChirpStack
+            update_chirpstack_user_password(email=email, new_password=new_password)
 
-        return Response({"message": "Contraseña actualizada correctamente"}, status=status.HTTP_200_OK)
+            # 3. Si ChirpStack responde bien, cambia en Django
+            user.set_password(new_password)
+            user.save()
+            Token.objects.filter(user=user).delete()
+
+            return Response({"message": "Contraseña actualizada correctamente en ambas APIs"}, status=200)
+
+        except Exception as e:
+            return Response({"error": f"Error al sincronizar con ChirpStack: {e}"}, status=500)
 
 
 # ---------------- VIEWS DEL CONSUMO DE CHIRPSTACK GATEWAYS, DEVICES, APPLICATIONS ----------------
 
-
 CHIRPSTACK_API_BASE = "http://chirpstack-rest-api:8090"
 CHIRPSTACK_TOKEN = os.environ.get("CHIRPSTACK_JWT_TOKEN")
-
 
 class ChirpstackGatewayViewSet(APIView):
     permission_classes = [IsAuthenticated]

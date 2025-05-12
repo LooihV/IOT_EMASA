@@ -43,7 +43,7 @@ def get_chirpstack_user_id(email):
     """Busca el ID de un usuario en ChirpStack por su email."""
     try:
         # Incluir el parámetro 'limit' ya que así funciona en el header de la solicitud para eliminar
-        params = {"limit": 50}
+        params = {"limit": 200}
         response = requests.get(CHIRPSTACK_API_URL, headers=HEADERS, params=params)
         response.raise_for_status()
         
@@ -210,7 +210,7 @@ def sync_tenant_to_chirpstack(sender, instance, created, **kwargs):
 def get_chirpstack_tenant_id_by_name(name):
     """Obtiene el ID del tenant en ChirpStack dado su nombre."""
     try:
-        params = {"limit": 50}
+        params = {"limit": 200}
         response = requests.get(CHIRPSTACK_TENANT_URL, headers=HEADERS, params=params)
         response.raise_for_status()
 
@@ -247,6 +247,18 @@ def delete_tenant_from_chirpstack(sender, instance, **kwargs):
 
     except requests.exceptions.RequestException as e:
         print(f"Error al eliminar tenant en ChirpStack: {e}")
+
+
+def update_chirpstack_user_password(email, new_password):
+    user_id = get_chirpstack_user_id(email)
+    if not user_id:
+        raise Exception(f"Usuario con email {email} no encontrado en ChirpStack.")
+
+    password_url = f"{CHIRPSTACK_API_URL}/{user_id}/password"
+    payload = {"password": new_password}
+    response = requests.post(password_url, headers=HEADERS, json=payload)
+    response.raise_for_status()
+    print(f"✅ Contraseña actualizada correctamente en ChirpStack para {email}")
         
         
         
@@ -353,7 +365,7 @@ def sync_machine_as_device(sender, instance, created, **kwargs):
 
     # Buscar ID del perfil recién creado
     try:
-        response = requests.get(CHIRPSTACK_DEVICE_PROFILE_URL, headers=HEADERS, params={"limit": 100})
+        response = requests.get(CHIRPSTACK_DEVICE_PROFILE_URL, headers=HEADERS, params={"limit": 200})
         response.raise_for_status()
         profiles = response.json().get("result", [])
         profile_id = next((p["id"] for p in profiles if p["name"] == device_profile_name), None)
