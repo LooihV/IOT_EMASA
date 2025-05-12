@@ -6,7 +6,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # 2. Copia solo lo que necesitas
-COPY main.py .  
+COPY main.py .
+COPY health_check.py .  
 # Si tienes módulos extra, copia el directorio:
 # COPY src/ ./src/
 

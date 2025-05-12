@@ -1,1 +1,2 @@
-paho-mqtt
+psutil>=5.9.0
+paho-mqtt>=1.6.1

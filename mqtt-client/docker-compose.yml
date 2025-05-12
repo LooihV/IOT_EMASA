@@ -4,6 +4,9 @@ services:
     restart: always
     volumes:
       - ../../.certs:/etc/paho-mqtt/certs
+    environment:
+      - MQTT_BROKER_HOST=lorawan-server-mosquitto-1
+      - MQTT_BROKER_PORT=1883
     networks:
       - chirp-django-net
 
