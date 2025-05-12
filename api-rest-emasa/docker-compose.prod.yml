@@ -28,7 +28,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - path: /home/dragino/IOT_EMASA/.env.prod
+      - path: ../.env.prod
     depends_on:
       - redis
     networks:
