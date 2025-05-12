@@ -10,7 +10,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from pathlib import Path
 import os
-
+import logging
+from django.core.exceptions import ImproperlyConfigured
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,9 +27,9 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') #Poner esto en vez del de abajo
 DEBUG = False
 
 #Colocar los dominios permitidos separados por (,) cambiar en produccion por el dominio de emasa hostinger
-ALLOWED_HOSTS = ['localhost','127.0.0.1','10.0.2.15','192.168.18.118']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
-# Application definition
+
 
 INSTALLED_APPS = [
     #'daphne',

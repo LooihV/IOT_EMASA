@@ -38,6 +38,7 @@ services:
       - POSTGRES_PASSWORD=chirpstack
       - POSTGRES_DB=chirpstack
       - REDIS_PASSWORD=redispass
+      - ALLOWED_HOSTS=localhost,127.0.0.1
     depends_on:
       - redis
     networks:

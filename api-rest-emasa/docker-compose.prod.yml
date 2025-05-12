@@ -5,7 +5,7 @@ services:
     volumes:
       - redis_data:/data
     env_file:
-      - ../.env.prod
+      - path: ../.env.prod
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -28,7 +28,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      - ../.env.prod
+      - path: /home/dragino/IOT_EMASA/.env.prod
     depends_on:
       - redis
     networks:
@@ -41,7 +41,7 @@ services:
     volumes:
     - ../openapi.json:/usr/share/nginx/html/openapi.json
     env_file:
-      - ../.env.prod
+      - path: ../.env.prod
     restart: always
     healthcheck:
       test: ["CMD", "wget", "-qO-", "127.0.0.1:8080/"]
