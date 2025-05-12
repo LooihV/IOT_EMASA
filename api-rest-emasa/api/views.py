@@ -180,7 +180,7 @@ class ChangePasswordViewSet(APIView):
             # 3. Si ChirpStack responde bien, cambia en Django
             user.set_password(new_password)
             user.save()
-            Token.objects.filter(user=user).delete()
+            CustomToken.objects.filter(user=user).delete()
 
             return Response({"message": "Contraseña actualizada correctamente en ambas APIs"}, status=200)
 
