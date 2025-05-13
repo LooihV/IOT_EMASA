@@ -616,7 +616,7 @@ Finally, open the terminal in the path where docker-compose.yaml file is located
 docker-compose up -d
 ```
 ## 4.5. Deployment Diagram for LoRaWAN Server
-![Diagram](resources\SVG\lorawan_server_docker_diagram.svg)
+![Diagram](resources/SVG/lorawan_server_docker_diagram.svg)
 
 
 # 5. Testing the Deployment
