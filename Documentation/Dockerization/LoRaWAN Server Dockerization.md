@@ -264,11 +264,11 @@ The following software packages must be installed on the construction of the Doc
 
 **First Steps**
 
-Once Container is running, [change the ChirpStack administrator user password↗](#_Change_admin_user) to a more secure one.
+Once Container is running, [change the ChirpStack administrator user password↗](#51-change-admin-user-password) to a more secure one.
 
 **Authentication**
 
-Chirpstack requires [administrative credentials↗](#_Configured_Values) to access main panel
+Chirpstack requires [administrative credentials↗](#313-configured-values) to access main panel
 
 ### 3.1.3. Configured Values
 
@@ -306,7 +306,7 @@ The following software packages must be installed on the construction of the Doc
 
 **First Steps**
 
-Before running the compose file, make sure that the [region is correctly assigned (us915\_7)↗](#_Software_Deployment)
+Before running the compose file, make sure that the [region is correctly assigned (us915_7)↗](#43-orchestration)
 
 ### 3.2.3. Configured Values
 
@@ -341,7 +341,7 @@ The following software packages must be installed on the construction of the Doc
 
 **First Steps**
 
-Before running the compose file, make sure that the [region is correctly assigned (us915\_7)↗](#_Software_Deployment)
+Before running the compose file, make sure that the [region is correctly assigned (us915_7)↗](#43-orchestration)
 
 ### 3.3.3. Configured Values
 

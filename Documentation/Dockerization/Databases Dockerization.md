@@ -212,7 +212,7 @@ The following software packages must be installed on the construction of the Doc
 
 **Authentication**
 
-Need to provide [postgres user, database name and password↗](#_Configured_Values_1)
+Need to provide [postgres user, database name and password↗](#313-configured-values)
 
 ### 3.1.3. Configured Values
 
