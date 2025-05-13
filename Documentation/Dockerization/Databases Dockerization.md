@@ -1,8 +1,8 @@
-# DATABASE DOCKERIZATION
+# Database Dockerization
 
 ## Installation and Deployment Guide
 
-Software Version: 1.0 | Date: 21 mar 2025
+Software Version: 1.0 | Date: 21 apr 2025
 
 ## Installation and Deployment Guide information
 
@@ -31,15 +31,9 @@ The Installation and Deployment Guide is to be reviewed by the Technical Lead, a
 
 The Installation and Deployment Guide is usually a deliverable component of the software solution. It is reviewed and bugs may be logged against it. But it is not approved or signed off unless required by the client scope/contract.
 
-## Installation Guide guidelines
+## Installation guide guidelines
 
 *Retain the following information in the final document, usually on the back of the cover page. The comment is for guidance and may be deleted or hidden.*
-
-### *Acknowledgements
-
-This document may refer to documents in Adobe® Acrobat® Portable Document Format (PDF). (Adobe® and Acrobat® are registered trademarks of Adobe Systems Incorporated.)
-
-This document may refer to use of products in the Microsoft® Office suite, the Microsoft® Team Foundation Server® and Visual Studio®.
 
 ### Guidelines for revising this document
 
@@ -113,7 +107,7 @@ The Revision history table shows the date, changes, and authors who have worked 
 
 | Version/Change request number | Version date | Description of changes | Author |
 | --- | --- | --- | --- |
-| 1.0 | 01/04/2025 | First Draft | Eder D. Martínez |
+| 1.0 | 21/04/2025 | First Draft | Eder D. Martínez |
 
 ## 1.3. Intended audience and reading suggestions
 
@@ -262,9 +256,9 @@ services:
         - ./configuration/postgresql/initdb:/docker-entrypoint-initdb.d
         - postgresqldata:/var/lib/postgresql/data
         environment:
-        - POSTGRES\_USER=chirpstack
-        - POSTGRES\_PASSWORD=chirpstack
-        - POSTGRES\_DB=chirpstack
+        - POSTGRES_USER=chirpstack
+        - POSTGRES_PASSWORD=chirpstack
+        - POSTGRES_DB=chirpstack
         networks:
         - chirp-django-net
     
