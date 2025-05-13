@@ -10,9 +10,6 @@ class TenantChirpstackSyncTest(TestCase):
 
         tenant = Tenant.objects.create(name="TestTenant")
         self.assertTrue(mock_post.called)
-
-        # Simular guardar el chirpstack_id si usas esa lógica en 
         tenant.chirpstack_id = "tenant-999"
         tenant.save()
-
         self.assertEqual(tenant.chirpstack_id, "tenant-999")

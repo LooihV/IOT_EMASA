@@ -157,6 +157,7 @@ class PasswordResetRequestViewSet(APIView):
             update_chirpstack_user_password(email=email, new_password=temp_password)
             return Response({"message": "Contraseña temporal enviada con èxito"}, status=200)
         except Exception as e:
+            print(f"ERROR PasswordResetView:{e}")
             return Response({"error": f"Error al sincronizar con ChirpStack: {e}"}, status=500)
     
 
@@ -184,8 +185,8 @@ class ChangePasswordViewSet(APIView):
             CustomToken.objects.filter(user=user).delete()
 
             return Response({"message": "Contraseña actualizada correctamente en ambas APIs"}, status=200)
-
         except Exception as e:
+            print(f"ERROR ChangePasswordView:{e}")
             return Response({"error": f"Error al sincronizar con ChirpStack: {e}"}, status=500)
 
 

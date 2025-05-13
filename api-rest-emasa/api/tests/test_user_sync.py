@@ -1,6 +1,7 @@
 from django.test import TestCase
 from unittest.mock import patch
 from api.models import CustomUser
+from api.chirpstack_api import sync_user_to_chirpstack, delete_user_from_chirpstack
 
 class UserChirpstackSyncTest(TestCase):
     @patch("api.chirpstack_api.requests.post")
@@ -8,7 +9,8 @@ class UserChirpstackSyncTest(TestCase):
         mock_post.return_value.status_code = 200
         mock_post.return_value.json.return_value = {"id": "user-123"}
 
-        CustomUser.objects.create_user(username="test", email="test@example.com", password="test")
+        user = CustomUser.objects.create_user(username="test", email="test@example.com", password="test")
+        sync_user_to_chirpstack(CustomUser, user, True, password_plaintext="test")
 
         self.assertTrue(mock_post.called)
         called_url = mock_post.call_args[0][0]
@@ -19,7 +21,7 @@ class UserChirpstackSyncTest(TestCase):
     def test_user_deletion_triggers_chirpstack_delete(self, mock_delete, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
-            "result": [{"user": {"email": "delete@example.com", "id": "user-456"}}]
+            "result": [{"email": "delete@example.com", "id": "user-456"}]
         }
         mock_delete.return_value.status_code = 200
 
