@@ -55,101 +55,93 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 ## Contents
 
-[1. Introduction](#_Toc194682498)
+[1. Introduction](#1-introduction)
 
-[1.1. Purpose](#_Toc194682499)
+[1.1. Purpose](#11-purpose)
 
-[1.2. Revision History](#_Toc194682500)
+[1.2. Revision History](#12-revision-history)
 
-[1.3. Intended Audience and Reading Suggestions](#_Toc194682501)
+[1.3. Intended Audience and Reading Suggestions](#13-intended-audience-and-reading-suggestions)
 
-[1.4. Technical Project Stakeholders](#_Toc194682502)
+[1.4. Technical Project Stakeholders](#14-technical-project-stakeholders)
 
-[1.5. References](#_Toc194682503)
+[1.5. References](#15-references)
 
-[1.6. Definitions, Acronyms and Abbreviations](#_Toc194682504)
+[1.6. Definitions, Acronyms and Abbreviations](#16-definitions-acronyms-and-abbreviations)
 
-[2. System Configurations](#_Toc194682505)
+[2. System Configurations](#2-system-configurations)
 
-[2.1. Roles, Features, and Packages](#_Toc194682506)
+[2.1. Roles, Features, and Packages](#22-command-line)
 
-[2.2. Command-Line](#_Toc194682507)
+[2.2. Command-Line](#22-command-line)
 
-[2.3. Configured Values](#_Toc194682508)
+[2.3. Configured Values](#23-configured-values)
 
-[3. Container Configurations](#_Toc194682509)
+[3. Container Configurations](#3-container-configurations)
 
-[3.1. Service 1 (Web UI)](#_Toc194682510)
+[3.1. Service 1 (Web UI)](#31-service-1-web-ui)
 
-[3.1.1. Roles, Features, and Packages](#_Toc194682511)
+[3.1.1. Roles, Features, and Packages](#311-roles-features-and-packages)
 
-[3.1.2. Container Configuration](#_Toc194682512)
+[3.1.2. Container Configuration](#312-container-configuration)
 
-[3.1.3. Configured Values](#_Toc194682513)
+[3.1.3. Configured Values](#313-configured-values)
 
-[3.2. Service 2 (Gateway Bridge)](#_Toc194682514)
+[3.2. Service 2 (Gateway Bridge)](#32-service-2-gateway-bridge)
 
-[3.2.1. Roles, Features, and Packages](#_Toc194682515)
+[3.2.1. Roles, Features, and Packages](#321-roles-features-and-packages)
 
-[3.2.2. Container Configuration](#_Toc194682516)
+[3.2.2. Container Configuration](#322-container-configuration)
 
-[3.2.3. Configured Values](#_Toc194682517)
+[3.2.3. Configured Values](#323-configured-values)
 
-[3.3. Service 3 (BasicStation)](#_Toc194682518)
+[3.3. Service 3 (BasicStation)](#33-service-3-basicstation)
 
-[3.3.1. Roles, Features, and Packages](#_Toc194682519)
+[3.3.1. Roles, Features, and Packages](#331-roles-features-and-packages)
 
-[3.3.2. Container Configuration](#_Toc194682520)
+[3.3.2. Container Configuration](#332-container-configuration)
 
-[3.3.3. Configured Values](#_Toc194682521)
+[3.3.3. Configured Values](#333-configured-values)
 
-[3.4. Service 4 (REST API)](#_Toc194682522)
+[3.4. Service 4 (REST API)](#34-service-4-rest-api)
 
-[3.4.1. Roles, Features, and Packages](#_Toc194682523)
+[3.4.1. Roles, Features, and Packages](#341-roles-features-and-packages)
 
-[3.4.2. Configured Values](#_Toc194682524)
+[3.4.2. Configured Values](#342-configured-values)
 
-[3.5. Service 5 (Database)](#_Toc194682525)
+[3.5. Service 5 (Data Structure Store)](#35-service-5-data-structure-store)
 
-[3.5.1. Roles, Features, and Packages](#_Toc194682526)
+[3.5.1. Roles, Features, and Packages](#351-roles-features-and-packages)
 
-[3.5.2. Container Configuration](#_Toc194682527)
+[3.5.2. Container Configuration](#352-configured-values)
 
-[3.5.3. Configured Values](#_Toc194682528)
+[3.6. Service 6 (MQTT Broker)](#36-service-6-mqtt-broker)
 
-[3.6. Service 6 (Data Structure Store)](#_Toc194682529)
+[3.6.1. Roles, Features, and Packages](#361-roles-features-and-packages)
 
-[3.6.1. Roles, Features, and Packages](#_Toc194682530)
+[3.6.2. Configured Values](#362-configured-values)
 
-[3.6.2. Configured Values](#_Toc194682531)
+[4. Software Deployment](#4-software-deployment)
 
-[3.7. Service 7 (MQTT Broker)](#_Toc194682532)
+[4.1. TLS Connection](#41-tls-conection)
 
-[3.7.1. Roles, Features, and Packages](#_Toc194682533)
+[4.1.1. Requirements](#411-requirements)
 
-[3.7.2. Configured Values](#_Toc194682534)
+[4.1.2. Certification Authority Generation](#412-certification-authority-generation)
 
-[4. Software Deployment](#_Toc194682535)
+[4.1.3. Server Certificate Generation](#413-mosquitto-configuration)
 
-[4.1. TLS Connection](Toc194682536)
+[4.2. Conection with EMASA API-REST](#42-conection-with-emasa-api-rest)
 
-[4.1.1. Requirements](Toc194682537)
+[4.3. Orchestration](#43-orchestration)
 
-[4.1.2. Certification Authority Generation](#_Toc194682538)
+[4.4. Deployment Diagram for LoRaWAN Server](#44-deployment-diagram-for-lorawan-server)
 
-[4.1.3. Server Certificate Generation](#_Toc194682539)
+[5. Testing the Deployment](#5-testing-the-deployment)
 
-[4.2. Conection with EMASA API-REST](#_Toc194682540)
+[5.1. Change admin user password](#51-change-admin-user-password)
 
-[4.3. Orchestration](#_Toc194682541)
-
-[4.4. Deployment Diagram for LoRaWAN Server](#_Toc194682542)
-
-[5. Testing the Deployment](#_Toc194682543)
-
-[5.1. Change admin user password](#_Toc194682542)
-
-[6. Troubleshooting](#_Toc194682543)
+[6. Troubleshooting](#6-troubleshooting)
 
 # 1. Introduction
 

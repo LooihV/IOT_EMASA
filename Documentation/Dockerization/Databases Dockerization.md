@@ -53,47 +53,47 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 ## Contents
 
-[1. Introduction](#_Toc197098672)
+[1. Introduction](#1-introduction)
 
-[1.1. Purpose](#_Toc197098673)
+[1.1. Purpose](#11-purpose)
 
-[1.2. Revision History](#_Toc197098674)
+[1.2. Revision History](#12-revision-history)
 
-[1.3. Intended Audience and Reading Suggestions](#_Toc197098675)
+[1.3. Intended Audience and Reading Suggestions](#13-intended-audience-and-reading-suggestions)
 
-[1.4. Technical Project Stakeholders](#_Toc197098676)
+[1.4. Technical Project Stakeholders](#14-technical-project-stakeholders)
 
-[1.5. References](#_Toc197098677)
+[1.5. References](#15-references)
 
-[1.6. Definitions, Acronyms and Abbreviations](#_Toc197098678)
+[1.6. Definitions, Acronyms and Abbreviations](#16-definitions-acronyms-and-abbreviations)
 
-[2. System Configurations](#_Toc197098679)
+[2. System Configurations](#2-system-configurations)
 
-[2.1. Roles, Features, and Packages](#_Toc197098680)
+[2.1. Roles, Features, and Packages](#21-roles-features-and-packages)
 
-[2.2. Command-Line](#_Toc197098681)
+[2.2. Command-Line](#22-command-line)
 
-[2.3. Configured Values](#_Toc197098682)
+[2.3. Configured Values](#23-configured-values)
 
-[3. Container Configurations](#_Toc197098683)
+[3. Container Configurations](#3-container-configurations)
 
-[3.1. Service 1 (Database)](#_Toc197098684)
+[3.1. Service 1 (Database)](#31-service-1-database)
 
-[3.1.1. Roles, Features, and Packages](#_Toc197098685)
+[3.1.1. Roles, Features, and Packages](#311-roles-features-and-packages)
 
-[3.1.2. Container Configuration](#_Toc197098686)
+[3.1.2. Container Configuration](#312-container-configuration)
 
-[3.1.3. Configured Values](#_Toc197098687)
+[3.1.3. Configured Values](#313-configured-values)
 
-[4. Software Deployment](#_Toc197098688)
+[4. Software Deployment](#4-software-deployment)
 
-[4.1. Connection with EMASA API-REST](#_Toc197098689)
+[4.1. Connection with EMASA API-REST](#41-connection-with-emasa-api-rest)
 
-[4.2. Orchestration](#_Toc197098690)
+[4.2. Orchestration](#42-orchestration)
 
-[5. Testing the Deployment](#_Toc197098691)
+[5. Testing the Deployment](#5-testing-the-deployment)
 
-[6. Troubleshooting](#_Toc197098692)
+[6. Troubleshooting](#6-troubleshooting)
 
 # 1. Introduction
 
