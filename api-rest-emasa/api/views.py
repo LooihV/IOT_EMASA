@@ -155,6 +155,7 @@ class PasswordResetRequestViewSet(APIView):
 
         try:
             update_chirpstack_user_password(email=email, new_password=temp_password)
+            return Response({"message": "Contraseña temporal enviada con èxito"}, status=200)
         except Exception as e:
             return Response({"error": f"Error al sincronizar con ChirpStack: {e}"}, status=500)
     

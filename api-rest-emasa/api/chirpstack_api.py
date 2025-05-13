@@ -43,7 +43,7 @@ def get_chirpstack_user_id(email):
     """Busca el ID de un usuario en ChirpStack por su email."""
     try:
         # Incluir el parámetro 'limit' ya que así funciona en el header de la solicitud para eliminar
-        params = {"limit": 200}
+        params = {"limit": 400}
         response = requests.get(CHIRPSTACK_API_URL, headers=HEADERS, params=params)
         response.raise_for_status()
         

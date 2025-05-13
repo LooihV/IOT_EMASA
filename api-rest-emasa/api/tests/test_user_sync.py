@@ -3,7 +3,7 @@ from unittest.mock import patch
 from api.models import CustomUser
 
 class UserChirpstackSyncTest(TestCase):
-    @patch("api.signals.requests.post")
+    @patch("api.chirpstack_api.requests.post")
     def test_user_creation_triggers_chirpstack_sync(self, mock_post):
         mock_post.return_value.status_code = 200
         mock_post.return_value.json.return_value = {"id": "user-123"}
@@ -14,8 +14,8 @@ class UserChirpstackSyncTest(TestCase):
         called_url = mock_post.call_args[0][0]
         self.assertIn("/api/users", called_url)
 
-    @patch("api.signals.requests.get")
-    @patch("api.signals.requests.delete")
+    @patch("api.chirpstack_api.requests.get")
+    @patch("api.chirpstack_api.requests.delete")
     def test_user_deletion_triggers_chirpstack_delete(self, mock_delete, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
