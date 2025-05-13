@@ -12,7 +12,7 @@ Obtiene un token de autenticación personalizado.
 
 	{
 	 "username": "usuario",
- 	"password": "contraseña"
+ 	 "password": "contraseña"
 	}
 
 ##### *Response:*
@@ -70,7 +70,7 @@ Crea un usuario nuevo.
 
 ##### *Request: (autenticado)*
 
-![](Aspose.Words.26a589e7-8c7b-459c-9163-a272badccc89.001.png)
+![Image](https://github.com/user-attachments/assets/9f82f4cf-4feb-4523-822f-8a6f4a2f1483)
 
 ##### *Response:*
 
@@ -94,7 +94,7 @@ Crea una nueva máquina asociada al usuario y la central activa.
 
 ##### *Request: (autenticado)*
 
-![](Aspose.Words.26a589e7-8c7b-459c-9163-a272badccc89.002.png)
+![Image](https://github.com/user-attachments/assets/7ce3f387-ac42-4a6a-b848-62b6f79ec775)
 
 ##### *Response:*
 
@@ -114,8 +114,7 @@ Crea un nuevo registro asociado a una máquina y a un usuario.
 
 ##### *Request: (autenticado)*
 
-![](Aspose.Words.26a589e7-8c7b-459c-9163-a272badccc89.003.png)
-
+![Image](https://github.com/user-attachments/assets/7bf5d403-a379-4113-a56b-4620ffa9bee1)
 
 ##### *Response:*
 
