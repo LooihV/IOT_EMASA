@@ -17,7 +17,7 @@ The Installation and Deployment Guide is first created in the Deployment process
 | --- | --- | --- | --- | --- | --- |
 | I | A | R | I | C | I |
 
-### Combining or splitting documents
+### Combining or Splitting Documents
 
 Documentation required by the process may be physically combined into fewer documents or split up into more documents in any way which makes sense to the project provided that all topics required by all the standard templates are present.
 
@@ -31,11 +31,11 @@ The Installation and Deployment Guide is to be reviewed by the Technical Lead, a
 
 The Installation and Deployment Guide is usually a deliverable component of the software solution. It is reviewed and bugs may be logged against it. But it is not approved or signed off unless required by the client scope/contract.
 
-## Installation guide guidelines
+## Installation Guide Guidelines
 
 *Retain the following information in the final document, usually on the back of the cover page. The comment is for guidance and may be deleted or hidden.*
 
-### Guidelines for revising this document
+### Guidelines for Revising This Document
 
 This document is prepared using Microsoft Word. The Arial 11 point font is used.
 
@@ -45,7 +45,7 @@ This document is set up with margins of 0.75 inches on all sides. This setting w
 
 This document contains comments to the author with guidelines on using or revising the document. To view this information, turn on the Review features of Word to show the Final Showing Markup view.
 
-### Ownership and revision
+### Ownership and Revision
 
 This Installation and Deployment Guide is owned and controlled by the project’s System Administrator. After a baseline of this document is published, the Technical Lead shall ensure that it is placed under change control.
 
@@ -57,15 +57,15 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 [1.1. Purpose](#_Toc197098673)
 
-[1.2. Revision history](#_Toc197098674)
+[1.2. Revision History](#_Toc197098674)
 
-[1.3. Intended audience and reading suggestions](#_Toc197098675)
+[1.3. Intended Audience and Reading Suggestions](#_Toc197098675)
 
-[1.4. Technical project stakeholders](#_Toc197098676)
+[1.4. Technical Project Stakeholders](#_Toc197098676)
 
 [1.5. References](#_Toc197098677)
 
-[1.6. Definitions, acronyms and abbreviations](#_Toc197098678)
+[1.6. Definitions, Acronyms and Abbreviations](#_Toc197098678)
 
 [2. System Configurations](#_Toc197098679)
 
@@ -101,7 +101,7 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 The purpose of this Installation and Deployment Guide is to describe in technical terms the steps necessary to install the software referred to ChirpStack open-source LoRaWAN Network Server and make it operational.
 
-## 1.2. Revision history
+## 1.2. Revision History
 
 The Revision history table shows the date, changes, and authors who have worked on this document.
 
@@ -109,13 +109,13 @@ The Revision history table shows the date, changes, and authors who have worked 
 | --- | --- | --- | --- |
 | 1.0 | 21/04/2025 | First Draft | Eder D. Martínez |
 
-## 1.3. Intended audience and reading suggestions
+## 1.3. Intended Audience and Reading Suggestions
 
 This Installation and Deployment Guide is intended to be used by technical stakeholders of the project who will be responsible for planning, performing, or maintaining the installation or deployment, such as the Systems Developers, Site Reliability Engineers (SRE) or Deployment Engineers.
 
 It is intended that stakeholders and software support personnel can read this document and coordinate their efforts in the installation/deployment of the application.
 
-## 1.4. Technical project stakeholders
+## 1.4. Technical Project Stakeholders
 
 This section provides a list of all known stakeholders with an interest in the project.
 
@@ -139,7 +139,7 @@ This section provides a list of all known stakeholders with an interest in the p
 
 
 
-## 1.6. Definitions, acronyms and abbreviations
+## 1.6. Definitions, Acronyms and Abbreviations
 
 | Term | Definition |
 | --- | --- |

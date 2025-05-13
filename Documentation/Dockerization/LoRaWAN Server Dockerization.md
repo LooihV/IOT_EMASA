@@ -17,7 +17,7 @@ The Installation and Deployment Guide is first created in the Deployment process
 | --- | --- | --- | --- | --- | --- |
 | I | A | R | I | C | I |
 
-### Combining or splitting documents
+### Combining or Splitting Documents
 
 Documentation required by the process may be physically combined into fewer documents or split up into more documents in any way which makes sense to the project provided that all topics required by all the standard templates are present.
 
@@ -31,13 +31,13 @@ The Installation and Deployment Guide is to be reviewed by the Technical Lead, a
 
 The Installation and Deployment Guide is usually a deliverable component of the software solution. It is reviewed and bugs may be logged against it. But it is not approved or signed off unless required by the client scope/contract.
 
-## Installation guide guidelines
+## Installation Guide Guidelines
 
 *Retain the following information in the final document, usually on the back of the cover page. The comment is for guidance and may be deleted or hidden.*
 
 
 
-### Guidelines for revising this document
+### Guidelines for Revising This Document
 
 This document is prepared using Microsoft Word. The Arial 11 point font is used.
 
@@ -47,7 +47,7 @@ This document is set up with margins of 0.75 inches on all sides. This setting w
 
 This document contains comments to the author with guidelines on using or revising the document. To view this information, turn on the Review features of Word to show the Final Showing Markup view.
 
-### Ownership and revision
+### Ownership and Revision
 
 This Installation and Deployment Guide is owned and controlled by the project’s System Administrator. After a baseline of this document is published, the Technical Lead shall ensure that it is placed under change control.
 
@@ -59,15 +59,15 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 [1.1. Purpose](#_Toc194682499)
 
-[1.2. Revision history](#_Toc194682500)
+[1.2. Revision History](#_Toc194682500)
 
-[1.3. Intended audience and reading suggestions](#_Toc194682501)
+[1.3. Intended Audience and Reading Suggestions](#_Toc194682501)
 
-[1.4. Technical project stakeholders](#_Toc194682502)
+[1.4. Technical Project Stakeholders](#_Toc194682502)
 
 [1.5. References](#_Toc194682503)
 
-[1.6. Definitions, acronyms and abbreviations](#_Toc194682504)
+[1.6. Definitions, Acronyms and Abbreviations](#_Toc194682504)
 
 [2. System Configurations](#_Toc194682505)
 
@@ -131,11 +131,25 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 [4. Software Deployment](#_Toc194682535)
 
-[5. Testing the Deployment](#_Toc194682536)
+[4.1. TLS Connection](Toc194682536)
 
-[5.1.1. Change admin user password](#_Toc194682537)
+[4.1.1. Requirements](Toc194682537)
 
-[6. Troubleshooting](#_Toc194682538)
+[4.1.2. Certification Authority Generation](#_Toc194682538)
+
+[4.1.3. Server Certificate Generation](#_Toc194682539)
+
+[4.2. Conection with EMASA API-REST](#_Toc194682540)
+
+[4.3. Orchestration](#_Toc194682541)
+
+[4.4. Deployment Diagram for LoRaWAN Server](#_Toc194682542)
+
+[5. Testing the Deployment](#_Toc194682543)
+
+[5.1. Change admin user password](#_Toc194682542)
+
+[6. Troubleshooting](#_Toc194682543)
 
 # 1. Introduction
 
@@ -143,7 +157,7 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 The purpose of this Installation and Deployment Guide is to describe in technical terms the steps necessary to install the software referred to ChirpStack open-source LoRaWAN Network Server and make it operational.
 
-## 1.2. Revision history
+## 1.2. Revision History
 
 The Revision history table shows the date, changes, and authors who have worked on this document.
 
@@ -151,13 +165,13 @@ The Revision history table shows the date, changes, and authors who have worked 
 | --- | --- | --- | --- |
 | 1.0 | 21/03/2025 | First Draft | Eder D. Martínez |
 
-## 1.3. Intended audience and reading suggestions
+## 1.3. Intended Audience and Reading Suggestions
 
 This Installation and Deployment Guide is intended to be used by technical stakeholders of the project who will be responsible for planning, performing, or maintaining the installation or deployment, such as the Systems Developers, Site Reliability Engineers (SRE) or Deployment Engineers.
 
 It is intended that stakeholders and software support personnel can read this document and coordinate their efforts in the installation/deployment of the application.
 
-## 1.4. Technical project stakeholders
+## 1.4. Technical Project Stakeholders
 
 This section provides a list of all known stakeholders with an interest in the project.
 
@@ -185,7 +199,7 @@ This section provides a list of all known stakeholders with an interest in the p
 | REF-11 | [LoRa](https://www.vencoel.com/que-es-lora-como-funciona-y-caracteristicas-principales/) | VENCO |
 | REF-12 | [MQTT Ports: Common Ports and How to Configure and Secure Them](https://www.emqx.com/en/blog/mqtt-ports) | EMQ Technologies |
 
-## 1.6. Definitions, acronyms and abbreviations
+## 1.6. Definitions, Acronyms and Abbreviations
 
 | Term | Definition |
 | --- | --- |
@@ -430,43 +444,135 @@ The following deployment is a fork from the offcial chirpstack-docker GitHub rep
 ```sh
 git clone https://github.com/chirpstack/chirpstack-docker.git
 ```
-## 4.1. Certification Authority Generation
+## 4.1. TLS Conection
+### 4.1.1. Requirements
+Before proceeding, please make sure that you have installed the [cfssl](https://github.com/cloudflare/cfssl)
+utility. You should also already have a working ChirpStack environment.
 
+If using Debian or Ubuntu, this package can be installed using:
+
+```sh
+sudo apt-get install golang-cfssl
+```
+
+### 4.1.2. Certification Authority Generation 
 In order to MQTT integration to work, it is necessary to have registered a valid certificate authority registered (this certificate authority can be self-signed). The steps describing the process are below.
 
-1. Create a folder outside of the IOT\_EMASA folder called .certs and go inside the directory.
+1. Create a folder outside of the `IOT_EMASA` directory called `.certs` and go inside the directory.
 
-mkdir .certs && cd .certs
+    ```sh
+    mkdir .certs && cd .certs
+    ```
+2. Create a file called `ca-csr.json` inside the directory with the following content:
 
-2. Generate a RSA of 4096 bits private key for the Certification Authority and saves it in a ca.key file.
+    ```json
+    {
+        "CN": "ChirpStack CA",
+        "key": {
+            "algo": "rsa",
+            "size": 4096
+        }
+    }
+    ```
 
-openssl genrsa -out ca.key 4096
+3. Create a file called `ca-config.json` inside the directory with the following content:
+    ```json
+    {
+        "signing": {
+            "default": {
+                "expiry": "8760h"
+            },
+            "profiles": {
+                "server": {
+                    "expiry": "8760h",
+                    "usages": [
+                        "signing",
+                        "key encipherment",
+                        "server auth"
+                    ]
+                }
+            }
+        }
+    }
+    ```
 
-3. Generate a Self-signed certificate for the CA
+3. Then execute the following command to generate the CA certificate and key:
 
-openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.pem
+    ```sh
+    cfssl gencert -initca ca-csr.json | cfssljson -bare ca
+    ```
 
-4. Fill up the fields requested on screen
+### 4.1.2. Server Certificate Generation
 
-5. Now in the directory it should appear a ca.pem and ca.key files.
+The MQTT server-sertificate is used to establish a secure TLS connection between
+the MQTT client (gateway or integration) and the MQTT broker.
 
-## 4.2. Server certificate Generation (Optional)
+1.  Create a file called `mqtt-server.json` and change`example.com` into the hostname that will be used by clients that will connect to the MQTT broker:
 
-This is and optional but more direct way to create self-signed certificates for MQTT communication between ChirpStack and Mosquitto.
+    ```json
+    {
+        "CN": "example.com",
+        "hosts": [
+            "example.com"
+        ],
+        "key": {
+            "algo": "rsa",
+            "size": 4096
+        }
+    }
+    ```
 
-1. In .certs folder create a mqtt-server.crt file using the following command.
+2. Execute the following command to generate the MQTT server-certificate:
 
-openssl genrsa -out mqtt-server.key 4096
+    ```sh
+    cfssl gencert -ca ca.pem -ca-key ca-key.pem -config ca-config.json -profile server mqtt-server.json | cfssljson -bare mqtt-server
+    ```
+### 4.1.3. Mosquitto Configuration
+1. Create a folder outside of the IOT_EMASA directory called `.acl` and go inside the directory.
+    
+    ```sh
+    mkdir .acl && cd .acl
+    ```
+2. Create an `acl` file and add the following content to it:
+    
+    ```text
+    pattern readwrite +/gateway/%u/#
+    pattern readwrite application/%u/#
+    ```
+3. In the docker compose file, add the following lines to the `mosquitto` service section:
 
-2. Create a certificate signing request using the following command.
+    ```yml
+    mosquitto:
+        volumes:
+        - ../.acl:/etc/mosquitto/acl
+    ```
+4. go inside `IOT_EMASA/lorawan-server/configuration/mosquitto/config/mosquitto.conf` file and add the following lines:
 
-openssl req -new -key mqtt-server.key -out mqtt-server.csr
+    ```conf
+    per_listener_settings true
 
-3. Sign the CSR with your CA to generate the server certificate with the following command.
+    listener 1883 127.0.0.1
+    allow_anonymous true
 
-openssl x509 -req -in mqtt-server.csr -CA ca.pem -CAkey ca.key -CAcreateserial -out mqtt-server.crt -days 3650 -sha256
+    listener 8883 0.0.0.0
+    cafile /etc/mosquitto/certs/ca.pem
+    certfile /etc/mosquitto/certs/mqtt-server.pem
+    keyfile /etc/mosquitto/certs/mqtt-server-key.pem
+    allow_anonymous false
+    require_certificate true
+    use_identity_as_username true
+    acl_file /etc/mosquitto/acl
+    ```
+>**NOTES**
+>1. Make sure to restart ChirpStack. Also verify the logs for possible errors.
+>2. The `ca.pem`, `cert.pem` and `key.pem` must be obtained from the ChirpStack
+  web-interface (gateway certificate or application MQTT integration certificate).
+>3. Verify that your firewall rules allow incoming connections to the MQTT broker.
+>4. In case you see TLS related errors, please verify that the hostname
+  (of the `-h` flag) matches the MQTT server-certificate. Validation of the 
+  server-certificate can be disabled using the `--insecure` flag.
 
-## 4.3. Conection with EMASA API-REST
+## 4.2. Conection with EMASA API-REST
 
 1. To have communication with the EMASA middleware, it is necessary to add a network into docker system, to do it, run the following command
 
@@ -482,7 +588,7 @@ openssl x509 -req -in mqtt-server.csr -CA ca.pem -CAkey ca.key -CAcreateserial -
         - chirp-django-net
     ```
 
-## 4.4. Orchestration
+## 4.3. Orchestration
 
 Modify/create the docker-compose.yaml file and copy the following code into it.
 
@@ -615,7 +721,7 @@ Finally, open the terminal in the path where docker-compose.yaml file is located
 ```sh
 docker-compose up -d
 ```
-## 4.5. Deployment Diagram for LoRaWAN Server
+## 4.4. Deployment Diagram for LoRaWAN Server
 ![Diagram](resources/SVG/lorawan_server_docker_diagram.svg)
 
 
