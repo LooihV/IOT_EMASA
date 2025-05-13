@@ -642,7 +642,7 @@ Due to this is deployed in a server, most of the time it won’t be possible to 
 6. In the headers include the token in this way
 
     ```http
-    Authorization = Bearer <TOKEN>
+    Authorization: Bearer <TOKEN>
     ```
 7. As mentioned previously in this document it is recommended to change the admin user password, in order to achieve this, follow the guide below.
 
