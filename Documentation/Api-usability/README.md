@@ -1,64 +1,64 @@
-# *DOCUMENTACIÓN GITHUB*
+# DOCUMENTACIÓN GITHUB
 
-## *Resultados y estructura de los endpoints de la api-rest*
+## Resultados y estructura de los endpoints de la api-rest
 
-#### *Autenticación*
+#### Autenticación
 
 POST /api/v1/token/
 
 Obtiene un token de autenticación personalizado.
 
-##### *Request:*
+##### Request:
 
 	{
 	 "username": "usuario",
  	 "password": "contraseña"
 	}
 
-##### *Response:*
+##### Response:
 
 	{
  	"token": "<token>"
 	}
 
-#### *Genera Nueva Contraseña temporal*
+#### Genera Nueva Contraseña temporal
 
 POST /api/v1/pass/reset/
 
 Genera una contraseña temporal para el usuario autenticado y la envía por correo.
 
-##### *Request: (tiene que estar autenticado)*
+##### Request: (tiene que estar autenticado)
 
 	{
  	 "email": "usuario@dominio.com"
 	}
 
-##### *Response:*
+##### Response:
 
 	{
  	 "mensage": "Se ha enviado una contraseña temporal a tu correo."
 	}
 
-#### *Cambio de contraseña temporal por una nueva definida.*
+#### Cambio de contraseña temporal por una nueva definida.
 
 POST /api/v1/pass/change/
 
 Cambia la contraseña del usuario por una nueva.
 
-##### *Request: (autenticado)*
+##### Request: (autenticado)
 
 	{
  	 "old\_password": "temporalRecibida",
  	 "new\_password": "contraseñaNueva"
 	}
 
-##### *Response:*
+##### Response:
 
 	{
  	 "message": "Contraseña actualizada correctamente en ambas APIs"
 	}
 
-#### *Administrar usuarios.*
+#### Administrar usuarios.
 
 GET /api/v1/Users/
 
@@ -68,11 +68,11 @@ POST /api/v1/Users/
 
 Crea un usuario nuevo.
 
-##### *Request: (autenticado)*
+##### Request: (autenticado)
 
 ![Image](https://github.com/user-attachments/assets/9f82f4cf-4feb-4523-822f-8a6f4a2f1483)
 
-##### *Response:*
+##### Response:
 
 	{
   	 "message": “Usuario creado con éxito"
@@ -82,7 +82,7 @@ DELETE /api/v1/Users/id del usuario
 
 #### Elimina un usuario.
 
-*Maquinas (Devices)*
+Maquinas (Devices)
 
 GET /api/v1/Maquinas/
 
@@ -92,17 +92,17 @@ POST /api/v1/Maquinas/
 
 Crea una nueva máquina asociada al usuario y la central activa.
 
-##### *Request: (autenticado)*
+##### Request: (autenticado)
 
 ![Image](https://github.com/user-attachments/assets/7ce3f387-ac42-4a6a-b848-62b6f79ec775)
 
-##### *Response:*
+##### Response:
 
 	{
   	 "message": "Máquina encendida"
 	}
 
-#### *Registros*
+#### Registros
 
 GET /api/v1/Registro/
 
@@ -112,17 +112,17 @@ POST /api/v1/ Registro/
 
 Crea un nuevo registro asociado a una máquina y a un usuario.
 
-##### *Request: (autenticado)*
+##### Request: (autenticado)
 
 ![Image](https://github.com/user-attachments/assets/7bf5d403-a379-4113-a56b-4620ffa9bee1)
 
-##### *Response:*
+##### Response:
 
 	{
  	 El nuevo registro creado.
 	}
 
-## *ChirpStack API Proxy (consumo desde Django)*
+## ChirpStack API Proxy (consumo desde Django)
 
 La API EMASA actúa como cliente hacia ChirpStack, realizando operaciones de forma transparente. Las rutas siguientes proxyfian las llamadas REST a ChirpStack utilizando el JWT Token configurado en entorno:
 
@@ -130,20 +130,20 @@ Sincronización bidireccional con ChirpStack (users y tenants)
 
 El archivo chirpstack\_api.py contiene la lógica que permite mantener sincronizados los usuarios y tenants entre EMASA y ChirpStack:
 
-- *Creación de usuarios:* Cuando se crea un usuario en EMASA (vía señales post\_save), también se crea en ChirpStack con mismo email y rol.
-- *Eliminación de usuarios:* Se elimina automáticamente también en ChirpStack (pre\_delete).
-- *Asignación de tenants:* Si el usuario en EMASA tiene un tenant relacionado, se sincroniza y asocia también en ChirpStack.
-- *Cambio de contraseña:* Al cambiar contraseña en EMASA (temporal o nueva), se actualiza también en ChirpStack mediante peticiones a /api/users/{id}/password.
-- *Creación de tenants:* Tenants creados en EMASA pueden sincronizar su chirpstack\_id con la plataforma ChirpStack.
+- Creación de usuarios: Cuando se crea un usuario en EMASA (vía señales post\_save), también se crea en ChirpStack con mismo email y rol.
+- Eliminación de usuarios: Se elimina automáticamente también en ChirpStack (pre\_delete).
+- Asignación de tenants: Si el usuario en EMASA tiene un tenant relacionado, se sincroniza y asocia también en ChirpStack.
+- Cambio de contraseña: Al cambiar contraseña en EMASA (temporal o nueva), se actualiza también en ChirpStack mediante peticiones a /api/users/{id}/password.
+- Creación de tenants: Tenants creados en EMASA pueden sincronizar su chirpstack\_id con la plataforma ChirpStack.
 
 Toda esta lógica se implementa mediante funciones auxiliares get\_chirpstack\_user\_id, sync\_user\_to\_chirpstack, update\_chirpstack\_user\_password y llamadas HTTP con requests.
 
 
-#### *Applications*
+#### Applications
 
 GET /api/v1/chirpstack/applications/ - Lista las aplicaciones del tenant del usuario.´
 
-##### *Response:*
+##### Response:
 	{
 
  	"totalCount": 1,
@@ -160,14 +160,14 @@ GET /api/v1/chirpstack/applications/ - Lista las aplicaciones del tenant del usu
 
 POST /api/v1/chirpstack/applications/ - Crea una aplicación asociada al tenant.
 
-##### *Request: (autenticado)*
+##### Request: (autenticado)
 
 	{
 	 "name": "normalito",
 	 "description": "una descripción"
 	}
 
-##### *Response: (autenticado)*
+##### Response: (autenticado)
 
 	{
  	 El registro de las applications creadas
@@ -175,11 +175,11 @@ POST /api/v1/chirpstack/applications/ - Crea una aplicación asociada al tenant.
 
 DELETE /api/v1/chirpstack/applications/{id}/ - Elimina una aplicación.
 
-*Gateways*
+Gateways
 
 GET /api/v1/chirpstack/gateways/ - Lista todos los gateways o solo los del tenant asociado al usuario.
 
-##### *Response: (autenticado)*
+##### Response: (autenticado)
 
 	{
 	"totalCount": 1,
@@ -207,7 +207,7 @@ GET /api/v1/chirpstack/gateways/ - Lista todos los gateways o solo los del tenan
 
 POST /api/v1/chirpstack/gateways/ - Registra un nuevo gateway.
 
-##### *Request: (Autenticado)*
+##### Request: (Autenticado)
 
 	{
 	 "gatewayId": "a84041fdfe2764b6",
@@ -217,7 +217,7 @@ POST /api/v1/chirpstack/gateways/ - Registra un nuevo gateway.
 	 "tenantId": "tu-uuid-de-tenant"
 	}
 
-##### *Response: (autenticado)*
+##### Response: (autenticado)
 
 	{
 	 El registro de los Gateways creados
@@ -225,7 +225,7 @@ POST /api/v1/chirpstack/gateways/ - Registra un nuevo gateway.
 
 DELETE /api/v1/chirpstack/gateways/{id}/ - Elimina un gateway por su ID.
 
-#### *Device Profiles*
+#### Device Profiles
 
 POST /api/v1/chirpstack/device-profiles/ - Crea un perfil de dispositivo.
 
@@ -250,7 +250,7 @@ MQTT Certificate
 	 "tenant\_id": "un tenant\_id"
 	}
 
-##### *Response: (autenticado)*
+##### Response: (autenticado)
 
 	{
 	 El registro del device profile creado.
@@ -258,11 +258,11 @@ MQTT Certificate
 
 POST /api/v1/chirpstack/applications/{id}/mqtt-certificate/ - Genera certificado MQTT para una aplicación.
 
-#### *Devices*
+#### Devices
 
 POST /api/v1/chirpstack/devices/ - Registra un nuevo dispositivo.
 
-##### *Request: (autenticado)*
+##### Request: (autenticado)
 
 	{
 	 "application\_id": "f6a6e800-bc8d-4a59-9006-0a69f7f9decb",
@@ -274,7 +274,7 @@ POST /api/v1/chirpstack/devices/ - Registra un nuevo dispositivo.
 	 "is\_disabled": false
 	}
 
-##### *Response: (autenticado)*
+##### Response: (autenticado)
 
 	{
 	 Listado del device creado.
@@ -282,7 +282,7 @@ POST /api/v1/chirpstack/devices/ - Registra un nuevo dispositivo.
 
 GET /api/v1/chirpstack/devices/{dev\_eui}/ - Consulta un dispositivo por DevEUI.
 
-##### *Response: (autenticado)*
+##### Response: (autenticado)
 
 	{
 	 "device": {
@@ -306,17 +306,17 @@ GET /api/v1/chirpstack/devices/{dev\_eui}/ - Consulta un dispositivo por DevEUI.
 
 DELETE /api/v1/chirpstack/devices/{dev\_eui}/ - Elimina un dispositivo.
 
-##### *Response: (autenticado)*
+##### Response: (autenticado)
 
 	{
 	 "message": "Device eliminado correctamente"
 	}
 
-#### *Device Activation*
+#### Device Activation
 
 POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activa un dispositivo (con claves nwk\_s\_key, app\_s\_key, etc.).
 
-##### *Request: (autenticado)*
+##### Request: (autenticado)
 
 	{
 	 "dev\_addr": "260CB229",
@@ -326,7 +326,7 @@ POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activa un dispositivo (
 	 "f\_cnt\_down": 0
 	}
 
-##### *Response: (Autenticado)*
+##### Response: (Autenticado)
 
 	{
 	 Status 200 ok
@@ -336,18 +336,23 @@ POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activa un dispositivo (
 
 Para realizar las pruebas de la api rest, se ejecutan una serie de comandos desde la terminal, dependiendo si se quieren ejecutar todos los test al mismo tiempo o sólo una función a la vez. Primero se debe asegurar de que su contenedor web de la api-rest-emasa esté corriendo, luego dentro de la ruta: IOT\_EMASA/api-rest-emasa/ se ejecutan los siguientes comandos:
 
-*1. Si se quieren ejecutar todos los test a la vez:* docker-compose exec web Python manage.py test api.tests
-*2. Para ejecutar el test del token:* docker-compose exec web Python manage.py test api.tests.test\_auth
-*3. Para ejecutar el test de user:* docker-compose exec web Python manage.py test api.tests.test\_users
-*4. Para ejecutar el test del tenant:* docker-compose exec web Python manage.py test api.tests.test\_tenants
-*5. Para ejecutar el test de applications:* docker-compose exec web Python manage.py test api.tests.test\_applications
-*6. Para ejecutar el test de gateways:* docker-compose exec web Python manage.py test api.tests.test\_gateways
-*7. Para ejecutar el test de device profiles:* docker-compose exec web Python manage.py test api.tests.test\_device\_profiles
-*8. Para ejecutar el test de devices:* docker-compose exec web Python manage.py test api.tests.test\_devices
-*9. Para ejecutar el test de device activation:* docker-compose exec web Python manage.py test api.tests.test\_device\_activation
-*10. Para ejecutar el test de password:* docker-compose exec web Python manage.py test api.tests.test\_password
-*11. Para ejecutar el test de user sincronizacion con chirpstack:* docker-compose exec web Python manage.py test api.tests.test\_user\_sync
-*12. Para ejecutar el test de tenant sincronización con chirpstack:* docker-compose exec web Python manage.py test api.tests.test\_tenant\_sync
+**1. Si se quieren ejecutar todos los test a la vez:** docker-compose exec web Python manage.py test api.tests
+**2. Para ejecutar el test del token:** docker-compose exec web Python manage.py test api.tests.test\_auth
+**3. Para ejecutar el test de user:** docker-compose exec web Python manage.py test api.tests.test\_users
+**4. Para ejecutar el test del tenant:** docker-compose exec web Python manage.py test api.tests.test\_tenants
+**5. Para ejecutar el test de applications:** docker-compose exec web Python manage.py test api.tests.test\_applications
+**6. Para ejecutar el test de gateways:** docker-compose exec web Python manage.py test api.tests.test\_gateways
+**7. Para ejecutar el test de device profiles:** docker-compose exec web Python manage.py test api.tests.test\_device\_profiles
+**8. Para ejecutar el test de devices:** docker-compose exec web Python manage.py test api.tests.test\_devices
+**9. Para ejecutar el test de device activation:** docker-compose exec web Python manage.py test api.tests.test\_device\_activation
+**10. Para ejecutar el test de password:** docker-compose exec web Python manage.py test api.tests.test\_password
+**11. Para ejecutar el test de user sincronizacion con chirpstack:** docker-compose exec web Python manage.py test api.tests.test\_user\_sync
+**12. Para ejecutar el test de tenant sincronización con chirpstack:** docker-compose exec web Python manage.py test api.tests.test\_tenant\_sync
+
+La carpeta que contiene el código de lo testsencuentra en la ruta: 
+```json
+IOT_EMASA/api-rest-emasa/api/tests
+```
 
 ## Sincronización con la base de datos.
 
@@ -365,15 +370,15 @@ La sincronización con la base de datos se realiza por medio de variables de ent
 
 Y un archivo .env.prod ubicado en la raíz del proyecto que contiene los datos de la base de datos cómo:
 
-*POSTGRESQL\_HOST=* el hostname de la db, en caso de este proyecto es el nombre del contenedor de persistance
+**POSTGRESQL\_HOST=** el hostname de la db, en caso de este proyecto es el nombre del contenedor de persistance
 
-*POSTGRES\_USER=* El nombre de usuario de la base de datos
+**POSTGRES\_USER=** El nombre de usuario de la base de datos
 
-*POSTGRES\_PASSWORD=* La contraseña asociada a la base de datos
+**POSTGRES\_PASSWORD=** La contraseña asociada a la base de datos
 
-*POSTGRES\_DB=* El nombre de la base de datos
+**POSTGRES\_DB=** El nombre de la base de datos
 
-*POSTGRES\_PORT=* El puerto dónde corre la db
+**POSTGRES\_PORT=** El puerto dónde corre la db
 
 El settings de mi proyecto django (html
 IOT\_EMASA/api-rest-emasa/drf/settings.py
@@ -387,4 +392,4 @@ Web:
   - path: ../.env.prod
 
 
-## *Respuestas y transacciones.*
+## Respuestas y transacciones.
