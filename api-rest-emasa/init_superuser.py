@@ -45,17 +45,27 @@ for user in SUPERUSERS:
         exists = any(u["user"]["email"] == user["email"] for u in list_resp.json().get("result", []))
 
         if not exists:
+            # 1. Crear usuario
             payload = {
                 "user": {
                     "email": user["email"],
                     "note": f"Usuario creado desde init_superuser.py",
-                    "password": user["password"],
-                    "isAdmin": True
+                    "isAdmin": True,
+                    "isActive":True
                 }
             }
             create_resp = requests.post(f"{CHIRPSTACK_API_BASE}/users", json=payload, headers=headers)
             create_resp.raise_for_status()
             print(f"✅ Usuario '{user['email']}' creado en ChirpStack.")
+
+            # 2. Obtener ID del usuario recién creado
+            user_id = create_resp.json()["id"]
+
+            # 3. Establecer la contraseña correctamente
+            password_payload = {"password": user["password"]}
+            pass_resp = requests.post(f"{CHIRPSTACK_API_BASE}/users/{user_id}/password", json=password_payload, headers=headers)
+            pass_resp.raise_for_status()
+            print(f"🔐 Contraseña establecida correctamente para '{user['email']}' en ChirpStack.")
         else:
             print(f"ℹ️ Usuario '{user['email']}' ya existe en ChirpStack.")
 
