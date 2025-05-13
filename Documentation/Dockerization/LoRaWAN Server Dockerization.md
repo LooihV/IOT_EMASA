@@ -580,7 +580,7 @@ networks:
 ```
 Verify that the file located at /configration/chirpstack/chirpstack.toml has the following sections.
 
-```toml
+```conf
 [network]
     enabled\_regions=[
         "as923",
@@ -603,12 +603,12 @@ Verify that the file located at /configration/chirpstack/chirpstack.toml has the
 ```
 In case it becomes necesary to connect via ssl add the following lines
 
-```toml
+```conf
 [integrattion]
     [integration.mqtt]
         [integration.mqtt.client]
-            ca\_cert="/etc/chirpstack/certs/ca.pem"
-            ca\_key="/etc/chirpstack/certs/ca.key"
+            ca_cert="/etc/chirpstack/certs/ca.pem"
+            ca_key="/etc/chirpstack/certs/ca.key"
 ```
 Finally, open the terminal in the path where docker-compose.yaml file is located and insert the following command, then press enter.
 
