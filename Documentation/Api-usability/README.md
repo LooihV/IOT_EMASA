@@ -38,7 +38,7 @@
 
 [5.2. Register Machines](#52-Register-Machines)
 
-[5.3. Boot Notification "Register"](#53-Boot-Notification)
+[5.3. Boot Notification (Register)](#53-Boot-Notification)
 
 [5.4. Set Machines](#54-Set-Machines)
 
@@ -52,7 +52,7 @@
 
 [5.9. Stop Transaction Response](#59-Stop-Transaction-Response)
 
-[5.10. Change Availability Response](#50-Change-Availability-Response)
+[5.11. Change Availability Response](#511-Change-Availability-Response)
 
 
 
@@ -474,7 +474,7 @@ lo tiene declarado.
 **- Tipo:** Transacción (2) saliente
 
 
-#### 5.3. Boot Notification "Register"
+#### 5.3. Boot Notification (Register)
 
 **- Descripción:** Registro inicial de usuario simulado mediante creación de entidades
 
@@ -529,7 +529,7 @@ lo tiene declarado.
 **- Tipo:**
 
 
-#### 5.10. Change Availability Response
+#### 5.11. Change Availability Response
 
 **- Descripción:**
 
