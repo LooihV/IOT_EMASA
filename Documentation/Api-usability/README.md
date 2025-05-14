@@ -48,8 +48,8 @@ Cambia la contraseña del usuario por una nueva.
 ##### Request: (autenticado)
 
 	{
- 	 "old\_password": "temporalRecibida",
- 	 "new\_password": "contraseñaNueva"
+ 	 "old_password": "temporalRecibida",
+ 	 "new_password": "contraseñaNueva"
 	}
 
 ##### Response:
@@ -80,9 +80,12 @@ Crea un usuario nuevo.
 
 DELETE /api/v1/Users/id del usuario
 
-#### Elimina un usuario.
+##### Response:
+```json
+Elimina un usuario.
 
-Maquinas (Devices)
+```
+#### Maquinas (Devices)
 
 GET /api/v1/Maquinas/
 
@@ -141,7 +144,7 @@ Toda esta lógica se implementa mediante funciones auxiliares get\_chirpstack\_u
 
 #### Applications
 
-GET /api/v1/chirpstack/applications/ - Lista las aplicaciones del tenant del usuario.´
+GET /api/v1/chirpstack/applications/ - Lista las aplicaciones del tenant del usuario.
 
 ##### Response:
 	{
@@ -175,7 +178,7 @@ POST /api/v1/chirpstack/applications/ - Crea una aplicación asociada al tenant.
 
 DELETE /api/v1/chirpstack/applications/{id}/ - Elimina una aplicación.
 
-Gateways
+#### Gateways
 
 GET /api/v1/chirpstack/gateways/ - Lista todos los gateways o solo los del tenant asociado al usuario.
 
@@ -334,7 +337,9 @@ POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activa un dispositivo (
 
 ## Test pruebas cómo se realizan las pruebas de la API.
 
-Para realizar las pruebas de la api rest, se ejecutan una serie de comandos desde la terminal, dependiendo si se quieren ejecutar todos los test al mismo tiempo o sólo una función a la vez. Primero se debe asegurar de que su contenedor web de la api-rest-emasa esté corriendo, luego dentro de la ruta: IOT\_EMASA/api-rest-emasa/ se ejecutan los siguientes comandos:
+Para realizar las pruebas de la api rest, se ejecutan una serie de comandos desde la terminal, dependiendo si se quieren ejecutar todos los test al mismo tiempo o sólo una función a la vez. Primero se debe asegurar de que su contenedor web de la api-rest-emasa esté corriendo, luego dentro de la ruta: ```json
+IOT\_EMASA/api-rest-emasa/
+``` se ejecutan los siguientes comandos:
 
 **1. Si se quieren ejecutar todos los test a la vez:** docker-compose exec web Python manage.py test api.tests
 **2. Para ejecutar el test del token:** docker-compose exec web Python manage.py test api.tests.test\_auth
@@ -349,7 +354,7 @@ Para realizar las pruebas de la api rest, se ejecutan una serie de comandos desd
 **11. Para ejecutar el test de user sincronizacion con chirpstack:** docker-compose exec web Python manage.py test api.tests.test\_user\_sync
 **12. Para ejecutar el test de tenant sincronización con chirpstack:** docker-compose exec web Python manage.py test api.tests.test\_tenant\_sync
 
-La carpeta que contiene el código de lo testsencuentra en la ruta: 
+La carpeta que contiene el código de lo tests se encuentra en la ruta: 
 ```json
 IOT_EMASA/api-rest-emasa/api/tests
 ```
@@ -380,16 +385,15 @@ Y un archivo .env.prod ubicado en la raíz del proyecto que contiene los datos d
 
 **POSTGRES\_PORT=** El puerto dónde corre la db
 
-El settings de mi proyecto django (html
+El settings de mi proyecto django ```
 IOT\_EMASA/api-rest-emasa/drf/settings.py
-) se comunica con el .env.prod gracias a que el contenedor de la api (html
+``` se comunica con el .env.prod gracias a que el contenedor de la api ```
 IOT\_EMASA/api-rest-emasa/docker-compose.prod.yml
-) lo tiene declarado. 
+``` lo tiene declarado. 
 
-yaml
-Web:
- env_file:
-  - path: ../.env.prod
+	Web:
+ 		 env_file:
+ 			  - path: ../.env.prod
 
 
 ## Respuestas y transacciones.
