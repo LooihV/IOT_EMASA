@@ -81,10 +81,9 @@ Crea un usuario nuevo.
 DELETE /api/v1/Users/id del usuario
 
 ##### Response:
-```json
-Elimina un usuario.
 
-```
+	 Elimina un usuario.
+
 #### Maquinas (Devices)
 
 GET /api/v1/Maquinas/
@@ -397,3 +396,72 @@ IOT\_EMASA/api-rest-emasa/docker-compose.prod.yml
 
 
 ## Respuestas y transacciones.
+
+#### 1. Register Users
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 2. Register Machines
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 3. Boot Notification "Register"
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 4. Set Machines
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 5. SendData
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 6. Data Transfer Request
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 7. Diagnostic Status
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 8. Change Availability Request
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 9. Stop Transaction Response
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
+
+
+#### 10. Change Availability Response
+
+  **- Descripción:**
+     **- Módulo:**
+	 **- Tipo:**
