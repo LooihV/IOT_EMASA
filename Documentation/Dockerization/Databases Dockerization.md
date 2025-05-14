@@ -121,8 +121,8 @@ This section provides a list of all known stakeholders with an interest in the p
 
 | Name | E-mail address | Role |
 | --- | --- | --- |
-| Jemison Montealgre | jonathangc.awt@gmail.com | Product owner |
-| Jonathan Gonzalez | jeminson00@gmail.com | Lead Developer |
+| Jemison Montealgre | jeminson00@gmail.com | Product owner |
+| Jonathan Gonzalez | jonathangc.awt@gmail.com | Lead Developer |
 | Eder Martínez | 2220211052@estudiantesunibague.edu.co | Deployment Engineer |
 | Carlos Bernal | 2420201003@estudiantesunibague.edu.co | Software Developer |
 
