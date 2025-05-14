@@ -384,12 +384,10 @@ Y un archivo .env.prod ubicado en la raíz del proyecto que contiene los datos d
 
 **POSTGRES\_PORT=** El puerto dónde corre la db
 
-El settings de mi proyecto django ```
-IOT\_EMASA/api-rest-emasa/drf/settings.py
-``` se comunica con el .env.prod gracias a que el contenedor de la api 
-```
-IOT\_EMASA/api-rest-emasa/docker-compose.prod.yml
-``` 
+El settings de mi proyecto django 
+	IOT\_EMASA/api-rest-emasa/drf/settings.py
+se comunica con el .env.prod gracias a que el contenedor de la api 
+	IOT\_EMASA/api-rest-emasa/docker-compose.prod.yml
 lo tiene declarado. 
 
 	Web:
