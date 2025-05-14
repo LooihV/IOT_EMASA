@@ -400,64 +400,80 @@ lo tiene declarado.
 #### 1. Register Users
 
 **- Descripción:** Registro de usuarios desde la API EMASA sincronizados con ChirpStack.
+
 **- Módulo:** chirpstack_api.py (función "sync_user_to_chirpstack")
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 2. Register Machines
 
 **- Descripción:** Registro de dispositivos desde api django hacia chirpstack
+
 **- Módulo:** chirpstackDeviceViewSet
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 3. Boot Notification "Register"
 
 **- Descripción:** Registro inicial de usuario simulado mediante creación de entidades
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 4. Set Machines
 
 **- Descripción:** Asignación de máquinas a users/tenants
+
 **- Módulo:** 
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 5. SendData
 
 **- Descripción:** Envío de datos desde EMASA a ChirpStack o la máquina (usando endpoints o MQTT).
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 6. Data Transfer Request
 
 **- Descripción:** Solicitud de datos a una máquina o desde ChirpStack.
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 7. Diagnostic Status
 
 **- Descripción:** Información de diagnóstico intercambiada a través de la función `SendData`.
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 8. Change Availability Request
 
 **- Descripción:**
+
 **- Módulo:**
+
 **- Tipo:** Transacción (2) saliente
 
 
 #### 9. Stop Transaction Response
 
 **- Descripción:**
+
 **- Módulo:**
+
 **- Tipo:**
 
 
 #### 10. Change Availability Response
 
 **- Descripción:**
+
 **- Módulo:**
+
 **- Tipo:**
