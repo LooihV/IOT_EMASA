@@ -38,7 +38,7 @@
 
 [5.2. Register Machines](#52-Register-Machines)
 
-[5.3. Boot Notification (Register)](#53-Boot-Notification)
+[5.3. Boot Notification (Register)](#53-Boot-Notification-Register)
 
 [5.4. Set Machines](#54-Set-Machines)
 
