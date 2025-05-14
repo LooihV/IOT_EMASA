@@ -2,12 +2,17 @@
 
 ## Contenido
 [1. Resultados y estructura de los endpoints de la api-rest](#1-Resultados y estructura de los endpoints de la api-rest)
+
 [2. ChirpStack API Proxy (consumo desde Django)](#2-ChirpStack API Proxy (consumo desde Django))
-[3. Test pruebas cómo se realizan las pruebas de la API.](#3-Test pruebas cómo se realizan las pruebas de la API)
+
+[3. Test pruebas de cómo se realizan las pruebas de la API.](#3-Test pruebas cómo se realizan las pruebas de la API)
+
 [4. Sincronización con la base de datos.](#4-Sincronización con la base de datos.)
+
 [5. Respuestas y transacciones.](#5-Respuestas y transacciones.)
 
-## Resultados y estructura de los endpoints de la api-rest
+
+## 1. Resultados y estructura de los endpoints de la api-rest
 
 #### Autenticación
 
@@ -131,7 +136,7 @@ Crea un nuevo registro asociado a una máquina y a un usuario.
  	 El nuevo registro creado.
 	}
 
-## ChirpStack API Proxy (consumo desde Django)
+## 2. ChirpStack API Proxy (consumo desde Django)
 
 La API EMASA actúa como cliente hacia ChirpStack, realizando operaciones de forma transparente. Las rutas siguientes proxyfian las llamadas REST a ChirpStack utilizando el JWT Token configurado en entorno:
 
@@ -341,7 +346,7 @@ POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activa un dispositivo (
 	 Status 200 ok
 	}
 
-## Test pruebas cómo se realizan las pruebas de la API.
+## 3. Test pruebas de cómo se realizan las pruebas de la API.
 
 Para realizar las pruebas de la api rest, se ejecutan una serie de comandos desde la terminal, dependiendo si se quieren ejecutar todos los test al mismo tiempo o sólo una función a la vez. Primero se debe asegurar de que su contenedor web de la api-rest-emasa esté corriendo, luego dentro de la ruta: ```json
 IOT\_EMASA/api-rest-emasa/
@@ -365,7 +370,7 @@ La carpeta que contiene el código de lo tests se encuentra en la ruta:
 IOT_EMASA/api-rest-emasa/api/tests
 ```
 
-## Sincronización con la base de datos.
+## 4. Sincronización con la base de datos.
 
 La sincronización con la base de datos se realiza por medio de variables de entorno que se comunican entre el código de la db en la ruta IOT\_EMASA/api-rest-emasa/drf/settings.py:
 
@@ -402,7 +407,7 @@ lo tiene declarado.
  			  - path: ../.env.prod
 
 
-## Respuestas y transacciones.
+## 5. Respuestas y transacciones.
 
 #### 1. Register Users
 
