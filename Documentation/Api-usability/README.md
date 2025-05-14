@@ -4,13 +4,13 @@
 
 [1. Resultados y estructura de los endpoints de la api-rest](#1-Resultados-y-estructura-de-los-endpoints-de-la-api-rest)
 
-[2. ChirpStack API Proxy (consumo desde Django)](#2-ChirpStack-API-Proxy(consumo-desde-Django))
+[2. ChirpStack API Proxy (consumo desde Django)](#2-ChirpStack-API-Proxy-(consumo-desde-Django))
 
 [3. Test pruebas de cómo se realizan las pruebas de la API.](#3-Test-pruebas-de-cómo-se-realizan-las-pruebas-de-la-API)
 
-[4. Sincronización con la base de datos.](#4-Sincronización-con-la-base-de-datos.)
+[4. Sincronización con la base de datos.](#4-Sincronización-con-la-base-de-datos)
 
-[5. Respuestas y transacciones.](#5-Respuestas-y-transacciones.)
+[5. Respuestas y transacciones.](#5-Respuestas-y-transacciones)
 
 
 ## 1. Resultados y estructura de los endpoints de la api-rest
