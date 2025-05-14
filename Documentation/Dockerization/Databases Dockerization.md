@@ -186,7 +186,7 @@ The table below describes the values for your installation environment for futur
 | --- | --- |
 | Default User | dragino |
 | Default Root User Password | dragino |
-| Default Software Directory | /home/dragino/IOT\_EMASA/lorawan\_server |
+| Default Software Directory | /home/dragino/IOT_EMASA/persistance |
 
 # 3. Container Configurations
 
@@ -237,7 +237,7 @@ To have communication with the EMASA middleware, it is necessary to add a networ
 docker network -d bridge chirp-django-net
 ```
 l
-prop into each container settin
+Then, add the netwroks prop into each container settings
 ```yml
 networks:
     - chirp-django-net
@@ -316,5 +316,5 @@ docker logs –-follow <docker container name>
 or by accessing the log files directly on the host system. On Linux Ubuntu, logs are located at
 
 ```sh
-/var/lib/docker/containers/<container\_id>/<container\_id>-json.log
+/var/lib/docker/containers/<container_id>/<container_id>-json.log
 ```
