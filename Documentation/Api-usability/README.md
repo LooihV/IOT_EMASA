@@ -4,7 +4,29 @@
 
 [1. Resultados y estructura de los endpoints de la api-rest](#1-Resultados-y-estructura-de-los-endpoints-de-la-api-rest)
 
+[1.1. Autenticación](#11-Autenticación)
+
+[1.2. Genera Nueva Contraseña temporal](#12-Genera-Nueva-Contraseña-temporal)
+
+[1.3. Cambio de contraseña temporal por una nueva definida.](#13-Cambio-de-contraseña-temporal-por-una-nueva-definida)
+
+[1.4. Administrar usuarios.](#14-Administrar-usuarios)
+
+[1.5. Maquinas (Devices)](#15-Maquinas-Devices)
+
+[1.6. Registros](#16-Registros)
+
 [2. ChirpStack API Proxy (consumo desde Django)](#2-ChirpStack-API-Proxy-consumo-desde-Django)
+
+[2.1. Applications](#21-Applications)
+
+[2.2. Gateways](#22-Gateways)
+
+[2.3. Device Profiles](#23-Device-Profiles)
+
+[2.4. Devices](#24-Devices)
+
+[2.5. Device Activation](#25-Device-Activation)
 
 [3. Test pruebas de cómo se realizan las pruebas de la API.](#3-Test-pruebas-de-cómo-se-realizan-las-pruebas-de-la-API)
 
@@ -12,10 +34,34 @@
 
 [5. Respuestas y transacciones.](#5-Respuestas-y-transacciones)
 
+[5.1. Register Users](#51-Register-Users)
+
+[5.2. Register Machines](#52-Register-Machines)
+
+[5.3. Boot Notification "Register"](#53-Boot-Notification-"Register")
+
+[5.4. Set Machines](#54-Set-Machines)
+
+[5.5. SendData](#55-SendData)
+
+[5.6. Data Transfer Request](#56-Data-Transfer-Request)
+
+[5.7. Diagnostic Status](#57-Diagnostic-Status)
+
+[5.8. Change Availability Request](#58-Change-Availability-Request)
+
+[5.9. Stop Transaction Response](#59-Stop-Transaction-Response)
+
+[5.10. Change Availability Response](#50-Change-Availability-Response)
+
+
+
+
+
 
 ## 1. Resultados y estructura de los endpoints de la api-rest
 
-#### Autenticación
+#### 1.1. Autenticación
 
 POST /api/v1/token/
 
@@ -34,7 +80,7 @@ Obtiene un token de autenticación personalizado.
  	"token": "<token>"
 	}
 
-#### Genera Nueva Contraseña temporal
+#### 1.2. Genera Nueva Contraseña temporal
 
 POST /api/v1/pass/reset/
 
@@ -52,7 +98,7 @@ Genera una contraseña temporal para el usuario autenticado y la envía por corr
  	 "mensage": "Se ha enviado una contraseña temporal a tu correo."
 	}
 
-#### Cambio de contraseña temporal por una nueva definida.
+#### 1.3. Cambio de contraseña temporal por una nueva definida.
 
 POST /api/v1/pass/change/
 
@@ -71,7 +117,7 @@ Cambia la contraseña del usuario por una nueva.
  	 "message": "Contraseña actualizada correctamente en ambas APIs"
 	}
 
-#### Administrar usuarios.
+#### 1.4. Administrar usuarios.
 
 GET /api/v1/Users/
 
@@ -97,7 +143,7 @@ DELETE /api/v1/Users/id del usuario
 
 	 Elimina un usuario.
 
-#### Maquinas (Devices)
+#### 1.5. Maquinas (Devices)
 
 GET /api/v1/Maquinas/
 
@@ -117,7 +163,7 @@ Crea una nueva máquina asociada al usuario y la central activa.
   	 "message": "Máquina encendida"
 	}
 
-#### Registros
+#### 1.6. Registros
 
 GET /api/v1/Registro/
 
@@ -154,7 +200,7 @@ El archivo chirpstack\_api.py contiene la lógica que permite mantener sincroniz
 Toda esta lógica se implementa mediante funciones auxiliares get\_chirpstack\_user\_id, sync\_user\_to\_chirpstack, update\_chirpstack\_user\_password y llamadas HTTP con requests.
 
 
-#### Applications
+#### 2.1. Applications
 
 GET /api/v1/chirpstack/applications/ - Lista las aplicaciones del tenant del usuario.
 
@@ -190,7 +236,7 @@ POST /api/v1/chirpstack/applications/ - Crea una aplicación asociada al tenant.
 
 DELETE /api/v1/chirpstack/applications/{id}/ - Elimina una aplicación.
 
-#### Gateways
+#### 2.2. Gateways
 
 GET /api/v1/chirpstack/gateways/ - Lista todos los gateways o solo los del tenant asociado al usuario.
 
@@ -240,7 +286,7 @@ POST /api/v1/chirpstack/gateways/ - Registra un nuevo gateway.
 
 DELETE /api/v1/chirpstack/gateways/{id}/ - Elimina un gateway por su ID.
 
-#### Device Profiles
+#### 2.3. Device Profiles
 
 POST /api/v1/chirpstack/device-profiles/ - Crea un perfil de dispositivo.
 
@@ -273,7 +319,7 @@ MQTT Certificate
 
 POST /api/v1/chirpstack/applications/{id}/mqtt-certificate/ - Genera certificado MQTT para una aplicación.
 
-#### Devices
+#### 2.4. Devices
 
 POST /api/v1/chirpstack/devices/ - Registra un nuevo dispositivo.
 
@@ -327,7 +373,7 @@ DELETE /api/v1/chirpstack/devices/{dev\_eui}/ - Elimina un dispositivo.
 	 "message": "Device eliminado correctamente"
 	}
 
-#### Device Activation
+#### 2.5. Device Activation
 
 POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activa un dispositivo (con claves nwk\_s\_key, app\_s\_key, etc.).
 
@@ -410,7 +456,7 @@ lo tiene declarado.
 
 ## 5. Respuestas y transacciones.
 
-#### 1. Register Users
+#### 5.1. Register Users
 
 **- Descripción:** Registro de usuarios desde la API EMASA sincronizados con ChirpStack.
 
@@ -419,7 +465,7 @@ lo tiene declarado.
 **- Tipo:** Transacción (2) saliente
 
 
-#### 2. Register Machines
+#### 5.2. Register Machines
 
 **- Descripción:** Registro de dispositivos desde api django hacia chirpstack
 
@@ -428,14 +474,14 @@ lo tiene declarado.
 **- Tipo:** Transacción (2) saliente
 
 
-#### 3. Boot Notification "Register"
+#### 5.3. Boot Notification "Register"
 
 **- Descripción:** Registro inicial de usuario simulado mediante creación de entidades
 
 **- Tipo:** Transacción (2) saliente
 
 
-#### 4. Set Machines
+#### 5.4. Set Machines
 
 **- Descripción:** Asignación de máquinas a users/tenants
 
@@ -444,28 +490,28 @@ lo tiene declarado.
 **- Tipo:** Transacción (2) saliente
 
 
-#### 5. SendData
+#### 5.5. SendData
 
 **- Descripción:** Envío de datos desde EMASA a ChirpStack o la máquina (usando endpoints o MQTT).
 
 **- Tipo:** Transacción (2) saliente
 
 
-#### 6. Data Transfer Request
+#### 5.6. Data Transfer Request
 
 **- Descripción:** Solicitud de datos a una máquina o desde ChirpStack.
 
 **- Tipo:** Transacción (2) saliente
 
 
-#### 7. Diagnostic Status
+#### 5.7. Diagnostic Status
 
 **- Descripción:** Información de diagnóstico intercambiada a través de la función `SendData`.
 
 **- Tipo:** Transacción (2) saliente
 
 
-#### 8. Change Availability Request
+#### 5.8. Change Availability Request
 
 **- Descripción:**
 
@@ -474,7 +520,7 @@ lo tiene declarado.
 **- Tipo:** Transacción (2) saliente
 
 
-#### 9. Stop Transaction Response
+#### 5.9. Stop Transaction Response
 
 **- Descripción:**
 
@@ -483,7 +529,7 @@ lo tiene declarado.
 **- Tipo:**
 
 
-#### 10. Change Availability Response
+#### 5.10. Change Availability Response
 
 **- Descripción:**
 
