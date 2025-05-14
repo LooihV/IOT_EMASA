@@ -8,25 +8,34 @@ from unittest.mock import patch
 class PasswordTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = CustomUser.objects.create_user(username="tempuser", email="temp@example.com", password="temporal123")
+        self.user = CustomUser.objects.create_user(
+            username="tempuser",
+            email="temp@example.com",
+            password="temporal123"
+        )
         self.token = CustomToken.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.reset_url = reverse("Password_reset")
         self.change_url = reverse("Password_change")
 
+    @patch("api.chirpstack_api.requests.post")
     @patch("api.chirpstack_api.get_chirpstack_user_id", return_value="mock-id-123")
-    @patch("api.chirpstack_api.update_chirpstack_user_password")
-    def test_password_reset(self, mock_update, mock_get_id):
-        mock_update.return_value = None
-        response = self.client.post(self.reset_url, {"email": self.user.email})
-        self.assertEqual(response.status_code, 200)
+    def test_password_reset_and_change(self, mock_get_id, mock_post):
+        mock_post.return_value.status_code = 200
+        mock_post.return_value.json.return_value = {}
 
-    @patch("api.chirpstack_api.get_chirpstack_user_id", return_value="mock-id-123")
-    @patch("api.chirpstack_api.update_chirpstack_user_password")
-    def test_password_change(self, mock_update, mock_get_id):
-        mock_update.return_value = None
-        response = self.client.post(self.change_url, {
-            "old_password": "temporal123",
-            "new_password": "newpass123"
+        # Paso 1: resetear contraseña temporal (simula email recibido)
+        reset_response = self.client.post(self.reset_url, {"email": self.user.email})
+        self.assertEqual(reset_response.status_code, 200)
+
+        # Simula la nueva contraseña temporal que se habría enviado al email
+        temp_password = "mocktemp123"
+        self.user.set_password(temp_password)
+        self.user.save()
+
+        # Paso 2: cambiar esa contraseña temporal por la definitiva
+        change_response = self.client.post(self.change_url, {
+            "old_password": temp_password,
+            "new_password": "newsecurepass456"
         })
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(change_response.status_code, 200)
