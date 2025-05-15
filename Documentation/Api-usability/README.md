@@ -2,7 +2,7 @@
 
 ## Content
 
-[1. Results and structure of api-rest endpoints](#1-Resultados-y-estructura-de-los-endpoints-de-la-api-rest)
+[1. Results and structure of api-rest endpoints](#1-Results-and-structure-of-api-rest-endpoints)
 
 [1.1. Authentication](#11-Autenticación)
 
