@@ -8,9 +8,9 @@
 
 [1.2. Generates New Temporary Password](#12-Generates-New-Temporary-Password)
 
-[1.3. Change of temporary password for a new defined one.](#13-Change-of-temporary-password-for-a-new-defined-one.)
+[1.3. Change of temporary password for a new defined one.](#13-Change-of-temporary-password-for-a-new-defined-one)
 
-[1.4. Manage users.](#14-Manage-users.)
+[1.4. Manage users.](#14-Manage-users)
 
 [1.5. Machines (Devices)](#15-Machines-Devices)
 
@@ -28,7 +28,7 @@
 
 [2.5. Device Activation](#25-Device-Activation)
 
-[3. Tests of how API tests are performed.](#3-Tests-of-how-API-tests-are-performed.)
+[3. Tests of how API tests are performed.](#3-Tests-of-how-API-tests-are-performed)
 
 [4. Database synchronization.](#4-Database-synchronization)
 
