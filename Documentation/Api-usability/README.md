@@ -4,19 +4,19 @@
 
 [1. Results and structure of api-rest endpoints](#1-Results-and-structure-of-api-rest-endpoints)
 
-[1.1. Authentication](#11-Autenticación)
+[1.1. Authentication](#11-Authentication)
 
-[1.2. Generates New Temporary Password](#12-Genera-Nueva-Contraseña-temporal)
+[1.2. Generates New Temporary Password](#12-Generates-New-Temporary-Password)
 
-[1.3. Change of temporary password for a new defined one.](#13-Cambio-de-contraseña-temporal-por-una-nueva-definida)
+[1.3. Change of temporary password for a new defined one.](#13-Change-of-temporary-password-for-a-new-defined-one.)
 
-[1.4. Manage users.](#14-Administrar-usuarios)
+[1.4. Manage users.](#14-Manage-users.)
 
-[1.5. Machines (Devices)](#15-Maquinas-Devices)
+[1.5. Machines (Devices)](#15-Machines-Devices)
 
-[1.6. Records](#16-Registros)
+[1.6. Records](#16-Records)
 
-[2. ChirpStack API Proxy (Django consumption)](#2-ChirpStack-API-Proxy-consumo-desde-Django)
+[2. ChirpStack API Proxy (Django consumption)](#2-ChirpStack-API-Proxy-Django-consumption)
 
 [2.1. Applications](#21-Applications)
 
@@ -28,11 +28,11 @@
 
 [2.5. Device Activation](#25-Device-Activation)
 
-[3. Tests of how API tests are performed.](#3-Test-pruebas-de-cómo-se-realizan-las-pruebas-de-la-API)
+[3. Tests of how API tests are performed.](#3-Tests-of-how-API-tests-are-performed.)
 
-[4. Database synchronization.](#4-Sincronización-con-la-base-de-datos)
+[4. Database synchronization.](#4-Database-synchronization)
 
-[5. Responses and transactions.](#5-Respuestas-y-transacciones)
+[5. Responses and transactions.](#5-Responses-and-transactions)
 
 [5.1. Register Users](#51-Register-Users)
 
