@@ -2,21 +2,21 @@
 
 ## Content
 
-[1. Resultados y estructura de los endpoints de la api-rest](#1-Resultados-y-estructura-de-los-endpoints-de-la-api-rest)
+[1. Results and structure of api-rest endpoints](#1-Resultados-y-estructura-de-los-endpoints-de-la-api-rest)
 
-[1.1. Autenticación](#11-Autenticación)
+[1.1. Authentication](#11-Autenticación)
 
-[1.2. Genera Nueva Contraseña temporal](#12-Genera-Nueva-Contraseña-temporal)
+[1.2. Generates New Temporary Password](#12-Genera-Nueva-Contraseña-temporal)
 
-[1.3. Cambio de contraseña temporal por una nueva definida.](#13-Cambio-de-contraseña-temporal-por-una-nueva-definida)
+[1.3. Change of temporary password for a new defined one.](#13-Cambio-de-contraseña-temporal-por-una-nueva-definida)
 
-[1.4. Administrar usuarios.](#14-Administrar-usuarios)
+[1.4. Manage users.](#14-Administrar-usuarios)
 
-[1.5. Maquinas (Devices)](#15-Maquinas-Devices)
+[1.5. Machines (Devices)](#15-Maquinas-Devices)
 
-[1.6. Registros](#16-Registros)
+[1.6. Records](#16-Registros)
 
-[2. ChirpStack API Proxy (consumo desde Django)](#2-ChirpStack-API-Proxy-consumo-desde-Django)
+[2. ChirpStack API Proxy (Django consumption)](#2-ChirpStack-API-Proxy-consumo-desde-Django)
 
 [2.1. Applications](#21-Applications)
 
@@ -28,11 +28,11 @@
 
 [2.5. Device Activation](#25-Device-Activation)
 
-[3. Test pruebas de cómo se realizan las pruebas de la API.](#3-Test-pruebas-de-cómo-se-realizan-las-pruebas-de-la-API)
+[3. Tests of how API tests are performed.](#3-Test-pruebas-de-cómo-se-realizan-las-pruebas-de-la-API)
 
-[4. Sincronización con la base de datos.](#4-Sincronización-con-la-base-de-datos)
+[4. Database synchronization.](#4-Sincronización-con-la-base-de-datos)
 
-[5. Respuestas y transacciones.](#5-Respuestas-y-transacciones)
+[5. Responses and transactions.](#5-Respuestas-y-transacciones)
 
 [5.1. Register Users](#51-Register-Users)
 
@@ -59,9 +59,9 @@
 
 
 
-## 1. Resultados y estructura de los endpoints de la api-rest
+## 1. Results and structure of api-rest endpoints
 
-#### 1.1. Autenticación
+#### 1.1. Authentication
 
 POST /api/v1/token/
 
@@ -80,7 +80,7 @@ Obtains a personalized authentication token.
  	"token": "<token>"
 	}
 
-#### 1.2. Genera Nueva Contraseña temporal
+#### 1.2. Generates New Temporary Password
 
 POST /api/v1/pass/reset/
 
@@ -98,7 +98,7 @@ Generates a temporary password for the authenticated user and sends it by mail.
  	 "mensage": "We have send a temporary password to your email."
 	}
 
-#### 1.3. Cambio de contraseña temporal por una nueva definida.
+#### 1.3. Change of temporary password for a new defined one.
 
 POST /api/v1/pass/change/
 
@@ -117,7 +117,7 @@ Change de users password for a new one.
  	 "message": "Password correctly updated in both APIs"
 	}
 
-#### 1.4. Administrar usuarios.
+#### 1.4. Manage users.
 
 GET /api/v1/Users/
 
@@ -137,13 +137,15 @@ Creates a new user.
   	 "message": “User succesfully created"
 	}
 
-DELETE /api/v1/Users/id del usuario
+DELETE /api/v1/Users/user id
 
 ##### Response:
 
-	 Elimina un usuario.
+	 {
+  	   "message": "deleted user"
+      	 }
 
-#### 1.5. Maquinas (Devices)
+#### 1.5. Machines (Devices)
 
 GET /api/v1/Maquinas/
 
@@ -162,7 +164,7 @@ Creates a new machine asociated to the user and the active central.
   	 "message": "Machine on"
 	}
 
-#### 1.6. Registros
+#### 1.6. Records
 
 GET /api/v1/Registro/
 
@@ -182,7 +184,7 @@ Creates a new register asociated to a machine and a user.
  	 The new record.
 	}
 
-## 2. ChirpStack API Proxy (consumo desde Django)
+## 2. ChirpStack API Proxy (Django consumption)
 
 The EMASA API acts as a client to ChirpStack, transparently performing operations. The following routes proxy REST calls to ChirpStack using the JWT Token configured in the environment:
 
@@ -369,7 +371,7 @@ DELETE /api/v1/chirpstack/devices/{dev\_eui}/ - Deletes a device.
 ##### Response: (Have to be authenticated)
 
 	{
-	 "message": "Device eliminado correctamente"
+	 "message": "Device successfully deleted"
 	}
 
 #### 2.5. Device Activation
@@ -392,7 +394,7 @@ POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activates a device (wit
 	 Status 200 ok
 	}
 
-## 3. Test pruebas de cómo se realizan las pruebas de la API.
+## 3. Tests of how API tests are performed.
 
 To run the api rest tests, you run a series of commands from the terminal, depending on whether you want to run all the tests at the same time or just one function at a time. You must first make sure that your api-rest-emasa web container is running, then inside the path: ```json
 IOT\_EMASA/api-rest-emasa/
@@ -416,7 +418,7 @@ The folder containing the test code is located in the path:
 IOT_EMASA/api-rest-emasa/api/tests
 ```
 
-## 4. Sincronización con la base de datos.
+## 4. Database synchronization.
 
 Synchronization with the database is done by means of environment variables that communicate between the db code in the route IOT\_EMASA/api-rest-emasa/drf/settings.py:
 
@@ -453,7 +455,7 @@ has it declared.
  			  - path: ../.env.prod
 
 
-## 5. Respuestas y transacciones.
+## 5. Responses and transactions.
 
 #### 5.1. Register Users
 
