@@ -37,11 +37,7 @@ class CustomUser(AbstractUser):
     #groups = models.ManyToManyField("auth.Group", related_name ="custom_users",blank=True)
     tenant = models.ForeignKey(Tenant, on_delete=models.CASCADE, null=True, blank=True)
     
-    """user_permissions = models.ManyToManyField(
-        "auth.Permission",
-        related_name="custom_users_permissions",
-        blank=True
-    )"""
+
     groups = models.ManyToManyField(
         Group,
         verbose_name='groups',

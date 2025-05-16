@@ -71,7 +71,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         send_mail(
             subject=f"MONITOR: Bienvenido {user.username}",
-            message="Bienvenido al sistema Monitor, Tu cuenta se ha creado exitosamente, su nombre de usuario es: {user.username} y su correo asociado es: {user.email}",
+            message=f"Bienvenido al sistema Monitor, Tu cuenta se ha creado exitosamente, su nombre de usuario es: {user.username} y su email es: {user.email}",
             from_email="monitor.pruebas2000@gmail.com",
             recipient_list=[user.email],
             fail_silently=False,
