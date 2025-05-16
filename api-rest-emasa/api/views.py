@@ -292,16 +292,23 @@ class ChirpstackDeviceActivationViewSet(APIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request, dev_eui):
-        
-        
-       
-        
-        
-       client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
-       try:
-            result = client.activate_device(dev_eui, request.data)
-            return Response(result, status=status.HTTP_200_OK)
-       except Exception as e:
+        activation_data = {
+            "devAddr": request.data.get("dev_addr"),
+            "appSKey": request.data.get("app_s_key"),
+            "nwkSEncKey": request.data.get("nwk_s_key"),
+            "fCntUp": request.data.get("f_cnt_up", 0),
+            "aFCntDown": request.data.get("a_f_cnt_down", 0),
+            "nFCntDown": request.data.get("n_f_cnt_down", 0),
+        }
+
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.activate_device(dev_eui, activation_data)
+            return Response({
+                "message": "Dispositivo activado correctamente",
+                "result": result
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
             return Response({"error": str(e)}, status=400)
         
         
