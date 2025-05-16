@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Machine, Registro, Tenant
 from .models import  CustomUser #, User
+from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 #from .chirpstack_api import create_user_in_chirpstack, update_user_in_chirpstack, delete_user_in_chirpstack
@@ -67,6 +68,14 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(password)  # Aquí usas el password bien
         user.save()
+
+        send_mail(
+            subject=f"MONITOR: Bienvenido {user.username}",
+            message="Bienvenido al sistema Monitor, Tu cuenta se ha creado exitosamente, su nombre de usuario es: {user.username} y su correo asociado es: {user.email}",
+            from_email="monitor.pruebas2000@gmail.com",
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
 
         from api.chirpstack_api import sync_user_to_chirpstack 
         sync_user_to_chirpstack(sender=User, instance=user, created=True, password_plaintext=password)
