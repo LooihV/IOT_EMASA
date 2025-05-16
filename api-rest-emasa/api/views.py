@@ -240,6 +240,21 @@ class ChirpstackGatewayDeleteView(APIView):
         except Exception as e:
             return Response({"error": str(e)}, status=400)
         
+        
+    def put(self, request, gateway_id):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+
+        gateway_data = request.data.copy()
+
+        try:
+            result = client.update_gateway(gateway_id, gateway_data)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+        
+
+        
 
 
 class ChirpstackDeviceProfileViewSet(APIView):
@@ -252,7 +267,28 @@ class ChirpstackDeviceProfileViewSet(APIView):
             return Response(result, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
+        
+        
+class ChirpstackDeviceProfileputdelViewSet(APIView):
+    permission_classes = [IsAuthenticated]
 
+
+    def put(self, request, profile_id):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.update_device_profile(profile_id, request.data)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+    def delete(self, request, profile_id):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+        try:
+            result = client.delete_device_profile(profile_id)
+            return Response({"message": "Device profile eliminado correctamente"}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+    
 
 class ChirpstackDeviceViewSet(APIView):
     permission_classes = [IsAuthenticated]
@@ -273,6 +309,18 @@ class  ChirpstackDeviceDelGetView(APIView):
         client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
         try:
             result = client.get_device(dev_eui)
+            return Response(result, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+        
+    def put(self, request, dev_eui):
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+
+        device_data = request.data.copy()
+
+        try:
+            result = client.update_device(dev_eui, device_data)
             return Response(result, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
@@ -374,6 +422,24 @@ class ChirpstackApplicationDeleteView(APIView):
         return Response({"message": "Aplicación eliminada correctamente"}, status=204)
      except Exception as e:
         return Response({"error": str(e)}, status=400)
+    
+    def put(self, request, application_id):
+        user = request.user
+        tenant = user.tenant
+
+        if not tenant or not tenant.chirpstack_id:
+            return Response({"error": "Usuario no tiene tenant asignado."}, status=403)
+
+        application_data = request.data.copy()
+        application_data["tenantId"] = tenant.chirpstack_id  # Ojo, camelCase como espera ChirpStack
+
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+
+        try:
+            result = client.update_application(application_id, application_data)
+            return Response(result, status=200)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
 
 
 class ChirpstackMQTTCertificateViewSet(APIView):

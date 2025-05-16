@@ -4,7 +4,7 @@ from api import views
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet, CustomObtainAuthToken, ChirpstackGatewayViewSet, ChirpstackDeviceProfileViewSet, ChirpstackDeviceViewSet, ChirpstackDeviceActivationViewSet, ChirpstackApplicationViewSet, ChirpstackMQTTCertificateViewSet, ChirpstackGatewayDeleteView, ChirpstackApplicationDeleteView, ChirpstackDeviceDelGetView
+from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet, CustomObtainAuthToken, ChirpstackGatewayViewSet, ChirpstackDeviceProfileViewSet, ChirpstackDeviceViewSet, ChirpstackDeviceActivationViewSet, ChirpstackApplicationViewSet, ChirpstackMQTTCertificateViewSet, ChirpstackGatewayDeleteView, ChirpstackApplicationDeleteView, ChirpstackDeviceDelGetView, ChirpstackDeviceProfileputdelViewSet
 
 
 router = routers.DefaultRouter()
@@ -26,6 +26,8 @@ urlpatterns = [
     path("chirpstack/gateways/",ChirpstackGatewayViewSet.as_view(), name="Gateways"),
     path("chirpstack/gateways/<str:gateway_id>/",ChirpstackGatewayDeleteView.as_view(), name="Gateway-Delete"),
     path("chirpstack/device-profiles/",ChirpstackDeviceProfileViewSet.as_view(),name="Device-Profile"),
+    path("chirpstack/device-profiles/<str:profile_id>/",ChirpstackDeviceProfileputdelViewSet.as_view(),name="Device-Profile"),
+    
     path("chirpstack/devices/",ChirpstackDeviceViewSet.as_view(), name="Devices"),
     path("chirpstack/devices/<str:dev_eui>/", ChirpstackDeviceDelGetView.as_view(), name="Devices2"),
     path("chirpstack/devices/<str:dev_eui>/activation/", ChirpstackDeviceActivationViewSet.as_view(), name="Device-Activation"),

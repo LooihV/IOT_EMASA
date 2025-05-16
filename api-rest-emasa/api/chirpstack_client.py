@@ -25,6 +25,11 @@ class ChirpstackApiClient:
         return self.handle_response(requests.get(url,headers=self.headers))
     
     
+    def update_gateway(self, gateway_id,gateway_data):
+        url = f"{self.base_url}/api/gateways/{gateway_id}"
+        return self.handle_response(requests.put(url,json={"gateway":gateway_data},headers=self.headers))
+    
+        
     def delete_gateway(self, gateway_id):
         url = f"{self.base_url}/api/gateways/{gateway_id}"
         return self.handle_response(requests.delete(url,headers=self.headers))
@@ -33,6 +38,16 @@ class ChirpstackApiClient:
     def create_device_profile(self, profile_data):
         url = f"{self.base_url}/api/device-profiles"
         return self.handle_response(requests.post(url,json={"deviceProfile":profile_data},headers=self.headers))
+    
+    
+    def update_device_profile(self, profile_id,profile_data):
+        url = f"{self.base_url}/api/device-profiles/{profile_id}"
+        return self.handle_response(requests.put(url,json={"deviceProfile":profile_data},headers=self.headers))
+    
+    
+    def delete_device_profile(self, profile_id):
+        url = f"{self.base_url}/api/device-profiles/{profile_id}"
+        return self.handle_response(requests.delete(url,headers=self.headers))
     
     
     def list_devpro_algorit(self):
@@ -50,6 +65,11 @@ class ChirpstackApiClient:
         if tenant_id:
             url += f"&tenant_id={tenant_id}"
         return self.handle_response(requests.get(url,headers=self.headers))
+    
+    
+    def update_application(self, application_id,application_data):
+        url = f"{self.base_url}/api/applications/{application_id}"
+        return self.handle_response(requests.put(url,json={"application":application_data},headers=self.headers))
     
     
     def delete_application(self, application_id):
@@ -70,6 +90,11 @@ class ChirpstackApiClient:
     def get_device(self,dev_eui):
         url = f"{self.base_url}/api/devices/{dev_eui}"
         return self.handle_response(requests.get(url,headers=self.headers))
+    
+    
+    def update_device(self, dev_eui,device_data):
+        url = f"{self.base_url}/api/devices/{dev_eui}"
+        return self.handle_response(requests.put(url,json={"device":device_data},headers=self.headers))
     
     
     def delete_device(self, dev_eui):

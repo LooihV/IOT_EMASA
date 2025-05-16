@@ -205,7 +205,39 @@ def sync_tenant_to_chirpstack(sender, instance, created, **kwargs):
         except requests.exceptions.RequestException as e:
             print(f"Error al crear tenant en ChirpStack: {e}")
             
+    elif not created:
+        print("Actualizando Tenant en ChirpStack...")
 
+        tenant_id = instance.chirpstack_id or get_chirpstack_tenant_id_by_name(instance.name)
+        if not tenant_id:
+            print(f"No se encontró tenant para actualizar: {instance.name}")
+            return
+
+        tenant_update_url = f"{CHIRPSTACK_TENANT_URL}/{tenant_id}"
+        updated_data = {
+            "tenant": {
+                "name": instance.name,
+                "description": "Actualizado desde Django",
+                "canHaveGateways": True,
+                "maxDeviceCount": 0,
+                "maxGatewayCount": 0,
+                "privateGatewaysDown": False,
+                "privateGatewaysUp": False,
+                "tags": {}
+            }
+        }
+
+        try:
+            response = requests.put(
+                tenant_update_url,
+                headers=HEADERS,
+                json=updated_data
+            )
+            response.raise_for_status()
+            print(f"Tenant actualizado en ChirpStack con ID: {tenant_id}")
+        except requests.exceptions.RequestException as e:
+            print(f"Error al actualizar tenant en ChirpStack: {e}")
+            
 
 def get_chirpstack_tenant_id_by_name(name):
     """Obtiene el ID del tenant en ChirpStack dado su nombre."""
