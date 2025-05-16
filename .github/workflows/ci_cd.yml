@@ -1,0 +1,35 @@
+name: Unified Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-databases:
+    uses: ./.github/workflows/deploy-component.yml
+    with:
+      component-path: 'persistance'
+    secrets: inherit
+
+  deploy-lorawan-server:
+    needs: deploy-databases
+    uses: ./.github/workflows/deploy-component.yml
+    with:
+      component-path: 'lorawan-server'
+    secrets: inherit
+
+  deploy-mqtt-client:
+    needs: deploy-lorawan-server
+    uses: ./.github/workflows/deploy-component.yml
+    with:
+      component-path: 'mqtt-client'
+    secrets: inherit
+
+  deploy-api-emasa:
+    needs: deploy-lorawan-server
+    uses: ./.github/workflows/deploy-component.yml
+    with:
+      component-path: 'api-rest-emasa'
+    secrets: inherit
