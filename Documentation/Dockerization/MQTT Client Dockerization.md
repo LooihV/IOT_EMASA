@@ -1,6 +1,7 @@
-# MQTT CLIENT DOCKER**
+# MQTT Client Dockerization
 
-##Installation and Deployment Guide**
+
+## Installation and Deployment Guide
 
 Software Version: 1.0 | 14 may 2025
 
@@ -12,9 +13,9 @@ The purpose of this document is to provide the System Administrator or any other
 
 The Installation and Deployment Guide is first created in the Deployment process step. Responsibilities for document creation and content are shown in the [RACI](https://en.wikipedia.org/wiki/Responsibility_assignment_matrix) chart below:
 
-|  |  |  |  |  |  |
-| --- | --- | --- | --- | --- | --- |
+
 | **Group Manager** | **Project Manager** | **Technical Lead** | **Business Analyst** | **Developer** | **Testing Analyst** |
+| --- | --- | --- | --- | --- | --- |
 | I | A | R | I | C | I |
 
 ### Combining or splitting documents
