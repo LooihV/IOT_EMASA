@@ -60,11 +60,30 @@ Each change or revision made to this Installation Guide Document shall be summar
 ## Contents
 
 [1. Introduction](#1-introduction)
+
 [1.1. Purpose](#11-purpose)
+
 [1.2. Revision history](#12-revision-history)
+
 [1.3. Intended audience and reading suggestions](#13-intended-audience-and-reading-suggestions)
+
 [1.4. Technical project stakeholders](#14-technical-project-stakeholders)
+
 [1.5. References](#15-references)
+
+[2. Actions](#2-actions)
+
+[2.1. Action 1 (Deploy component)](#21-action-1-deploy-component)
+
+[2.2. Action 2 (CI/CD)](#22-action-2-cicd)
+
+[3. Workflow](#3-workflow)
+
+[3.1. Deploy Component](#31-deploy-component)
+
+[3.2. Deployment Pipeline](#32-deployment-pipeline)
+
+[4. Troubleshooting](#4-troubleshooting)
 
 
 # 1. Introduction
