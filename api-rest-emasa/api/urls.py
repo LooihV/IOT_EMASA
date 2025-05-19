@@ -4,7 +4,7 @@ from api import views
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet, CustomObtainAuthToken, ChirpstackGatewayViewSet, ChirpstackDeviceProfileViewSet, ChirpstackDeviceViewSet, ChirpstackDeviceActivationViewSet, ChirpstackApplicationViewSet, ChirpstackMQTTCertificateViewSet, ChirpstackGatewayDeleteView, ChirpstackApplicationDeleteView, ChirpstackDeviceDelGetView, ChirpstackDeviceProfileputdelViewSet
+from .views import  PasswordResetRequestViewSet, ChangePasswordViewSet, CustomObtainAuthToken, ChirpstackGatewayViewSet, ChirpstackDeviceProfileViewSet, ChirpstackDeviceViewSet, ChirpstackDeviceActivationViewSet, ChirpstackApplicationViewSet, ChirpstackMQTTCertificateViewSet, ChirpstackGatewayDeleteView, ChirpstackApplicationDeleteView, ChirpstackDeviceDelGetView, ChirpstackDeviceProfileputdelViewSet, UpdateChirpstackUserView
 
 
 router = routers.DefaultRouter()
@@ -34,5 +34,5 @@ urlpatterns = [
     path("chirpstack/applications/",ChirpstackApplicationViewSet.as_view(), name=("Applications")),
     path("chirpstack/applications/<str:application_id>/",ChirpstackApplicationDeleteView.as_view(), name=("Applications")),
     path("chirpstack/applications/<str:application_id>/mqtt-certificate/", ChirpstackMQTTCertificateViewSet.as_view()),    
-    
+    path("Users/<str:user_id>/", UpdateChirpstackUserView.as_view(), name="update-chirpstack-user"),
 ]

@@ -127,6 +127,30 @@ class UserViewSet(viewsets.ModelViewSet):
         return User.objects.filter(id=user.id)
     
     
+
+class UpdateChirpstackUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, chirpstack_id):
+        from .chirpstack_client import ChirpstackApiClient
+
+        CHIRPSTACK_API_BASE = "http://chirpstack-rest-api:8090"
+        CHIRPSTACK_TOKEN = os.environ.get("CHIRPSTACK_JWT_TOKEN")
+
+        client = ChirpstackApiClient(CHIRPSTACK_API_BASE, CHIRPSTACK_TOKEN)
+
+        try:
+            user_data = request.data.get("user")
+            if not user_data:
+                return Response({"error": "Falta el campo 'user'"}, status=400)
+
+            result = client.update_user(chirpstack_id, user_data)
+            return Response(result, status=200)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
+    
+    
 CHIRPSTACK_API_BASE = "http://chirpstack-rest-api:8090"
 CHIRPSTACK_TOKEN = os.environ.get("CHIRPSTACK_JWT_TOKEN")
    

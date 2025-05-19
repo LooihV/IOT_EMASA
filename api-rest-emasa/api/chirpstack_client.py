@@ -110,3 +110,8 @@ class ChirpstackApiClient:
     def get_device_activation(self, dev_eui):
         url = f"{self.base_url}/api/devices/{dev_eui}/activation"
         return self.handle_response(requests.get(url,headers=self.headers))
+    
+    
+    def update_user(self, user_id, user_data):
+        url = f"{self.base_url}/api/users/{user_id}"
+        return self.handle_response(requests.put(url,json={"user":user_data},headers=self.headers))

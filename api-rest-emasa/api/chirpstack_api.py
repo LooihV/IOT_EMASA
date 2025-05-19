@@ -108,6 +108,13 @@ def sync_user_to_chirpstack(sender, instance, created, password_plaintext=None, 
             response = requests.post(CHIRPSTACK_API_URL, headers=HEADERS, json=user_data)
             print(f"STATUS CREACIÓN: {response.status_code} | RESPUESTA: {response.text}")
             response.raise_for_status()
+            
+            # Guardar chirpstack_id que devuelve la respuesta
+            chirpstack_id = response.json().get("id")
+            if chirpstack_id:
+                instance.chirpstack_id = chirpstack_id
+                instance.save(update_fields=["chirpstack_id"])
+            
 
         else:
             if not user_id:
@@ -130,6 +137,13 @@ def sync_user_to_chirpstack(sender, instance, created, password_plaintext=None, 
                 password_response = requests.post(password_url, headers=HEADERS, json=password_payload)
                 print(f"STATUS CONTRASEÑA: {password_response.status_code} | RESPUESTA: {password_response.text}")
                 password_response.raise_for_status()
+                
+                
+                
+            # Si aún no se había guardado, lo guardas ahora
+            if not instance.chirpstack_id:
+                instance.chirpstack_id = user_id
+                instance.save(update_fields=["chirpstack_id"])
 
     except Exception as e:
         print(f"Error al sincronizar usuario con ChirpStack: {e}")
