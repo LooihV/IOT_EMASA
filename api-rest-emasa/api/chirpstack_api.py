@@ -15,11 +15,6 @@ CustomUser = get_user_model()
 
 
 
-#@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-#def create_auth_token(sender, instance=None, created=False, **kwargs):
- #   if created:
-  #      Token.objects.create(user=instance)
-
 CHIRPSTACK_API_URL = "http://chirpstack-rest-api:8090/api/users"
 CHIRPSTACK_TENANT_URL = "http://chirpstack-rest-api:8090/api/tenants"
 CHIRPSTACK_GATEWAYS_URL = "http://chirpstack-rest-api:8090/api/gateways"
