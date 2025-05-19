@@ -368,6 +368,7 @@ class ChirpstackDeviceActivationViewSet(APIView):
             "devAddr": request.data.get("dev_addr"),
             "appSKey": request.data.get("app_s_key"),
             "nwkSEncKey": request.data.get("nwk_s_key"),
+            "fNwkSIntKey":request.data.get("fnwk_s_key"),
             "fCntUp": request.data.get("f_cnt_up", 0),
             "aFCntDown": request.data.get("a_f_cnt_down", 0),
             "nFCntDown": request.data.get("n_f_cnt_down", 0),

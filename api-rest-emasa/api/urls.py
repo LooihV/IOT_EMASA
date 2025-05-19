@@ -27,7 +27,6 @@ urlpatterns = [
     path("chirpstack/gateways/<str:gateway_id>/",ChirpstackGatewayDeleteView.as_view(), name="Gateway-Delete"),
     path("chirpstack/device-profiles/",ChirpstackDeviceProfileViewSet.as_view(),name="Device-Profile"),
     path("chirpstack/device-profiles/<str:profile_id>/",ChirpstackDeviceProfileputdelViewSet.as_view(),name="Device-Profile"),
-    
     path("chirpstack/devices/",ChirpstackDeviceViewSet.as_view(), name="Devices"),
     path("chirpstack/devices/<str:dev_eui>/", ChirpstackDeviceDelGetView.as_view(), name="Devices2"),
     path("chirpstack/devices/<str:dev_eui>/activation/", ChirpstackDeviceActivationViewSet.as_view(), name="Device-Activation"),
