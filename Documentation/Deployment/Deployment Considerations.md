@@ -60,14 +60,23 @@ Each change or revision made to this Installation Guide Document shall be summar
 ## Contents
 
 [1. Introduction](#1-introduction)
+
 [1.1. Purpose](#11-purpose)
+
 [1.2. Revision history](#12-revision-history)
+
 [1.3. Intended audience and reading suggestions](#13-intended-audience-and-reading-suggestions)
+
 [1.4. Technical project stakeholders](#14-technical-project-stakeholders)
+
 [2. Considerations](#2-considerations)
+
 [2.1. Environment Variables](#21-environment-variables)
+
 [2.2. Healthcheks](#22-healthcheks)
+
 [2.3. Exposed ports](#23-exposed-ports)
+
 [3. Troubleshooting](#3-troubleshooting)
 
 # 1. Introduction
@@ -136,10 +145,10 @@ SUPERUSER_2_PASSWORD
 ## 2.2. Healthcheks
 Production docker-compose file contains a healthcheck for the most relevant services. This is done to ensure that the services are running properly before the application is exposed to the public. The healthchecks are defined in the `healthcheck` section of the docker-compose file. 
 
->> NOTE: Healthchecks are important for scaleability and resilience, it is recommnded to keep them activ specially for Docker Swarm of Kubernetes implementations.
+> NOTE: Healthchecks are important for scaleability and resilience, it is recommnded to keep them activ specially for Docker Swarm of Kubernetes implementations.
 ## 2.3. Exposed ports
 Production docker-compose file contains a port mapping for the most relevant services. This is done to ensure that the services are running properly before the application is exposed to the public. The port mappings are defined in the `ports` section of the docker-compose file.
->> NOTE: it recommended to use common ports for the services due to security reasons.
+> NOTE: it recommended to use common ports for the services due to security reasons.
 
 # 3. Troubleshooting
 
@@ -150,5 +159,4 @@ docker logs –-follow <docker container name>
 or by accessing the log files directly on the host system. On Linux Ubuntu, logs are located at
 ```sh
 /var/lib/docker/containers/<container\_id>/<container\_id>-json.log
-```
 ```
