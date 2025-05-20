@@ -1,5 +1,7 @@
 import requests
 
+#Consumo de la api de chirpstack applications, gateways, device-profile, devices device activation, update users
+
 class ChirpstackApiClient:
     def __init__(self, base_url, jwt_token):
         self.base_url = base_url.rstrip('/')
@@ -7,6 +9,8 @@ class ChirpstackApiClient:
     "Authorization": f"Bearer {jwt_token}",
     "Content-Type": "application/json"
     }
+        
+        
     def handle_response(self, response):
         if response.ok:
             return response.json()
