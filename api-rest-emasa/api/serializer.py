@@ -69,6 +69,9 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)  # Aquí usas el password bien
         user.save()
 
+        from api.chirpstack_api import sync_user_to_chirpstack 
+        sync_user_to_chirpstack(sender=User, instance=user, created=True, password_plaintext=password)
+
         send_mail(
             subject=f"MONITOR: Bienvenido {user.username}",
             message=f"Bienvenido al sistema Monitor, Tu cuenta se ha creado exitosamente, su nombre de usuario es: {user.username} y su email es: {user.email}",
@@ -76,10 +79,9 @@ class UserSerializer(serializers.ModelSerializer):
             recipient_list=[user.email],
             fail_silently=False,
         )
-
-        from api.chirpstack_api import sync_user_to_chirpstack 
-        sync_user_to_chirpstack(sender=User, instance=user, created=True, password_plaintext=password)
         return user
+
+
     
     def update(self, instance, validated_data):
         password = None
