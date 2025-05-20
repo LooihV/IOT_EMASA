@@ -15,6 +15,8 @@ class DeviceActivationTest(APITestCase):
             "devAddr": "01020304",
             "appSKey": "AABBCCDD00112233445566778899AABB",
             "nwkSEncKey": "FFEEDDCCBBAA99887766554433221100",
+            "fNwkSIntKey":"FFEEDDCCBBAA99887766554433221100",
+            "sNwkSIntKey":"FFEEDDCCBBAA99887766554433221100",
             "fCntUp": 0,
             "fCntDown": 0
         })
