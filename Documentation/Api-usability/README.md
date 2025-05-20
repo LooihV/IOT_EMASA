@@ -396,9 +396,9 @@ POST /api/v1/chirpstack/devices/{dev\_eui}/activation/ - Activates a device (wit
 
 ## 3. Tests of how API tests are performed.
 
-To run the api rest tests, you run a series of commands from the terminal, depending on whether you want to run all the tests at the same time or just one function at a time. You must first make sure that your api-rest-emasa web container is running, then inside the path: ```json
+To run the api rest tests, you run a series of commands from the terminal, depending on whether you want to run all the tests at the same time or just one function at a time. You must first make sure that your api-rest-emasa web container is running, then inside the path: 
 IOT\_EMASA/api-rest-emasa/
-``` the following commands are executed:
+ the following commands are executed:
 
 **1. If you want to run all tests at the same time:** docker-compose exec web Python manage.py test api.tests
 **2. To execute the token test:** docker-compose exec web Python manage.py test api.tests.test\_auth
