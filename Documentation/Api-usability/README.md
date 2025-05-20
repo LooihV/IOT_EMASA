@@ -1,6 +1,6 @@
 #  GITHUB API DOCUMENTATION
 
-The classes and functions of the api are declared at models.py file, the serializer.py file is the file which can perform the classes actions and the views.py is the users view from the drf panel administration the routes are declared at the urls.py file and the actions related to chirpstack are detail at the 2 subtitle of this file.
+The classes and functions of the api are declared at models.py file, the serializer.py file is the file which can perform the classes actions and the views.py is the users view from the drf panel administration the routes are declared at the urls.py file and the actions related to chirpstack are detail at the second (2) subtitle of this file.
 
 ## Content
 
