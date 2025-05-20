@@ -401,17 +401,29 @@ IOT\_EMASA/api-rest-emasa/
  the following commands are executed:
 
 **1. If you want to run all tests at the same time:** docker-compose exec web Python manage.py test api.tests
+
 **2. To execute the token test:** docker-compose exec web Python manage.py test api.tests.test\_auth
+
 **3. To execute the user test:** docker-compose exec web Python manage.py test api.tests.test\_users
+
 **4. To execute the tenant test:** docker-compose exec web Python manage.py test api.tests.test\_tenants
+
 **5. To execute the applications test:** docker-compose exec web Python manage.py test api.tests.test\_applications
+
 **6. To execute the gateways test:** docker-compose exec web Python manage.py test api.tests.test\_gateways
+
 **7. To execute the device profiles test:** docker-compose exec web Python manage.py test api.tests.test\_device\_profiles
+
 **8. To execute the devices test:** docker-compose exec web Python manage.py test api.tests.test\_devices
+
 **9. To execute the device activation test:** docker-compose exec web Python manage.py test api.tests.test\_device\_activation
+
 **10. To execute the password test:** docker-compose exec web Python manage.py test api.tests.test\_password
+
 **11. To execute the user sincronizacion con chirpstack test:** docker-compose exec web Python manage.py test api.tests.test\_user\_sync
+
 **12. To execute the tenant sincronización con chirpstack test:** docker-compose exec web Python manage.py test api.tests.test\_tenant\_sync
+
 
 The folder containing the test code is located in the path:
 ```json
