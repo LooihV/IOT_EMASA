@@ -83,7 +83,7 @@ Each change or revision made to this Installation Guide Document shall be summar
 
 ## 1.1. Purpose
 
-The purpose of this Installation and Deployment Guide is to describe in technical terms the steps necessary to install the software referred to ChirpStack open-source LoRaWAN Network Server and make it operational.
+The purpose of this Guide is to describe in technical concern to deploy the software referred to EMASA Monitor Online and make it operational.
 
 ## 1.2. Revision history
 
@@ -111,9 +111,9 @@ This section provides a list of all known stakeholders with an interest in the p
 | Carlos Bernal | 2420201003@estudiantesunibague.edu.co | Software Developer |
 
 # 2. Considerations
-As it can be noiced, tnere are two docker-compose files, one for development purposes and one for production purposes. It is important to recognize their differences at their requirements. This docuemnt in focuesed on the production file. to check out development files requiremets, please refer to the [development file](, please refer to the [development docs↗](../Dockerization/).
+As it can be noticed, there are two docker-compose files, one for development purposes and one for production purposes. It is important to recognize their differences at their requirements. This document is focused on the production file. to check out development files requirements, please refer to the [development docs↗](../Dockerization/).
 ## 2.1. Environment variables
- It is indespensable to create a `.env.prod` file at the root directory of the repository, containing the following variables:
+ It is indispensable to create a `.env.prod` file at the root directory of the repository, containing the following variables
 ```txt
 SWAGGER_JSON_URL
 REDIS_PASSWORD
@@ -145,7 +145,7 @@ SUPERUSER_2_PASSWORD
 ## 2.2. Healthcheks
 Production docker-compose file contains a healthcheck for the most relevant services. This is done to ensure that the services are running properly before the application is exposed to the public. The healthchecks are defined in the `healthcheck` section of the docker-compose file. 
 
-> NOTE: Healthchecks are important for scaleability and resilience, it is recommnded to keep them activ specially for Docker Swarm of Kubernetes implementations.
+> NOTE: Healthchecks are important for scalability and resilience, it is recommended to keep them active specially for Docker Swarm of Kubernetes implementations.
 ## 2.3. Exposed ports
 Production docker-compose file contains a port mapping for the most relevant services. This is done to ensure that the services are running properly before the application is exposed to the public. The port mappings are defined in the `ports` section of the docker-compose file.
 > NOTE: it recommended to use common ports for the services due to security reasons.
