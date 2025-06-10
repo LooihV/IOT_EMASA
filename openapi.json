@@ -3,7 +3,7 @@
   "info": {
     "title": "Chirpstack Production VPS API",
     "description": "API for managing Chirpstack resources in a production environment",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "servers": [
     {
