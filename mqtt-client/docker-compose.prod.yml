@@ -8,6 +8,7 @@ services:
       - ../.env.prod
     networks:
       - chirp-django-net
+  
     healthcheck:
       test: ["CMD", "python", "/app/health_check.py"]
       interval: 30s

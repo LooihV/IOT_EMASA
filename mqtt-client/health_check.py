@@ -1,66 +1,162 @@
-import os
-import sys
-import paho.mqtt.client as mqtt
-import time
-import psutil
-
-# Configuration - use the same environment variables as your main app
-"""MQTT_BROKER_HOST = os.environ.get("MQTT_BROKER_HOST", "mqtt-broker")
-MQTT_BROKER_PORT = int(os.environ.get("MQTT_BROKER_PORT", 1883))
-MAIN_PROCESS_NAME = "main.py"  # Adjust if your main script has a different name
 """
-MQTT_BROKER_HOST = os.environ.get("MQTT_BROKER_HOST")
-MQTT_BROKER_PORT = int(os.environ.get("MQTT_BROKER_PORT"))
-MAIN_PROCESS_NAME = "main.py"  # Adjust if your main script has a different name
+Docker Health Check for MQTT Service
 
-def is_main_process_running():
-    """Check if the main process is running"""
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        try:
-            # Check if this is our main python process
-            if proc.info['name'] == 'python' and any(MAIN_PROCESS_NAME in cmd for cmd in proc.info['cmdline']):
-                return True
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            pass
-    return False
+Lightweight health check specifically designed for Docker container monitoring.
+Fast execution with minimal resource overhead for container orchestration.
 
-def can_connect_to_broker():
-    """Test if we can connect to the MQTT broker"""
-    client = mqtt.Client(client_id="health-check")
-    client.connect_status = False
+Usage in Dockerfile:
+    HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+        CMD python health_check.py --docker || exit 1
+
+Author: IoT Development Team
+Version: 1.0
+Date: August 2025
+"""
+
+import paho.mqtt.client as mqtt
+import sys
+import time
+import json
+import os
+
+def docker_health_check(timeout=5):
+    """
+    Lightweight health check for Docker containers.
     
-    def on_connect(client, userdata, flags, rc):
-        if rc == 0:
-            client.connect_status = True
-        client.disconnect()
+    Tests essential MQTT connectivity with minimal overhead.
+    Returns exit code 0 for healthy, 1 for unhealthy.
     
-    client.on_connect = on_connect
+    Args:
+        timeout: Connection timeout in seconds
+        
+    Returns:
+        dict: Basic health status for logging
+    """
+    health_status = {
+        "timestamp": time.time(),
+        "status": "unknown",
+        "message": "",
+        "response_time_ms": 0
+    }
+    
+    start_time = time.time()
     
     try:
-        client.connect(MQTT_BROKER_HOST, MQTT_BROKER_PORT, 5)
-        client.loop_start()
-        # Give it time to attempt connection
-        time.sleep(3)
-        client.loop_stop()
-        return client.connect_status
-    except Exception:
-        return False
+        # Get MQTT broker settings from environment or defaults
+        broker_host = os.getenv('MQTT_BROKER', 'localhost')
+        broker_port = int(os.getenv('MQTT_PORT', '1883'))
+        
+        # Quick connection test
+        client = mqtt.Client()
+        client.connect(broker_host, broker_port, timeout)
+        
+        # Test basic publish capability
+        client.publish("health/check", "docker_health_ping")
+        client.disconnect()
+        
+        response_time = int((time.time() - start_time) * 1000)
+        
+        health_status.update({
+            "status": "healthy",
+            "message": f"MQTT broker responsive in {response_time}ms",
+            "response_time_ms": response_time
+        })
+        
+        return health_status
+        
+    except Exception as e:
+        health_status.update({
+            "status": "unhealthy", 
+            "message": f"MQTT connection failed: {str(e)}",
+            "response_time_ms": -1
+        })
+        
+        return health_status
+
+def docker_websocket_health_check():
+    """
+    Quick WebSocket server health check for Docker.
+    
+    Returns:
+        dict: WebSocket health status
+    """
+    try:
+        # Only check if the module is importable
+        from websockets_server import get_connected_clients
+        client_count = get_connected_clients()
+        
+        return {
+            "status": "healthy",
+            "message": f"WebSocket server running ({client_count} clients)",
+            "client_count": client_count
+        }
+    except ImportError:
+        return {
+            "status": "degraded",
+            "message": "WebSocket module not available"
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "message": f"WebSocket error: {str(e)}"
+        }
 
 def main():
-    """Run health checks and exit with appropriate code"""
-    # Check 1: Is main process running?
-    if not is_main_process_running():
-        print("Main process is not running")
-        sys.exit(1)
+    """
+    Main health check execution for Docker.
     
-    # Check 2: Can we connect to the MQTT broker?
-    if not can_connect_to_broker():
-        print("Cannot connect to MQTT broker")
-        sys.exit(1)
+    Supports different modes based on command line arguments:
+    - --docker: Lightweight Docker health check
+    - --detailed: Comprehensive health check
+    - (no args): Standard health check
+    """
     
-    # All checks passed
-    print("Health check passed")
-    sys.exit(0)
+    # Check command line arguments
+    if len(sys.argv) > 1:
+        if "--docker" in sys.argv:
+            # Docker health check mode
+            health = docker_health_check()
+            
+            # Log health status
+            print(json.dumps(health))
+            
+            # Exit with appropriate code for Docker
+            if health["status"] == "healthy":
+                sys.exit(0)  # Healthy
+            else:
+                sys.exit(1)  # Unhealthy
+                
+        elif "--detailed" in sys.argv:
+            # Detailed health check (use the comprehensive version)
+            from health_check_detailed import health_checker
+            health = health_checker.comprehensive_health_check()
+            print(json.dumps(health, indent=2))
+            sys.exit(0)
+    
+    # Standard health check mode
+    mqtt_health = docker_health_check()
+    ws_health = docker_websocket_health_check()
+    
+    overall_status = "healthy"
+    if mqtt_health["status"] != "healthy" or ws_health["status"] == "unhealthy":
+        overall_status = "unhealthy"
+    elif ws_health["status"] == "degraded":
+        overall_status = "degraded"
+    
+    health_report = {
+        "timestamp": time.time(),
+        "overall_status": overall_status,
+        "mqtt_broker": mqtt_health,
+        "websocket_server": ws_health
+    }
+    
+    print(json.dumps(health_report, indent=2))
+    
+    # Exit code for automated monitoring
+    if overall_status == "healthy":
+        sys.exit(0)
+    else:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

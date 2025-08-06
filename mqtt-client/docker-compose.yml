@@ -5,8 +5,13 @@ services:
     volumes:
       - ../../.certs:/etc/paho-mqtt/certs
     environment:
+      #- MQTT_BROKER_HOST=mosquitto-broker
       - MQTT_BROKER_HOST=lorawan-server-mosquitto-1
       - MQTT_BROKER_PORT=1883
+      - MQTT_USERNAME=admin
+      - MQTT_PASSWORD=admin
+      - WEBSOCKET=0.0.0.0
+      - WEBSOCKET_PORT=8765
     networks:
       - chirp-django-net
 
