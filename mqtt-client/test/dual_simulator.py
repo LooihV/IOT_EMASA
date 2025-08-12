@@ -45,7 +45,7 @@ NWK_S_KEY = "01020304050607080910111213141516"  # Network Session Key (16 bytes 
 APP_S_KEY = "01020304050607080910111213141516"  # Application Session Key (16 bytes hex)
 
 # MQTT connection configuration
-MQTT_BROKER = "localhost"
+MQTT_BROKER = os.getenv("MQTT_BROKER_HOST", "localhost")  # Use environment variable
 MQTT_PORT = 1883
 SEND_INTERVAL = 8  # seconds between messages (faster for dual simulation)
 
