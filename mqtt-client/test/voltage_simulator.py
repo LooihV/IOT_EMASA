@@ -40,11 +40,11 @@ def generate_voltage_series():
     values = []
     
     # Generar 50 puntos de datos (como tu ejemplo real)
-    for i in range(50):
+    for i in range(150):
         timestamp = base_time + (i * 300)  # cada 300ms
         voltage = round(random.uniform(0.5, 5.0), 1)  # Voltaje entre 0.5V y 5V
         
-        iso_time = datetime.datetime.fromtimestamp(timestamp/1000).strftime('%Y-%m-%dT%H:%M:%S.%fZ')[:-3] + 'Z'
+        iso_time = datetime.datetime.fromtimestamp(timestamp/1000, datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%fZ')[:-3] + 'Z'
         
         values.append({
             "time": timestamp,
@@ -73,7 +73,7 @@ try:
         # Payload en formato ChirpStack v4 (basado en tu JSON)
         payload = {
             "deduplicationId": f"sim-{random.randint(10000000, 99999999):08x}-{random.randint(1000, 9999):04x}-{random.randint(1000, 9999):04x}-{random.randint(1000, 9999):04x}-{random.randint(100000000000, 999999999999):012x}",
-            "time": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
+            "time": datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
             "deviceInfo": {
                 "tenantId": "1c27c2fb-d0d6-4883-9b19-d76a0821ed28",
                 "tenantName": "POTENCIA",

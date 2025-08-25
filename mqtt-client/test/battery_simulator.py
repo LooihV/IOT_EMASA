@@ -34,7 +34,7 @@ def generate_battery_sample():
     """Generate a single battery value sample"""
     timestamp = int(time.time() * 1000)
     battery = round(random.uniform(10.5, 13.5), 2)  # Battery voltage between 3.0V and 4.2V
-    iso_time = datetime.datetime.fromtimestamp(timestamp/1000).strftime('%Y-%m-%dT%H:%M:%S.%fZ')[:-3] + 'Z'
+    iso_time = datetime.datetime.fromtimestamp(timestamp/1000, datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%fZ')[:-3] + 'Z'
     return {
         "time": timestamp,
         "time_iso": iso_time,
@@ -52,7 +52,7 @@ try:
         fcnt = get_fcnt()
         payload = {
             "deduplicationId": f"sim-{random.randint(10000000, 99999999):08x}-{random.randint(1000, 9999):04x}-{random.randint(1000, 9999):04x}-{random.randint(1000, 9999):04x}-{random.randint(100000000000, 999999999999):012x}",
-            "time": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
+            "time": datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
             "deviceInfo": {
                 "tenantId": "1c27c2fb-d0d6-4883-9b19-d76a0821ed28",
                 "tenantName": "POTENCIA",
@@ -86,8 +86,8 @@ try:
             "rxInfo": [{
                 "gatewayId": "a84041fdfe2764b6",
                 "uplinkId": random.randint(8000, 9000),
-                "gwTime": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
-                "nsTime": datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
+                "gwTime": datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
+                "nsTime": datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+00:00',
                 "rssi": random.randint(-15, -5),
                 "snr": round(random.uniform(10.0, 15.0), 1),
                 "channel": random.randint(0, 7),
