@@ -55,7 +55,7 @@ mqtt_username = os.getenv("MQTT_USERNAME", "admin")
 mqtt_password = os.getenv("MQTT_PASSWORD", "admin")
 
 # Gateway infrastructure configuration
-GATEWAY_ID = "a0102030a4b0c5d0"  # Unique gateway identifier (8-byte hex)
+GATEWAY_ID = "a0102030a4b0c5d1"  # Unique gateway identifier (8-byte hex, 16 chars)
 PHY_PAYLOAD = ""  # LoRaWAN physical payload (reserved for complete simulation)
 
 # Device identification configuration
@@ -187,7 +187,7 @@ try:
             
             # Transmission information (frequency and modulation parameters)
             "txInfo": {
-                "frequency": 868300000,  # EU868 frequency band (Hz)
+                "frequency": 903900000,  # US915 valid uplink frequency (Hz)
                 "modulation": {
                     "lora": {
                         "bandwidth": 125000,        # 125kHz bandwidth
@@ -214,8 +214,8 @@ try:
                 # Gateway context and regional information
                 "context": base64.b64encode(b"gateway-context").decode(),
                 "metadata": {
-                    "region_name": "eu868",
-                    "region_common_name": "EU868"
+                    "region_name": "us915",
+                    "region_common_name": "US915"
                 }
             }
         }
