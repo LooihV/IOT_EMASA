@@ -150,7 +150,7 @@ try:
             "regionConfigId": "us915_7"
         }
 
-        topic = f"v4/device/{APP_ID}/{DEV_EUI}/event/up"
+        topic = f"applications/{APP_ID}/devices/{DEV_EUI}/event/up"
         final_message = json.dumps(payload, indent=2)
 
         client.publish(topic, final_message)
