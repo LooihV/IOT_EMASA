@@ -229,13 +229,33 @@ def on_message(client, userdata, msg):
             logging.info(f"   🏢 Tenant: {device_info.get('tenantName', 'N/A')}")
             logging.info(f"   📱 App: {device_info.get('applicationName', 'N/A')}")
         
-        # Log measurement data summary
-        if "object" in data and "values" in data["object"]:
-            values = data["object"]["values"]
-            logging.info(f"   📊 Voltage samples: {len(values)}")
-            if values:
-                voltages = [v.get("value", 0) for v in values]
-                logging.info(f"   ⚡ Voltage range: {min(voltages):.1f}V - {max(voltages):.1f}V")
+        # Log measurement data summary - support both formats
+        if "object" in data:
+            object_data = data["object"]
+            
+            # NEW MULTI-SENSOR FORMAT
+            if "measurements" in object_data:
+                logging.info(f"   🌡️ Multi-sensor format detected")
+                logging.info(f"   📟 Sensor ID: {object_data.get('id', 'N/A')}")
+                logging.info(f"   📋 Active sensors: {', '.join(object_data.get('active_sensors', []))}")
+                
+                measurements = object_data["measurements"]
+                for sensor_type, channels in measurements.items():
+                    for channel, samples in channels.items():
+                        if isinstance(samples, list) and samples:
+                            values = [s.get("value", 0) for s in samples if "value" in s]
+                            if values:
+                                logging.info(f"   📊 {sensor_type.title()} {channel}: {len(values)} samples")
+                                logging.info(f"      Range: {min(values):.1f} - {max(values):.1f} (avg: {sum(values)/len(values):.2f})")
+            
+            # OLD SINGLE-SENSOR FORMAT
+            elif "values" in object_data:
+                logging.info(f"   📊 Single-sensor format detected")
+                values = object_data["values"]
+                logging.info(f"   📊 Voltage samples: {len(values)}")
+                if values:
+                    voltages = [v.get("value", 0) for v in values]
+                    logging.info(f"   ⚡ Voltage range: {min(voltages):.1f}V - {max(voltages):.1f}V")
                 
         # Process with custom payload processor if available
         if PAYLOAD_PROCESSING_AVAILABLE:

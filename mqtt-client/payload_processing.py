@@ -38,6 +38,118 @@ import base64
 import logging
 from datetime import datetime
 
+def process_multi_sensor_data(object_data):
+    """
+    Process multi-sensor measurement data with multiple sensor types and channels.
+    
+    Args:
+        object_data: Object containing measurements structure
+        
+    Returns:
+        dict: Processed multi-sensor data structure
+    """
+    result = {
+        "measurement_format": "multi_sensor",
+        "active_sensors": object_data.get("active_sensors", []),
+        "sensor_id": object_data.get("id"),
+        "relative_timestamp": object_data.get("relative_timestamp"),
+        "arrival_date": object_data.get("arrival_date"),
+        "measurements": object_data["measurements"],
+        "measurement_values": []
+    }
+    
+    measurements = object_data["measurements"]
+    
+    # Process voltage measurements
+    if "voltage" in measurements:
+        voltage_data = measurements["voltage"]
+        all_voltage_values = []
+        
+        for channel, samples in voltage_data.items():
+            if isinstance(samples, list):
+                all_voltage_values.extend([s.get("value", 0) for s in samples if "value" in s])
+        
+        if all_voltage_values:
+            result["voltage_stats"] = {
+                "total_samples": len(all_voltage_values),
+                "min_voltage": min(all_voltage_values),
+                "max_voltage": max(all_voltage_values),
+                "avg_voltage": sum(all_voltage_values) / len(all_voltage_values),
+                "channels": list(voltage_data.keys())
+            }
+    
+    # Process current measurements
+    if "current" in measurements:
+        current_data = measurements["current"]
+        all_current_values = []
+        
+        for channel, samples in current_data.items():
+            if isinstance(samples, list):
+                all_current_values.extend([s.get("value", 0) for s in samples if "value" in s])
+        
+        if all_current_values:
+            result["current_stats"] = {
+                "total_samples": len(all_current_values),
+                "min_current": min(all_current_values),
+                "max_current": max(all_current_values),
+                "avg_current": sum(all_current_values) / len(all_current_values),
+                "channels": list(current_data.keys())
+            }
+    
+    # Create flattened measurement_values for compatibility
+    for sensor_type, channels in measurements.items():
+        for channel, samples in channels.items():
+            if isinstance(samples, list):
+                for sample in samples:
+                    sample_copy = sample.copy()
+                    sample_copy["sensor_type"] = sensor_type
+                    sample_copy["channel"] = channel
+                    result["measurement_values"].append(sample_copy)
+    
+    return result
+
+def process_single_sensor_data(object_data):
+    """
+    Process single-sensor measurement data (legacy format).
+    
+    Args:
+        object_data: Object containing values array
+        
+    Returns:
+        dict: Processed single-sensor data structure
+    """
+    values = object_data["values"]
+    
+    result = {
+        "measurement_format": "single_sensor",
+        "measurement_values": values,
+        "buffer_stats": {
+            "total_samples": len(values),
+            "sampling_period_seconds": 15,
+            "sampling_interval_seconds": 0.3,
+            "measurement_type": object_data.get("measurement", "Unknown"),
+            "series_id": object_data.get("series_id"),
+            "fragment_number": object_data.get("fragment_number"),
+            "total_fragments": object_data.get("total_fragments"),
+            "machine_uptime_ms": object_data.get("machine_uptime_ms"),
+            "machine_start_time": object_data.get("machine_start_time")
+        }
+    }
+    
+    if values:
+        # Análisis de los valores
+        voltage_values = [v["value"] for v in values if "value" in v]
+        if voltage_values:
+            result["buffer_stats"].update({
+                "min_voltage": min(voltage_values),
+                "max_voltage": max(voltage_values),
+                "avg_voltage": sum(voltage_values) / len(voltage_values),
+                "first_sample_time": values[0].get("time_iso"),
+                "last_sample_time": values[-1].get("time_iso")
+            })
+    
+    return result
+
 """
 Process LoRaWAN payload from MQTT message.
 
@@ -151,35 +263,18 @@ def process_lorawan_payload(msg):
             except Exception as e:
                 logging.warning(f"Error decodificando datos binarios: {e}")
         
-        # EXTRAER TODOS LOS VALUES (el buffer completo de 15 segundos)
-        if "object" in data and "values" in data["object"]:
-            values = data["object"]["values"]
-            frontend_data["measurement_values"] = values  # TODOS los valores
-            
-            # Estadísticas del buffer
-            frontend_data["buffer_stats"] = {
-                "total_samples": len(values),
-                "sampling_period_seconds": 15,
-                "sampling_interval_seconds": 0.3,
-                "measurement_type": data["object"].get("measurement", "Unknown"),
-                "series_id": data["object"].get("series_id"),
-                "fragment_number": data["object"].get("fragment_number"),
-                "total_fragments": data["object"].get("total_fragments"),
-                "machine_uptime_ms": data["object"].get("machine_uptime_ms"),
-                "machine_start_time": data["object"].get("machine_start_time")
-            }
-            
-            if values:
-                # Análisis de los valores
-                voltage_values = [v["value"] for v in values if "value" in v]
-                if voltage_values:
-                    frontend_data["buffer_stats"].update({
-                        "min_voltage": min(voltage_values),
-                        "max_voltage": max(voltage_values),
-                        "avg_voltage": sum(voltage_values) / len(voltage_values),
-                        "first_sample_time": values[0].get("time_iso"),
-                        "last_sample_time": values[-1].get("time_iso")
-                    })
+        # DETECT FORMAT AND DELEGATE TO APPROPRIATE PROCESSOR
+        object_data = data.get("object", {})
+        
+        if "measurements" in object_data:
+            # NEW FORMAT: Multi-sensor with measurements structure
+            frontend_data.update(process_multi_sensor_data(object_data))
+        elif "values" in object_data:
+            # OLD FORMAT: Single sensor with values array
+            frontend_data.update(process_single_sensor_data(object_data))
+        else:
+            frontend_data["measurement_format"] = "unknown"
+            logging.warning("No recognized measurement format found in object data")
         
         return frontend_data
         
@@ -251,7 +346,7 @@ Performance Impact:
 """
 def log_processed_data(frontend_data):
     """
-    Muestra información procesada en los logs
+    Muestra información procesada en los logs - Compatible con multi-sensor
     
     Args:
         frontend_data: Datos procesados del payload
@@ -270,22 +365,55 @@ def log_processed_data(frontend_data):
     logging.info(f"   🚪 Port: {frontend_data.get('dev_port')}")
     logging.info(f"   ⏰ Tiempo: {frontend_data.get('message_time')}")
     logging.info(f"   📊 Frame: #{frontend_data.get('frame_counter')}")
+    logging.info(f"   🔧 Format: {frontend_data.get('measurement_format', 'unknown')}")
     
     if frontend_data.get("radio_info"):
         radio = frontend_data["radio_info"]
         logging.info(f"   📡 Radio: RSSI={radio.get('rssi')}dBm, SNR={radio.get('snr')}dB")
     
-    if frontend_data.get("measurement_values"):
-        stats = frontend_data.get("buffer_stats", {})
-        logging.info(f"   📈 Buffer: {stats.get('total_samples', 0)} muestras en {stats.get('sampling_period_seconds', 0)}s")
-        if stats.get('avg_voltage') is not None:
-            logging.info(f"   🔢 Voltaje: {stats.get('min_voltage', 0):.1f}V - {stats.get('max_voltage', 0):.1f}V (avg: {stats.get('avg_voltage', 0):.2f}V)")
-        logging.info(f"   📊 Serie ID: {stats.get('series_id')}, Fragmento: {stats.get('fragment_number')}/{stats.get('total_fragments')}")
+    # Handle multi-sensor format
+    if frontend_data.get('measurement_format') == 'multi_sensor':
+        logging.info(f"   🌡️ Sensor ID: {frontend_data.get('sensor_id')}")
+        logging.info(f"   📋 Active sensors: {', '.join(frontend_data.get('active_sensors', []))}")
         
-        # Mostrar algunos valores de ejemplo
-        values = frontend_data["measurement_values"]
-        logging.info("   📋 Primera muestra:")
-        for i, sample in enumerate(values[:1]):
-            logging.info(f"      [{i+1}] {sample.get('time_iso')} → {sample.get('value')}V")
+        # Voltage measurements
+        if frontend_data.get('voltage_stats'):
+            v_stats = frontend_data['voltage_stats']
+            logging.info(f"   ⚡ Voltage: {len(v_stats['channels'])} channels, {v_stats['total_samples']} samples")
+            logging.info(f"      Range: {v_stats['min_voltage']:.1f}V - {v_stats['max_voltage']:.1f}V (avg: {v_stats['avg_voltage']:.2f}V)")
+            logging.info(f"      Channels: {', '.join(v_stats['channels'])}")
+        
+        # Current measurements
+        if frontend_data.get('current_stats'):
+            c_stats = frontend_data['current_stats']
+            logging.info(f"   🔌 Current: {len(c_stats['channels'])} channels, {c_stats['total_samples']} samples")
+            logging.info(f"      Range: {c_stats['min_current']:.1f}A - {c_stats['max_current']:.1f}A (avg: {c_stats['avg_current']:.2f}A)")
+            logging.info(f"      Channels: {', '.join(c_stats['channels'])}")
+        
+        # Show sample data
+        if frontend_data.get("measurement_values"):
+            values = frontend_data["measurement_values"]
+            logging.info("   📋 Sample measurements:")
+            for i, sample in enumerate(values[:3]):  # Show first 3 samples
+                sensor_type = sample.get('sensor_type', 'unknown')
+                channel = sample.get('channel', 'unknown')
+                value = sample.get('value', 0)
+                time_iso = sample.get('time', sample.get('time_iso', 'unknown'))
+                logging.info(f"      [{i+1}] {sensor_type}.{channel}: {value} at {time_iso}")
+    
+    # Handle legacy single-sensor format
+    elif frontend_data.get('measurement_format') == 'single_sensor':
+        if frontend_data.get("measurement_values"):
+            stats = frontend_data.get("buffer_stats", {})
+            logging.info(f"   📈 Buffer: {stats.get('total_samples', 0)} muestras en {stats.get('sampling_period_seconds', 0)}s")
+            if stats.get('avg_voltage') is not None:
+                logging.info(f"   🔢 Voltaje: {stats.get('min_voltage', 0):.1f}V - {stats.get('max_voltage', 0):.1f}V (avg: {stats.get('avg_voltage', 0):.2f}V)")
+            logging.info(f"   📊 Serie ID: {stats.get('series_id')}, Fragmento: {stats.get('fragment_number')}/{stats.get('total_fragments')}")
+            
+            # Mostrar algunos valores de ejemplo
+            values = frontend_data["measurement_values"]
+            logging.info("   📋 Primera muestra:")
+            for i, sample in enumerate(values[:1]):
+                logging.info(f"      [{i+1}] {sample.get('time_iso')} → {sample.get('value')}V")
     
     logging.info("=" * 80)
